@@ -1,7 +1,7 @@
 #!/bin/bash
 
 date
-cat /home/darptolus/CAPSL/DEMAC/NodeConfig/nodeList.txt | while read output
+cat ~/DEMAC/Node_Config/nodeList.txt | while read output
 do
     ping -c 1 "$output" > /dev/null
     if [ $? -eq 0 ]; then
