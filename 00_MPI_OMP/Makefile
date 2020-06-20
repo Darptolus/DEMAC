@@ -1,4 +1,4 @@
-# Makefile DEMAC GeMM
+# Makefile DEMAC
 HEADNODE? = parallella@NOPA01
 PROGRAM? = main
 PRG_EXE = ${PROGRAM}.o
