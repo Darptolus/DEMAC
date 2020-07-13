@@ -18,6 +18,7 @@
 int main(int argc, char* argv[]) {
 
 	//printf(">>>>> New <<<<<\n");
+	// Initialize MPI
 	MPI_Init(NULL, NULL);
 		int world_size;
 		MPI_Comm_size(MPI_COMM_WORLD, &world_size);
@@ -36,18 +37,19 @@ int main(int argc, char* argv[]) {
 
 	bool exec_prog = 1;
   
+	// Define thread safe queues
 	thread_safe::deque<ThreadedProcedure*> I_Queue;
 	thread_safe::deque<ThreadedProcedure*> O_Queue;
 
-	int TP_count = 0; // Total number of TPs
-	int TP_c_inS = 0; // Number of TPs for the current node
+	//* int TP_count = 0; // Total number of TPs
+	//* int TP_c_inS = 0; // Number of TPs for the current node
 	int TP_c_out = 0; // Number of TPs to be sent to other nodes
-	int TP_com_h = 0; // Header pointer of the TP comm
+	//* int TP_com_h = 0; // Header pointer of the TP comm
 	
-	//tpQueue SchTPQ;
-	// tpQueue ComTPQ;
-	int msg_code = 0;
-	int succ_req = 0;
+	//* tpQueue SchTPQ;
+	//* tpQueue ComTPQ;
+	//* int msg_code = 0;
+	//* int succ_req = 0;
 	int r_flag = 0;
 	int t_flag = 0;
 	int c_flag = 0;
@@ -67,17 +69,16 @@ int main(int argc, char* argv[]) {
 	
 	// Initialize variables
 	exec_prog = 1;
-  TP_count = 0;
+  //* TP_count = 0;
 	TP_c_out = 0;
-	TP_com_h = 0;
-	msg_code = 0;
-	succ_req = 0;
+	//* TP_com_h = 0;
+	//*  msg_code = 0;
+	//*  succ_req = 0;
 	r_flag = 0; // Send flag
 	s_flag = 0; // Receive flag
 	t_flag = 0;
 	c_flag = 0;
 	
-
 #pragma omp barrier
 
   if (core_id == 1){ // Scheduler
@@ -140,7 +141,7 @@ int main(int argc, char* argv[]) {
     while(exec_prog){
 			switch(c_mode){
 				case RECEIVE:
-					// Flag to message the first time that Comms enters Receive
+					// Flags the first time that Comms enters Receive
 					if (r_flag == 0){
 						printf("%s C(%d): REC mode [INIT RECEIVE TPQ_out(%d)/TPQ_in(%d)]\n",
 						node_name, core_id, O_Queue.size(), I_Queue.size());
