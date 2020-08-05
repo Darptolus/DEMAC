@@ -13,6 +13,41 @@
 
 #include <unistd.h>
 
+#include <e-loader.h>
+#include <e-hal.h>  // Epiphany Hardware Abstraction Layer
+                    // functionality for communicating with epiphany chip when
+                    // the application runs on a host, typically the ARM µp
+
+#define BUFOFFSET (0x01000000)  // SDRAM is at 0x8f00'0000,
+                                // offset in e_read starts at 0x8e00'0000
+
+unsigned rows, cols, i, j, ncores, row, col;
+
+/*
+ * Init the epiphany platform
+ */
+ 
+void init_epiphany(e_platform_t * platform) {
+  e_init(NULL);
+  e_reset_system();
+  e_get_platform_info(platform);
+}
+
+/*
+ * Create the workgroup and load programs into it
+ */
+void init_workgroup(e_epiphany_t * dev) {
+  e_return_stat_t result;
+  e_open(dev, 0, 0, rows, cols); // Create an epiphany cores workgroup
+  e_reset_group(dev);
+  // load programs into cores workgroup, do not execute it immediately
+  result = static_cast<e_return_stat_t>(e_load_group("emain.elf", dev, 0, 0, rows, cols, E_FALSE));
+  if(result != E_OK) {
+    printf("Error Loading the Epiphany Application %i\n", result);
+  }
+  e_start_group(dev);
+}
+
 //void com();
 
 int main(int argc, char* argv[]) {
@@ -56,11 +91,19 @@ int main(int argc, char* argv[]) {
 	int s_flag = 0;
 	int end_msg_id;
 
+	struct timeval start, end;
+
 	int e_flag_n[2];
 	int e_flag_t[2][world_size];
 
 	nodeComm ComMod[world_size]; 
 	comm_mode c_mode;
+  
+  e_platform_t platform;  // platform infos
+  e_epiphany_t dev;       // provides access to cores workgroup
+  e_mem_t emem;           // shared memory buffer
+
+gettimeofday(&start, NULL);
 
 #pragma omp parallel num_threads(2)
 {
@@ -82,6 +125,34 @@ int main(int argc, char* argv[]) {
 #pragma omp barrier
 
   if (core_id == 1){ // Scheduler
+		init_epiphany(&platform);
+
+		rows = platform.rows;
+    cols = platform.cols;
+    ncores = rows * cols;
+    uint32_t result[ncores];     // to store the results, size of cores
+    // allocate a space to share data between e_cores and here
+    // offset starts from 0x8e00'0000
+    // sdram (shared space) is at 0x8f00'0000
+    // so 0x8e00'0000 + 0x0100'0000 = 0x8f00'0000
+    e_alloc(&emem, BUFOFFSET, ncores*sizeof(uint32_t));
+
+    init_workgroup(&dev);
+    // we read from the allocated space and store it to the result array
+      usleep(100);
+      e_read(&emem, 0, 0, 0x0, &result, ncores * sizeof(uint32_t)); // reads what's ben put in buffer
+      for(row = 0; row < rows; row++) {
+        for(col = 0; col < cols; col++) {
+          fprintf(stdout, "[%i]", result[row*cols+col]);
+        }
+      }
+      fprintf(stdout, "\n");
+      fflush(stdout);
+    
+    e_close(&dev);
+
+		MPI_Barrier(MPI_COMM_WORLD);
+
     //printf("The Scheduler in %s, in core %d from %d\n",node_name, core_id, core_tot);
 		ThreadedProcedure* newTP;
 		if (world_rank == 0){ // Node01
@@ -280,6 +351,15 @@ int main(int argc, char* argv[]) {
 
 #pragma omp barrier
 }
+
+gettimeofday(&end, NULL);
+
+printf("%s: %lf us\n", node_name, (((end.tv_sec * 1000000 + end.tv_usec)
+				- (start.tv_sec * 1000000 + start.tv_usec)))*1.0);
+
+gettimeofday(&start, NULL);
+fflush(stdout);
+
 MPI_Barrier(MPI_COMM_WORLD);
 
 MPI_Gather(&e_flag_n[0], 1, MPI_INT, &e_flag_t[0][world_rank], 1, MPI_INT, 0, MPI_COMM_WORLD);
@@ -287,6 +367,8 @@ MPI_Gather(&e_flag_n[1], 1, MPI_INT, &e_flag_t[1][world_rank], 1, MPI_INT, 0, MP
 	
 
 MPI_Barrier(MPI_COMM_WORLD);
+
+gettimeofday(&end, NULL);
 
 if (world_rank == 0){
 	for(int i = 0; i< world_size; i++){
@@ -296,6 +378,8 @@ if (world_rank == 0){
 		}
 		printf("\n");
 	}
+	printf("Time 2: %lf us\n", (((end.tv_sec * 1000000 + end.tv_usec)
+				- (start.tv_sec * 1000000 + start.tv_usec)))*1.0);
 }
 
 MPI_Finalize();

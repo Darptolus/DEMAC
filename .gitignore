@@ -4,3 +4,4 @@ Node_Config/DEMAC_check_nfs_mD.sh
 Node_Config/DEMAC_sshfsEnable_mD.sh
 01_MPI_OMP_EPI/nodeList
 Node_Config/DEMAC_pingAll_mD.sh
+Node_Config/DEMAC_reboot_mount_mD.sh

@@ -13,12 +13,14 @@ usage()
 {
   echo "./run_D.sh [-c [copyHost] -f [fileName] -l [nodeList] -cl -cf -mk -n [nodeNum] -r [execHost]]"
 }
+# CLEAR >> COPY >> MAKE >> RUN
+# ./run_D.sh -c nopa08 -f main -cl -cf -mk -n 4 -r nopa08
 
-# COPY (file, makefile) >> RUN
-#./run_D.sh -f 00_nodeCheck -n 24 -m Makefile -c demac -r nopa01
+# CLEAR >> COPY >> MAKE
+# ./run_D.sh -c nopa08 -f main -cl -cf -mk
 
 # RUN
-#./run_D.sh -f 00_nodeCheck -n 24 -r nopa01
+# ./run_D.sh -c nopa08 -f main -cl -cf -mk -n 4 -r nopa08
 
 while [ "$1" != "" ]; do
     case $1 in

@@ -1,14 +1,3 @@
-/*
- * Author: Noémien Kocher
- * Date: january 2016
- * Licence: MIT
- * Purpose:
- *   Computes a game of life where each core is an independent cell.
- *   The main program reads for a certain number of iterations the status of the
- *   cells and displays it. Outputs at the end the number of iterations for each
- *   cell (eCore) and the status of the sticky overflow flag.
- */
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
