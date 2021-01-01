@@ -41,7 +41,7 @@ void init_epiphany(e_platform_t * platform) {
 /*
  * Create the workgroup and load programs into it
  */
-void init_workgroup(e_epiphany_t * dev) {
+int init_workgroup(e_epiphany_t * dev) {
   e_return_stat_t result;
   e_open(dev, 0, 0, rows, cols); // Create an epiphany cores workgroup
   e_reset_group(dev);
@@ -79,7 +79,23 @@ MPI_Init(NULL, NULL);
   e_platform_t platform;  // platform infos
   e_epiphany_t dev;       // provides access to cores workgroup
   e_mem_t emem;           // shared memory buffer
+
+  init_epiphany(&platform);
+
+  rows = platform.rows;
+  cols = platform.cols;
+  ncores = rows * cols;
+  uint32_t result[ncores];     // to store the results, size of cores
+  // allocate a space to share data between e_cores and here
+  // offset starts from 0x8e00'0000
+  // sdram (shared space) is at 0x8f00'0000
+  // so 0x8e00'0000 + 0x0100'0000 = 0x8f00'0000
+  e_alloc(&emem, BUFOFFSET, ncores*sizeof(uint32_t));
+  init_workgroup(&dev);
+
+
 gettimeofday(&start, NULL);
+
 
 #pragma omp parallel num_threads(2)
 {
@@ -87,19 +103,7 @@ gettimeofday(&start, NULL);
   int core_tot = omp_get_num_threads();
 
   if (core_id == 1){
-    init_epiphany(&platform);
 
-    rows = platform.rows;
-    cols = platform.cols;
-    ncores = rows * cols;
-    uint32_t result[ncores];     // to store the results, size of cores
-    // allocate a space to share data between e_cores and here
-    // offset starts from 0x8e00'0000
-    // sdram (shared space) is at 0x8f00'0000
-    // so 0x8e00'0000 + 0x0100'0000 = 0x8f00'0000
-    e_alloc(&emem, BUFOFFSET, ncores*sizeof(uint32_t));
-
-    init_workgroup(&dev);
     // we read from the allocated space and store it to the result array
       usleep(100);
       e_read(&emem, 0, 0, 0x0, &result, ncores * sizeof(uint32_t)); // reads what's ben put in buffer

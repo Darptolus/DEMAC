@@ -16,8 +16,7 @@
 typedef void (*FncPtrType)(void);
 enum comm_mode
 {
-  WAIT_R,
-  WAIT_S,
+  INIT,
   RECEIVE,
   SEND
 };
@@ -30,6 +29,15 @@ class nodeComm
     bool T_flag; // ToBeDeleted used to print message
     bool R_set; // Not_Set = 0, Set = 1 
     int R_rec; // Not_Succesful_Rec = 0, Succesful_Rec = 1
+};
+
+class nodeMngr
+{
+public:
+  void tpScheduler();
+  
+  int nodeID;
+  int tpNum;
 };
 
 // Define node actors
