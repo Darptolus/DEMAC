@@ -20,23 +20,26 @@ int main(int argc, char *argv[]){
   int name_len;
   MPI_Get_processor_name(node_name, &name_len);
 
-  // Print off a hello world message
-  // printf("Hello world from processor %s, rank %d out of %d processors\n", processor_name, world_rank, world_size);
+  #pragma omp parallel num_threads(2)
+  {
+    int core_id = omp_get_thread_num();
+    int core_tot = omp_get_num_threads();
+
+    //printf("%s: R(%d/%d) C(%d/%d)\n", node_name, world_rank+1, world_size, core_id+1, core_tot);
+    // printf("C(%d/%d)\n", core_id, core_tot);
+
+    if (core_id == 0){
+      start_NCOM();
+      printf("%s: This is NCOM R(%d/%d) C(%d/%d)\n", node_name, world_rank+1, world_size, core_id+1, core_tot);
+    }else if (core_id == 1){
+      start_NMGR();
+      printf("%s: This is NMGR R(%d/%d) C(%d/%d)\n", node_name, world_rank+1, world_size, core_id+1, core_tot);
+    }
+
+    #pragma omp barrier
+  }
 
   // Finalize the MPI environment. No more MPI calls can be made after this
   MPI_Finalize();
-
-#pragma omp parallel num_threads(2)
-{
-  int core_id = omp_get_thread_num();
-  int core_tot = omp_get_num_threads();
-
-  printf("%s: R(%d/%d) C(%d/%d)\n", node_name, world_rank+1, world_size, core_id+1, core_tot);
-  // printf("C(%d/%d)\n", core_id, core_tot);
-
-  
-
-  #pragma omp barrier
-}
 
 }
