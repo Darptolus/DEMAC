@@ -8,4 +8,15 @@
  * Includes the definition of the Node Comunicator for each node of the cluster
  */
 
+#ifndef NODE_H
+#define NODE_H
+
 #include <stdio.h>
+#include <stdlib.h>
+#include <NCOM.hpp>
+#include <NMGR.hpp>
+#include <eDARTS.hpp>
+
+int start_NODE();
+
+#endif /* NODE_H */

@@ -8,4 +8,12 @@
  * Includes the definition of the Node Manager for each node of the cluster
  */
 
+#ifndef NMGR_H
+#define NMGR_H
+
 #include <stdio.h>
+#include <stdlib.h>
+
+int start_NMGR();
+
+#endif /* NMGR_H */

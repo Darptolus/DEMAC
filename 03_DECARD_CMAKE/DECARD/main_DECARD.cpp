@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <omp.h>
 #include <mpi.h>
-//#include "decard.hpp"
+#include "decard.hpp"
 
 int main(int argc, char *argv[]){
   MPI_Init(NULL, NULL);
@@ -29,15 +29,15 @@ int main(int argc, char *argv[]){
     // printf("C(%d/%d)\n", core_id, core_tot);
 
     if (core_id == 0){
-      start_NCOM();
       printf("%s: This is NCOM R(%d/%d) C(%d/%d)\n", node_name, world_rank+1, world_size, core_id+1, core_tot);
     }else if (core_id == 1){
-      start_NMGR();
       printf("%s: This is NMGR R(%d/%d) C(%d/%d)\n", node_name, world_rank+1, world_size, core_id+1, core_tot);
     }
 
     #pragma omp barrier
   }
+
+  start_DECARD();
 
   // Finalize the MPI environment. No more MPI calls can be made after this
   MPI_Finalize();

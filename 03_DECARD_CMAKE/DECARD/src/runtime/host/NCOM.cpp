@@ -7,6 +7,6 @@
 int start_NCOM()
 {
   // NCOM initialize channels
-  printf("IMITIALIZING NCOM");
+  printf("INITIALIZING NCOM\n");
   return 0;
 }

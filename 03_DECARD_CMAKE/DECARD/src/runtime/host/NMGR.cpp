@@ -7,6 +7,6 @@
 int start_NMGR()
 {
   // NMGR initialize Accelerator
-  printf("IMITIALIZING NMGR");
+  printf("INITIALIZING NMGR\n");
   return 0;
 }

@@ -1,21 +1,20 @@
 /**
- * @file decard.hpp
+ * @file NCOM.hpp
  * @author Diego Roa
  * @date 31 Dec 2020
- * @brief DECARD runtime
+ * @brief Node Comunicator
  * @todo Add copyright
  *
  * Includes the definition of the Node Comunicator for each node of the cluster
  */
 
-#ifndef DECARD_HPP
-#define	DECARD_HPP
+#ifndef NCOM_H
+#define NCOM_H
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "runtime.hpp"
 
-// #include "ThreadedProcedure.h"
+  
+int start_NCOM();
 
-
-#endif /* NODE_H */
+#endif /* NCOM_H */

@@ -3,15 +3,15 @@ cmake_minimum_required(VERSION 3.10)
 # set the project name and version
 project(DECARD VERSION 0.1 DESCRIPTION "Distributed runtime for the Codelet Model")
 
-# include_directories(include
-#                     include/assets
-#                     include/runtime
-#                     include/runtime/host
-#                     include/runtime/device
-#                     include/codeletModel
-#                     include)
+include_directories(include
+                    include/runtime
+                    include/runtime/host
+                    include/runtime/device
+                    include/codeletModel
+                    include/assets
+                    include)
 
-# add_subdirectory( src )
+add_subdirectory( src )
 # add_subdirectory( tests )
 
 #including DECARD
@@ -22,47 +22,68 @@ find_package(MPI REQUIRED)
 
 include_directories(${MPI_INCLUDE_PATH})
 
-add_executable(decard_main.out main_DECARD.cpp)
-# add_library()
-
-target_link_libraries(decard_main.out PRIVATE OpenMP::OpenMP_CXX
-                                      PRIVATE ${MPI_LIBRARIES})
-
 # target_link_libraries(my_mpi_target ${MPI_C_LIBRARIES})
 
 message("=> Copying NodeList\n")
 add_custom_command(
    OUTPUT nodeList
-   COMMAND cp nodeList ../build
+  #  COMMAND cp ../decard/nodeList nodeList
+   COMMAND touch ThisIsATest.txt
    DEPENDS nodeList
    COMMENT "Copying NodeList"
    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-   VERBATIM
-)
+   VERBATIM)
 
-add_library(decard SHARED
-  src/runtime/NCOM.cpp
-  src/runtime/NMGR.cpp
-)
+message("=> HERE!!!\n")
 
-set_target_properties(decard PROPERTIES VERSION ${PROJECT_VERSION}
-                                        PUBLIC_HEADER include/decard.hpp)
+add_executable(decard_main main_DECARD.cpp)
 
-configure_file(decard.pc.in decard.pc @ONLY)
+message("=> Linking Libraries!!!\n")
 
-target_include_directories(decard PRIVATE .)
+target_link_libraries(decard_main PRIVATE OpenMP::OpenMP_CXX
+                                  PRIVATE ${MPI_LIBRARIES}
+                                  PRIVATE decard)
+
+
+
+
+# set( decard_src
+#      decard_runtime_host_src
+#      )
+
+# set( decard_inc
+#      decard_runtime_host_inc
+#      )
+
+# add_library( decard SHARED ${decard_src} ${decard_inc})
+
+
+# set_target_properties(decard PROPERTIES VERSION ${PROJECT_VERSION}
+#                                         PUBLIC_HEADER include/decard.hpp)
+
+# configure_file(decard.pc.in decard.pc @ONLY)
+
+# target_include_directories(decard PRIVATE .)
 
 # target_include_directories(mylib PRIVATE include)
 # target_include_directories(mylib PRIVATE src)
 
-include(GNUInstallDirs)
+# include(GNUInstallDirs)
 
-install(TARGETS decard
-  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-  PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+# set( decard_src 
+#      ${CMAKE_SOURCE_DIR}/src)
 
-install(FILES ${CMAKE_BINARY_DIR}/mylib.pc
-  DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/pkgconfig)
+# set( decard_inc 
+#      ${CMAKE_SOURCE_DIR}/include)
+
+# install(TARGETS decard
+#         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+#         PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+
+
+# add_library()
+
+
 # add_custom_command(
 #    OUTPUT decard_main.out
 #    COMMAND g++ main_DECARD.cpp ${EXTERNAL_FLAGS} -o decard_main.out
