@@ -5,10 +5,10 @@
 
 #include "Node.hpp"
 
-int world_size;
-int world_rank;
-int name_len;
-char node_name[16];
+extern int world_size;
+extern int world_rank;
+extern int name_len;
+extern char node_name[16];
 
 int start_NODE()
 {
@@ -31,6 +31,7 @@ int start_NODE()
       start_NMGR();
       printf("%s: This is NMGR R(%d/%d) C(%d/%d)\n", node_name, world_rank+1, world_size, core_id+1, core_tot);
     }
+    #pragma omp barrier
   }
   return 0;
 }

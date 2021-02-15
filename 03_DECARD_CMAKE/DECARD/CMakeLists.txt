@@ -36,8 +36,6 @@ add_custom_command(
    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
    VERBATIM)
 
-message("=> HERE!!!\n")
-
 add_executable(decard_main main_DECARD.cpp)
 
 message("=> Linking Libraries!!!\n")
@@ -46,8 +44,7 @@ target_link_libraries(decard_main PRIVATE OpenMP::OpenMP_CXX
                                   PRIVATE ${MPI_LIBRARIES}
                                   PRIVATE decard)
 
-
-
+message("=> END MAIN CMAKE <=\n")
 
 # set( decard_src
 #      decard_runtime_host_src
