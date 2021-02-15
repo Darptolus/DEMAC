@@ -17,6 +17,11 @@
 #include <NMGR.hpp>
 #include <eDARTS.hpp>
 
+extern int world_size;
+extern int world_rank;
+extern int name_len;
+extern char node_name[16];
+
 int start_NODE();
 
 #endif /* NODE_H */

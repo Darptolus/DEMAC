@@ -3,6 +3,8 @@ cmake_minimum_required(VERSION 3.10)
 # set the project name and version
 project(DECARD VERSION 0.1 DESCRIPTION "Distributed runtime for the Codelet Model")
 
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fopenmp")
+
 include_directories(include
                     include/runtime
                     include/runtime/host

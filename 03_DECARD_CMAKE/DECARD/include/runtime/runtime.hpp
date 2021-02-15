@@ -13,6 +13,11 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+
+// extern int world_size;
+// extern int world_rank;
+// extern int name_len;
+// extern char node_name[16];
   
 int start_DECARD();
 
