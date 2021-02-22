@@ -6,4 +6,5 @@ Node_Config/DEMAC_reboot_mount_mD.sh
 01_MPI_OMP_EPI/nodeList
 02_DECARD/proj_DECARD.code-workspace
 03_DECARD_CMAKE/test_proj/
+03_DECARD_CMAKE/test_proj_v2/
 *~

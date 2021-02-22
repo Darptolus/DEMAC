@@ -1,19 +1,19 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <omp.h>
+/**
+ * @file Node.cpp
+ * @author Diego Roa
+ * @date 31 Dec 2020
+ * @brief Node 
+ * @todo Add copyright
+ *
+ * Includes the definition of the Node for each board of the cluster
+ */
 
 #include "Node.hpp"
 
-extern int world_size;
-extern int world_rank;
-extern int name_len;
-extern char node_name[16];
-
-int start_NODE()
+int Node_Intern::start_NODE()
 {
   // Initialize NODE
-  printf("INITIALIZING NODE\n");
+  printf("INITIALIZING Node_Intern\n");
   start_eDARTS();
 
   // OpenMP
@@ -34,4 +34,12 @@ int start_NODE()
     #pragma omp barrier
   }
   return 0;
-}
+};
+
+int Node_Extern::start_NODE()
+{
+  // Initialize NODE
+  printf("INITIALIZING Node_Extern\n");
+  return 0;
+
+};

@@ -1,11 +1,11 @@
 /**
- * @file cm.hpp
+ * @file AbstractMachine.hpp
  * @author Diego Roa
  * @date 31 Dec 2020
- * @brief Node Comunicator
+ * @brief Abstrac tMachine
  * @todo Add copyright
  *
- * Includes the definition of the Node Comunicator for each node of the cluster
+ * Includes the definition of the Abstract Machine for the cluster
  */
 
 #ifndef ABSTRACTMACHINE_H
@@ -13,7 +13,28 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <mpi.h>
+#include<iterator>
+#include<vector>
 
-int start_AM();
+#include "Node.hpp"
+
+class AbstractMachine
+{
+private:
+  int world_size;
+  std::vector<Node*> nodes;
+  std::vector<Node*>::iterator nodes_it;
+public:
+  AbstractMachine();
+  int GetWorldSize() {return world_size;}
+  int start_AM();
+  ~AbstractMachine() {
+    for (auto& element : nodes) {
+      delete element;
+    }
+  }
+  
+}; 
 
 #endif /* ABSTRACTMACHINE_H */

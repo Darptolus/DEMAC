@@ -5,7 +5,7 @@
  * @brief DECARD runtime
  * @todo Add copyright
  *
- * Includes the definition of the Node Comunicator for each node of the cluster
+ * Includes the definition of the DECARD runtime for the cluster
  */
 
 #ifndef DECARD_HPP
@@ -13,6 +13,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <mpi.h>
 #include "runtime.hpp"
 
 // #include "ThreadedProcedure.h"

@@ -5,7 +5,7 @@
  * @brief Runtime
  * @todo Add copyright
  *
- * Includes the definition of the runtime
+ * Includes the definition of the Runtime
  */
 
 #ifndef RUNTIME_H
@@ -13,6 +13,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include "AbstractMachine.hpp"
 
 // extern int world_size;
 // extern int world_rank;
