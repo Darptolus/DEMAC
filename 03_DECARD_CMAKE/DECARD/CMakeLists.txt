@@ -16,6 +16,23 @@ include_directories(include
 add_subdirectory( src )
 # add_subdirectory( tests )
 
+## CHECK FOR DEBUG MODE
+if (DEBUG)
+  message ("DEBUG MODE COMPILATION")
+  set(CMAKE_BUILD_TYPE Debug)
+  enable_testing()
+  add_subdirectory (tests) 
+else ()
+  message ("RELEASE MODE COMPILATION")
+  set(CMAKE_BUILD_TYPE Release)
+endif (DEBUG)
+
+## CHECK FOR VERBOSE EXECUTION MODE
+if (VERBOSE_MODE)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DVERBOSE_MODE=${VERBOSE_MODE}")
+endif (VERBOSE_MODE)
+
+
 #including DECARD
 message("=> Starting DECARD environment\n")
 

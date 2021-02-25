@@ -13,8 +13,22 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include "NodeInit.hpp"
+#include <vector>
 
-  
-int start_NCOM();
+namespace decard
+{
+  class NCOM
+  {
+    private:
+      AllNodes * nodes_list;
+      Node * this_node;
+    public:
+      NCOM(AllNodes * a_nodes, Node * a_node):nodes_list(a_nodes), this_node(a_node){};
+      ~NCOM(){};
+      int start_NCOM();
+
+  };
+}
 
 #endif /* NCOM_H */

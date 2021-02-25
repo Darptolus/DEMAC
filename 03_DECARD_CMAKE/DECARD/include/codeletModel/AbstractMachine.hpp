@@ -14,27 +14,29 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <mpi.h>
-#include<iterator>
-#include<vector>
+#include <iterator>
+#include <vector>
 
 #include "Node.hpp"
 
-class AbstractMachine
+namespace decard
 {
-private:
-  int world_size;
-  std::vector<Node*> nodes;
-  std::vector<Node*>::iterator nodes_it;
-public:
-  AbstractMachine();
-  int GetWorldSize() {return world_size;}
-  int start_AM();
-  ~AbstractMachine() {
-    for (auto& element : nodes) {
-      delete element;
+  class AbstractMachine
+  {
+  private:
+    int world_size;
+    AllNodes nodes;
+    AllNodes::iterator nodes_it;
+  public:
+    AbstractMachine();
+    int GetWorldSize() {return world_size;}
+    int start_AM();
+    ~AbstractMachine() {
+      for (auto& element : nodes) {
+        delete element;
+      }
     }
-  }
-  
-}; 
-
+    
+  }; 
+}
 #endif /* ABSTRACTMACHINE_H */

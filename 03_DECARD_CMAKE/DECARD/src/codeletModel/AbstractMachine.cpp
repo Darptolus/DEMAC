@@ -9,6 +9,8 @@
  */
 #include "AbstractMachine.hpp"
 
+using namespace decard;
+
 int world_size;
 int world_rank;
 // char node_name[16];
@@ -43,7 +45,7 @@ int AbstractMachine::start_AM()
     Node * newNode;
     if (i==world_rank){
       // Create Intern Node
-      newNode = new Node_Intern(world_rank, world_size);
+      newNode = new Node_Intern(world_rank, world_size, &nodes);
       // newNode->start_NODE();
     }else if (i!=world_rank){
       // Create Extern Node

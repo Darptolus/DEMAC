@@ -14,6 +14,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int start_NMGR();
+namespace decard
+{
+  class NMGR
+  {
+    private:
+      
+    public:
+      NMGR(){};
+      ~NMGR(){};
+      int start_NMGR();
+  };
+}
 
 #endif /* NMGR_H */

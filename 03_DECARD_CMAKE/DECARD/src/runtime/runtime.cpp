@@ -10,17 +10,19 @@
 
 #include "runtime.hpp"
 
-// int world_size;
-// int world_rank;
-// int name_len;
-// char node_name[16];
+using namespace decard;
 
-int start_DECARD()
+int Runtime::start_rt()
 {
   AbstractMachine DECARD_AM;
   // Initialize Runtime
   printf("INITIALIZING RUNTIME\n");
   DECARD_AM.start_AM();
   
+  return 0;
+}
+
+int Runtime::end_rt()
+{
   return 0;
 }

@@ -15,8 +15,7 @@
 #include <stdlib.h>
 #include <mpi.h>
 #include "runtime.hpp"
-
 // #include "ThreadedProcedure.h"
 
 
-#endif /* NODE_H */
+#endif /* DECARD_HPP */

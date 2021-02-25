@@ -27,25 +27,16 @@
 
 
 #ifndef THREAD_SAFE_DEQUE_H_INCLUDED
-
 #define THREAD_SAFE_DEQUE_H_INCLUDED
 
-
-
 #include <deque>
-
 #include "Lock.h"
-
 #include "AutoLock.h"
-
-
-
 
 
 namespace thread_safe
 
 {
-
 
 
 template < class T, class Allocator = std::allocator<T> >

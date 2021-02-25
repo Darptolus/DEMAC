@@ -36,9 +36,8 @@
 
 #endif
 
-// namespace darts
-// {
-
+namespace decard
+{
 /*
 	Class: Lock
 
@@ -167,4 +166,4 @@ public:
         
 };
 
-// } // namespace darts
+} // namespace decard

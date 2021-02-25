@@ -15,11 +15,17 @@
 #include <stdlib.h>
 #include "AbstractMachine.hpp"
 
-// extern int world_size;
-// extern int world_rank;
-// extern int name_len;
-// extern char node_name[16];
-  
-int start_DECARD();
+namespace decard
+{
+  class Runtime
+  {
+    private:
+    public:
+      Runtime(){};
+      ~Runtime(){};
+      int start_rt();
+      int end_rt();
+  };
 
+}
 #endif /* RUNTIME_H */
