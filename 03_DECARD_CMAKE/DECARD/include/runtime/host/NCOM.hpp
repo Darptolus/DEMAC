@@ -14,20 +14,22 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "NodeInit.hpp"
+#include <mpi.h>
 #include <vector>
+#include <iterator>
 
 namespace decard
 {
   class NCOM
   {
     private:
-      AllNodes * nodes_list;
       Node * this_node;
+      AllNodes * nodes_list;
+      AllNodes::iterator n_it;
     public:
       NCOM(AllNodes * a_nodes, Node * a_node):nodes_list(a_nodes), this_node(a_node){};
       ~NCOM(){};
-      int start_NCOM();
-
+      int run();
   };
 }
 

@@ -16,10 +16,11 @@
 #include <unistd.h>
 #include <limits.h>
 #include <omp.h>
+#include <mpi.h>
+#include <vector>
 #include "NodeInit.hpp"
 #include <NCOM.hpp>
 #include <NMGR.hpp>
-#include <vector>
 #include <edarts.hpp>
 
 namespace decard
@@ -43,6 +44,12 @@ namespace decard
   {
   private:
     // ACK
+    // MPI_Request comm_reqS;
+    // MPI_Request comm_reqR;
+    // MPI_Status comm_sts;
+    // MPI_Status comm_stsR;
+    int test_flagS;
+    int test_flagR;
 
   public:
     Node_Extern(int w_rank, int w_size):Node(w_rank, w_size){};

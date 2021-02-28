@@ -13,19 +13,35 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include "AbstractMachine.hpp"
 
 namespace decard
 {
+  enum runtime_mode
+  {
+    ALL_AUTO,
+    ALL_DONE,
+    ALL_IDLE,
+    ALL_RECV,
+    ALL_SEND  
+  };
+  
   class Runtime
   {
     private:
+      runtime_mode rt_mode;
+      AbstractMachine DECARD_AM;
     public:
       Runtime(){};
+      Runtime(runtime_mode a_rt_mode):rt_mode(a_rt_mode){};
       ~Runtime(){};
-      int start_rt();
+      int run();
+      int run(runtime_mode a_rt_mode);
+      void set_mode(runtime_mode a_rt_mode){
+        this->rt_mode = a_rt_mode;
+      };
       int end_rt();
   };
-
 }
 #endif /* RUNTIME_H */

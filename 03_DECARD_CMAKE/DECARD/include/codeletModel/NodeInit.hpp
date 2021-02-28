@@ -21,11 +21,12 @@
 
 namespace decard
 {
-  enum comms_mode
+  enum node_mode
   {
-    INIT,
-    RECEIVE,
-    SEND
+    N_DONE,
+    N_IDLE,
+    N_RECEIVE,
+    N_SEND  
   };
 
   class Node
@@ -34,7 +35,7 @@ namespace decard
   public:
     int world_rank;
     int world_size;
-    comms_mode comm_mode;
+    node_mode comm_mode;
     thread_safe::deque<ThreadedProcedure*> INTPQ;
     thread_safe::deque<ThreadedProcedure*> ONTPQ;
     thread_safe::deque<ThreadedProcedure*> ISTPQ;
@@ -42,7 +43,10 @@ namespace decard
 
     Node(int w_rank, int w_size):world_rank(w_rank),world_size(w_size){};
     ~Node(){};
-    virtual int start_NODE() = 0;
+    virtual int start_NODE() = 0; // Pure virtual
+    void set_mode(node_mode a_c_mode){
+      this->comm_mode = a_c_mode;
+    };
   };
 
   typedef std::vector<Node*> AllNodes;

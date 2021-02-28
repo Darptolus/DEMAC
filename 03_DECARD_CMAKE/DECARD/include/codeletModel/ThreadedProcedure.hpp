@@ -31,6 +31,7 @@ namespace decard
 {
   //This is a forward declaration since there is a circular dependence
   class Codelet;
+  class Node;
 
   class ThreadedProcedure 
   {
@@ -41,6 +42,7 @@ namespace decard
   */
     unsigned int ref_;
   public:
+    Node * parent_node;
     ThreadedProcedure * parentTP_;
     ThreadedProcedure(void);
     //ThreadedProcedure(unsigned int num, ThreadedProcedure * parentTP);
