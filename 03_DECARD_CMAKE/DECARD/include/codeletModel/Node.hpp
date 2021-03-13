@@ -18,7 +18,7 @@
 #include <omp.h>
 #include <mpi.h>
 #include <vector>
-#include "NodeInit.hpp"
+#include "NodeInterface.hpp"
 #include <NCOM.hpp>
 #include <NMGR.hpp>
 #include <edarts.hpp>
@@ -28,33 +28,46 @@ namespace decard
   class Node_Intern: public Node
   {
   private:
-    NCOM NodeNCOM;
-    NMGR NodeNMGR;
-  public:
-  char node_name[HOST_NAME_MAX+1];
-    Node_Intern(int w_rank, int w_size, AllNodes * a_nodes):Node(w_rank, w_size), NodeNCOM(a_nodes, this){
+    NCOM this_NCOM;
+    NMGR this_NMGR;
+    // thread_safe::deque<ThreadedProcedure*> INTPQ;
+    // thread_safe::deque<ThreadedProcedure*> ONTPQ;
+    // thread_safe::deque<ThreadedProcedure*> ISTPQ;
+    // thread_safe::deque<ThreadedProcedure*> OSTPQ;
+    control_q ICTRQ;
+    control_q OCTRQ;
+  public: 
+    char node_name[HOST_NAME_MAX+1];
+    Node_Intern(int w_rank, int w_size, AllNodes * a_nodes):
+    Node(w_rank, w_size), 
+    this_NCOM(a_nodes, this, &ICTRQ, &OCTRQ),
+    this_NMGR(a_nodes, this, &ICTRQ, &OCTRQ){
       gethostname(node_name, HOST_NAME_MAX+1);
       // printf("NODENAME: %s \n", node_name);
     };
     ~Node_Intern(){};
-    int start_NODE();
+    int run();
   };
 
   class Node_Extern: public Node
   {
   private:
-    // ACK
-    // MPI_Request comm_reqS;
-    // MPI_Request comm_reqR;
-    // MPI_Status comm_sts;
-    // MPI_Status comm_stsR;
+    MPI_Request rcv_req;
+    MPI_Status rcv_sts;
     int test_flagS;
     int test_flagR;
-
+    int msg_box;
   public:
     Node_Extern(int w_rank, int w_size):Node(w_rank, w_size){};
-    ~Node_Extern(){};
-    int start_NODE();
+    ~Node_Extern(){}
+    int run();
+    void set_msgbox(int a_msg){
+      this->msg_box = a_msg;
+    };
+    MPI_Request * get_rreq(){return &rcv_req;}
+    MPI_Status * get_rsts(){return &rcv_sts;}
+    int * get_msgbox(){return &msg_box;}
   };
+
 } // namespace decard
 #endif /* NODE_H */

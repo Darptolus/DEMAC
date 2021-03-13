@@ -13,17 +13,26 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include "NodeInterface.hpp"
+#include "ThreadedProcedure.hpp"
+
 
 namespace decard
 {
   class NMGR
   {
     private:
-      
+      Node * this_node;
+      AllNodes * nodes_list;
+      AllNodes::iterator n_it;
+      control_q * this_ICTRQ;
+      control_q * this_OCTRQ;
     public:
-      NMGR(){};
+      NMGR(AllNodes * a_nodes, Node * a_node, control_q * a_ICTRQ, control_q * a_OCTRQ):
+           nodes_list(a_nodes), this_node(a_node), this_ICTRQ(a_ICTRQ), this_OCTRQ(a_OCTRQ){};
       ~NMGR(){};
-      int start_NMGR();
+      int run();
+      int tst_gen();
   };
 }
 

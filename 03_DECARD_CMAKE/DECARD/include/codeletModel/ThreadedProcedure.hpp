@@ -40,9 +40,12 @@ namespace decard
   * Variable: ref_
   * ref_ says when the TP is done
   */
+    int origin_node;
+    int destin_node;
+    int opr_id;
     unsigned int ref_;
   public:
-    Node * parent_node;
+    // Node * parent_node;
     ThreadedProcedure * parentTP_;
     ThreadedProcedure(void);
     //ThreadedProcedure(unsigned int num, ThreadedProcedure * parentTP);
@@ -53,6 +56,18 @@ namespace decard
     void incRef (void);
     bool zeroRef (void);
     bool checkParent(void);
+
+    void set_orig(int a_o_node){
+      this->origin_node = a_o_node;
+    };
+    void set_dest(int a_d_node){
+      this->destin_node = a_d_node;
+    };
+    void set_opr(int a_opr){
+      this->opr_id = a_opr;
+    };
+
+
     /*
     * Method: addCodelet
     * Adds a codelet to the TP's list

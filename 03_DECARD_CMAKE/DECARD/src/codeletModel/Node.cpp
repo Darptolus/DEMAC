@@ -12,7 +12,7 @@
 
 using namespace decard;
 
-int Node_Intern::start_NODE()
+int Node_Intern::run()
 {
   // Initialize NODE
   printf("INITIALIZING Node_Intern\n");
@@ -28,19 +28,19 @@ int Node_Intern::start_NODE()
 
     if (core_id == 0){
       // Core A
-      printf("%s: This is NCOM R(%d/%d) C(%d/%d)\n", this->node_name, this->world_rank+1, this->world_size, core_id+1, core_tot);
-      NodeNCOM.run();
+      printf("%s: NCOM R(%d/%d) C(%d/%d)\n", this->node_name, this->node_id+1, this->world_size, core_id+1, core_tot);
+      this_NCOM.run();
     }else if (core_id == 1){
       // Core B
-      printf("%s: This is NMGR R(%d/%d) C(%d/%d)\n", this->node_name, this->world_rank+1, this->world_size, core_id+1, core_tot);
-      NodeNMGR.start_NMGR();
+      printf("%s: NMGR R(%d/%d) C(%d/%d)\n", this->node_name, this->node_id+1, this->world_size, core_id+1, core_tot);
+      this_NMGR.run();
     }
     #pragma omp barrier
   }
   return 0;
 };
 
-int Node_Extern::start_NODE()
+int Node_Extern::run()
 {
   // Initialize NODE
   printf("INITIALIZING Node_Extern\n");
