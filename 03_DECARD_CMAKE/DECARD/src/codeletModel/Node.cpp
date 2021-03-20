@@ -15,7 +15,7 @@ using namespace decard;
 int Node_Intern::run()
 {
   // Initialize NODE
-  printf("INITIALIZING Node_Intern\n");
+  // printf("INITIALIZING Node_Intern\n");
 
   eDARTS epiDARTS;
   epiDARTS.start_eDARTS();
@@ -30,19 +30,23 @@ int Node_Intern::run()
       // Core A
       printf("%s: NCOM R(%d/%d) C(%d/%d)\n", this->node_name, this->node_id+1, this->world_size, core_id+1, core_tot);
       this_NCOM.run();
+      this_NCOM.tst_gen_0();
+      
     }else if (core_id == 1){
       // Core B
       printf("%s: NMGR R(%d/%d) C(%d/%d)\n", this->node_name, this->node_id+1, this->world_size, core_id+1, core_tot);
       this_NMGR.run();
+      this_NMGR.tst_gen_0();
+      
     }
     #pragma omp barrier
   }
   return 0;
-};
+}
 
 int Node_Extern::run()
 {
   // Initialize NODE
   printf("INITIALIZING Node_Extern\n");
   return 0;
-};
+}

@@ -28,4 +28,4 @@ set_target_properties(decard_codeletModel PROPERTIES LINKER_LANGUAGE CXX
 
 # target_compile_options(decard_codeletModel PRIVATE -fopenmp)
 
-                                                     
+# target_link_libraries(decard_codeletModel ${MPI_LIBRARIES})

@@ -15,11 +15,9 @@ using namespace decard;
 
 int NCOM::run()
 {
-  // NCOM initialize channels
-  printf("INITIALIZING NCOM\n");
-  // for (n_it = nodes.begin(); n_it != nodes.end(); ++n_it){
-  //   (*n_it)->setMode();
-  // }
+  Node_Intern * n_int = dynamic_cast <Node_Intern *> (t_node);
+  // todo: t_node -> n_int
+  Node_Extern * n_ext;
   int codeA = 0;
   int codeB = 0;
   int node_dest = 0;
@@ -30,46 +28,164 @@ int NCOM::run()
 
   int test_flagS = 0;
   int test_flagR = 0;
-  Node_Intern * t_node = (Node_Intern *) this_node;
-  Node_Extern * n_ext;
 
+  // NCOM initialize channels
+  printf("%s: INITIALIZING NCOM\n", n_int->node_name);
 
-  // Recieve
+/***************************************************
+  
   for (n_it = nodes_list->begin(); n_it != nodes_list->end(); ++n_it){
-    // (*nodes_it)->start_NODE();
-    // printf("HERE!!!\n");
-    // printf("node_id= %d this_node_id= %d\n", (*n_it)->get_id(), (t_node)->node_id);
-    if ((*n_it)->get_id() != (t_node)->node_id){
-      n_ext = dynamic_cast <Node_Extern *> (*n_it);
-      // n_ext->set_msgbox();
-      printf("%s: OPENNING \t\t in R(%d/%d) \t to R(%d) \t ErrCode(%d)\n",
-      (t_node)->node_name, (t_node)->node_id, (t_node)->world_size, n_ext->get_id(), ErrCode);
-      ErrCode = MPI_Irecv(n_ext->get_msgbox(), 1, MPI_INT, n_ext->get_id(), 1, MPI_COMM_WORLD, n_ext->get_rreq()); 
-    }
+    // Clear channel availability
+    (*n_it)->clr_renb()
   }
 
-  // Send
-  for (n_it = nodes_list->begin(); n_it != nodes_list->end(); ++n_it){
-    if ((*n_it)->get_id() != (t_node)->node_id){
-      n_ext = dynamic_cast <Node_Extern *> (*n_it);
-      codeA = 10*((*n_it)->get_id() +1);
-      ErrCode = MPI_Send(&codeA, 1, MPI_INT, n_ext->get_id(), 1, MPI_COMM_WORLD);
-      printf("%s: SENDING msg(%d) \t from R(%d/%d) \t to R(%d) \t ErrCode(%d)\n", 
-      (t_node)->node_name, codeA, (t_node)->node_id, (t_node)->world_size, n_ext->get_id(), ErrCode);
-    }
-  }
+  do{
+    switch(n_int->get_mode()) {
+    case N_DONE:
+      printf("%s: NCOM DONE\n", n_int->node_name);
+      // Send DONE msg
 
-  // Test
-  for (n_it = nodes_list->begin(); n_it != nodes_list->end(); ++n_it){
-    if ((*n_it)->get_id() != (t_node)->node_id){
-      n_ext = dynamic_cast <Node_Extern *> (*n_it);
-      ErrCode = MPI_Wait(n_ext->get_rreq(), n_ext->get_rsts());
-      // ErrCode = MPI_Test(&((t_node)->rcv_req), &test_flagR, &((t_node)->rcv_sts));
-      printf("%s: TESTING R[%d] msg(%d) \t from R(%d/%d) \t to R(%d) \t ErrCode(%d)\n", 
-      (t_node)->node_name, test_flagR, *(n_ext->get_msgbox()), (t_node)->node_id, (t_node)->world_size, n_ext->get_id(), ErrCode);
-      usleep(1000000);
+      // set exec = 0
+      break;
+    case N_IDLE:
+      printf("%s: NCOM IDLE\n", n_int->node_name);
+      // Test
+      for (n_it = nodes_list->begin(); n_it != nodes_list->end(); ++n_it){
+        if ((*n_it)->get_id() != n_int->node_id){
+          n_ext = dynamic_cast <Node_Extern *> (*n_it);
+          // Check if msg has been recieved
+          // ErrCode = MPI_Wait(n_ext->get_rreq(), n_ext->get_rsts());
+          ErrCode = MPI_Test(n_ext->get_rreq(), n_ext->get_rflg(), n_ext->get_rsts());
+          printf("%s: TESTING R[%d] msg(%d) \t from R(%d/%d) \t to R(%d) \t ErrCode(%d)\n", 
+          n_int->node_name, *(n_ext->get_rflg()), *(n_ext->get_msgbox()), n_int->node_id, n_int->world_size, n_ext->get_id(), ErrCode);
+        }
+        if(*(n_ext->get_rflg())){
+          // Mssage recieved -> Set origin node -> Change to RECEIVE
+          n_int->set_nrcv(n_ext);
+          n_ext->clr_renb();
+          n_int->mode_rcv();
+          break;
+        }else if(n_ext->get_msgout()){ // ********** Msg in q? **********
+          // Outgoing message(s) -> Change to SEND
+          n_int->mode_snd();
+          break;
+        }
+      }
+      if(n_int->get_mode() == N_IDLE){
+        // Stay in idle
+        usleep(1000000);
+      }
+      break;
+
+    case N_RECEIVE:
+      // Recieve
+      printf("%s: NCOM RECEIVE\n", n_int->node_name);
+      // Check for incoming message
+      if(n_int->get_nrcv() != NULL){
+        // Message Recieved
+        printf("%s: NCOM: Pushing [%d]\n", n_int->node_name, *(n_ext->get_msgbox())); // *((n_int->get_nrcv())->get_msgbox())
+        // Push to queue
+        this_ICTRQ->push_back(*(n_ext->get_msgbox()));
+        // Clear Recieved
+        n_int->set_nrcv(NULL);
+        // Reenable Channel
+        printf("%s: OPENNING \t\t in R(%d/%d) \t to R(%d) \t ErrCode(%d)\n",
+        n_int->node_name, n_int->node_id, n_int->world_size, n_ext->get_id(), ErrCode);
+        ErrCode = MPI_Irecv(n_ext->get_msgbox(), 1, MPI_INT, n_ext->get_id(), 1, MPI_COMM_WORLD, n_ext->get_rreq()); 
+        n_ext->set_renb();
+      }else{
+      // Check all channels
+        for (n_it = nodes_list->begin(); n_it != nodes_list->end(); ++n_it){
+          // Check channel availability
+          if (!((*n_it)->get_renb) && ((*n_it)->get_id() != n_int->node_id)){
+            // Open channel
+            n_ext = dynamic_cast <Node_Extern *> (*n_it);
+            printf("%s: OPENNING \t\t in R(%d/%d) \t to R(%d) \t ErrCode(%d)\n",
+            n_int->node_name, n_int->node_id, n_int->world_size, n_ext->get_id(), ErrCode);
+            ErrCode = MPI_Irecv(n_ext->get_msgbox(), 1, MPI_INT, n_ext->get_id(), 1, MPI_COMM_WORLD, n_ext->get_rreq()); 
+            n_ext->set_renb();
+          }
+        }
+      }
+      if(n_ext->get_msgout()){
+          // Outgoing message(s) -> Change to SEND
+          n_int->mode_snd();
+        }else{
+          // Change to SEND
+          n_int->mode_idl();
+        }
+
+      // set idle mode
+      break;
+    case N_SEND:
+      printf("%s: NCOM SEND\n", n_int->node_name);
+      // Recieve message & push to queue
+
+      // Send msg to node
+      for (n_it = nodes_list->begin(); n_it != nodes_list->end(); ++n_it){
+        if ((*n_it)->get_id() != n_int->node_id){
+          n_ext = dynamic_cast <Node_Extern *> (*n_it);
+          codeA = 10*((*n_it)->get_id() +1);
+          ErrCode = MPI_Send(&codeA, 1, MPI_INT, n_ext->get_id(), 1, MPI_COMM_WORLD);
+          printf("%s: SENDING msg(%d) \t from R(%d/%d) \t to R(%d) \t ErrCode(%d)\n", 
+          n_int->node_name, codeA, n_int->node_id, n_int->world_size, n_ext->get_id(), ErrCode);
+        }
+      } 
+
+      // set idle mode
+      break;
+    default:
+      printf("%s: NCOM Invalid State\n", n_int->node_name);
+    }
+  }while(n_int->get_exec())
+
+
+**************************************************/
+
+        // (*nodes_it)->start_NODE();
+        // printf("HERE!!!\n");
+        // printf("node_id= %d this_node_id= %d\n", (*n_it)->get_id(), n_int->node_id);
+        // if ((*n_it)->get_id() != n_int->node_id){}
+          
+          // n_ext->set_msgbox();
+
+  // for (n_it = nodes.begin(); n_it != nodes.end(); ++n_it){
+  //   (*n_it)->setMode();
+  // }
+
+  return 0;
+}
+
+int NCOM::tst_gen_0()
+{
+  Node_Intern * n_int = dynamic_cast <Node_Intern *> (t_node);
+  ThreadedProcedure * newTP;
+  // Consuming
+  printf("%s: NCOM: Consuming TPs\n", n_int->node_name);
+  int x, y;
+  x = 0;
+  while (x < 3) {
+    if(!t_ONTPQ->empty()){
+      newTP = t_ONTPQ->popFront();
+      y = newTP->get_opr();
+      printf("%s: NCOM: Popping [%d]\n", n_int->node_name, y);
+      ++x;
     }
   }
+  usleep(1000000);
+  // Producing
+  printf("%s: NCOM: Generating TPs\n", n_int->node_name);
+  for(x = 0; x < 3; ++x){
+    newTP = new ThreadedProcedure();
+    newTP->set_orig(n_int->node_id);
+    // newTP->set_dest((*n_it)->get_id());
+    newTP->set_opr(x);
+    printf("%s: NCOM: Pushing [%d]\n", n_int->node_name, x);
+    t_INTPQ->push_back(newTP);
+    // this_OCTRQ->push_back(x);
+  }
+  return 0;
+}
 
 
   // MPI_Request comm_reqS;
@@ -126,8 +242,7 @@ int NCOM::run()
   // }
 
 
-  return 0;
-};
+
 
 // int NCOM::start()
 // {

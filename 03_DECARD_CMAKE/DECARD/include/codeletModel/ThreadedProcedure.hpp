@@ -66,7 +66,7 @@ namespace decard
     void set_opr(int a_opr){
       this->opr_id = a_opr;
     };
-
+    int get_opr(){ return opr_id;};
 
     /*
     * Method: addCodelet

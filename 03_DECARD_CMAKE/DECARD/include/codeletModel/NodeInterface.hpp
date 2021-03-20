@@ -17,7 +17,7 @@
 #include <omp.h>
 #include <mpi.h>
 #include "thread_safe_deque.h"
-// #include "ThreadedProcedure.hpp"
+#include "ThreadedProcedure.hpp"
 #include <vector>
 
 namespace decard
@@ -56,9 +56,22 @@ namespace decard
     int get_id(){ return node_id;};
     node_mode get_mode(){ return n_mode;};
     node_type get_type(){ return n_type;};
+    void mode_dne(){
+      this->n_mode = N_DONE;
+    };
+    void mode_idl(){
+      this->n_mode = N_IDLE;
+    };
+    void mode_rcv(){
+      this->n_mode = N_RECEIVE;
+    };
+    void mode_snd(){
+      this->n_mode = N_SEND;
+    };
   };
 
   typedef std::vector<Node*> AllNodes;
   typedef thread_safe::deque<int> control_q;
+  typedef thread_safe::deque<ThreadedProcedure*> tp_q;
 } // namespace decard
 #endif /* NODEINIT_H */

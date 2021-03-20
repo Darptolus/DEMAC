@@ -14,6 +14,6 @@ using namespace decard;
 int eDARTS::start_eDARTS()
 {
   // Initialize channels
-  printf("INITIALIZING eDARTS\n");
+  // printf("INITIALIZING eDARTS\n");
   return 0;
 }

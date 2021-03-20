@@ -15,33 +15,9 @@ using namespace decard;
 // int world_size;
 int world_rank;
 
-// void print_rt_mode(machine_state mstate) {
-//   printf("RUNTIME ");
-//   switch(mstate) {
-//     case ALL_AUTO:
-//         printf("ALL_AUTO\n");
-//         break;
-//     case ALL_DONE:
-//         printf("ALL_DONE\n");
-//         break;
-//     case ALL_IDLE:
-//         printf("ALL_IDLE\n");
-//         break;
-//     case ALL_RECV:
-//         printf("ALL_RECV\n");
-//         break;
-//     case ALL_SEND:
-//         printf("ALL_SEND\n");
-//         break;
-//     default:
-//         printf("Invalid Mode\n");
-//   }
-// }
-
 // AbstractMachine::AbstractMachine(){
 //   printf("CREATING AbstractMachine\n");
 // }
-
 
 int AbstractMachine::run()
 {
@@ -69,26 +45,7 @@ int AbstractMachine::run()
   }
   // Define operation mode for each node
   node_mode n_mode = N_IDLE;
-  // switch(am_state) {
-  //   case ALL_AUTO:
-  //       // Set mode based on workload for each node?
-  //       n_mode = N_IDLE;
-  //       break;
-  //   case ALL_DONE:
-  //       n_mode = N_DONE;
-  //       break;
-  //   case ALL_IDLE:
-  //       n_mode = N_IDLE;
-  //       break;
-  //   case ALL_RECV:
-  //       n_mode = N_RECEIVE;
-  //       break;
-  //   case ALL_SEND:
-  //       n_mode = N_SEND;
-  //       break;
-  //   default:
-  //       printf("Invalid Mode\n");
-  // }
+
   for (nodes_it = nodes.begin(); nodes_it != nodes.end(); ++nodes_it){
     (*nodes_it)->set_mode(n_mode);
   }

@@ -18,29 +18,15 @@
 
 namespace decard
 {
-  // enum runtime_mode
-  // {
-  //   R_DONE,
-  //   R_EXEC,
-  //   R_IDLE,
-  //   R_UNDEF 
-  // };
-  
   class Runtime
   {
     private:
-      // runtime_mode rt_mode;
       AbstractMachine DECARD_AM;
     public:
       Runtime(){};
-      // Runtime(runtime_mode a_rt_mode):rt_mode(a_rt_mode){};
       ~Runtime(){};
       int run();
-      // int run(runtime_mode a_rt_mode);
-      // void set_mode(runtime_mode a_rt_mode){
-      //   this->rt_mode = a_rt_mode;
-      // };
-      int end_rt();
+      int end();
   };
 }
 #endif /* RUNTIME_H */

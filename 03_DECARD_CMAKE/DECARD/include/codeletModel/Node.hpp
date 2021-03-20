@@ -25,48 +25,91 @@
 
 namespace decard
 {
+  class Node_Extern: public Node
+  {
+  private:
+    MPI_Request rcv_req;
+    MPI_Status rcv_sts;
+    bool rcv_enb;
+    bool snd_flg;
+    // int test_flagS;
+    int rcv_flg;
+    int msg_box;
+    int msg_out;
+  public:
+    Node_Extern(int w_rank, int w_size):Node(w_rank, w_size){};
+    ~Node_Extern(){}
+    int run();
+    void set_renb(){
+      this->rcv_enb = 1;
+    };
+    void clr_renb(){
+      this->rcv_enb = 0;
+    };
+    void set_sflg(){
+      this->snd_flg = 1;
+    };
+    void clr_sflg(){
+      this->snd_flg = 0;
+    };
+    void set_msgbox(int a_msg){
+      this->msg_box = a_msg;
+    };
+
+    MPI_Request * get_rreq(){return &rcv_req;}
+    MPI_Status * get_rsts(){return &rcv_sts;}
+    int * get_rflg(){return &rcv_flg;}
+    int * get_msgbox(){return &msg_box;}
+    int get_msgout(){return msg_out;}
+    bool get_renb(){return &rcv_enb;}
+    bool get_sflg(){return &snd_flg;}
+  };
+
   class Node_Intern: public Node
   {
   private:
+    bool exec;
     NCOM this_NCOM;
     NMGR this_NMGR;
     // thread_safe::deque<ThreadedProcedure*> INTPQ;
     // thread_safe::deque<ThreadedProcedure*> ONTPQ;
     // thread_safe::deque<ThreadedProcedure*> ISTPQ;
     // thread_safe::deque<ThreadedProcedure*> OSTPQ;
+    tp_q INTPQ;
+    tp_q ONTPQ;
+    tp_q ISTPQ;
+    tp_q OSTPQ;
     control_q ICTRQ;
     control_q OCTRQ;
+    Node_Extern * node_rcv;
   public: 
     char node_name[HOST_NAME_MAX+1];
     Node_Intern(int w_rank, int w_size, AllNodes * a_nodes):
     Node(w_rank, w_size), 
-    this_NCOM(a_nodes, this, &ICTRQ, &OCTRQ),
-    this_NMGR(a_nodes, this, &ICTRQ, &OCTRQ){
+    this_NCOM(a_nodes, this, &ICTRQ, &OCTRQ, &INTPQ, &ONTPQ),
+    this_NMGR(a_nodes, this, &ICTRQ, &OCTRQ, &INTPQ, &ONTPQ, &ISTPQ, &OSTPQ){
       gethostname(node_name, HOST_NAME_MAX+1);
+      this->exec = 1;
+      //node_rcv = NULL;
       // printf("NODENAME: %s \n", node_name);
     };
-    ~Node_Intern(){};
-    int run();
-  };
-
-  class Node_Extern: public Node
-  {
-  private:
-    MPI_Request rcv_req;
-    MPI_Status rcv_sts;
-    int test_flagS;
-    int test_flagR;
-    int msg_box;
-  public:
-    Node_Extern(int w_rank, int w_size):Node(w_rank, w_size){};
-    ~Node_Extern(){}
-    int run();
-    void set_msgbox(int a_msg){
-      this->msg_box = a_msg;
+    ~Node_Intern(){
+      // for (auto& element : nodes) {
+      //   delete element;
+      // }
     };
-    MPI_Request * get_rreq(){return &rcv_req;}
-    MPI_Status * get_rsts(){return &rcv_sts;}
-    int * get_msgbox(){return &msg_box;}
+    void set_exec(){
+      this->exec = 1;
+    };
+    void clr_exec(){
+      this->exec = 0;
+    };
+    void set_nrcv(Node_Extern * a_nrcv){
+      this->node_rcv = a_nrcv;
+    };
+    bool get_exec(){return exec;};
+    Node_Extern * get_nrcv(){return node_rcv;};
+    int run();
   };
 
 } // namespace decard
