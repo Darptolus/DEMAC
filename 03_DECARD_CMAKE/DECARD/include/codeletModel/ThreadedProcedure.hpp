@@ -31,7 +31,7 @@ namespace decard
 {
   //This is a forward declaration since there is a circular dependence
   class Codelet;
-  class Node;
+  // class Node;
 
   class ThreadedProcedure 
   {
@@ -40,12 +40,13 @@ namespace decard
   * Variable: ref_
   * ref_ says when the TP is done
   */
-    int origin_node;
-    int destin_node;
+    // Node * origin_node;
+    // Node * destin_node;
+    int origin_node_id;
+    int destin_node_id;
     int opr_id;
     unsigned int ref_;
   public:
-    // Node * parent_node;
     ThreadedProcedure * parentTP_;
     ThreadedProcedure(void);
     //ThreadedProcedure(unsigned int num, ThreadedProcedure * parentTP);
@@ -57,17 +58,28 @@ namespace decard
     bool zeroRef (void);
     bool checkParent(void);
 
+    // void set_orig(Node * a_o_node){
+    //   this->origin_node = a_o_node;
+    //   this->origin_node_id = a_o_node->get_id();
+    // };
+    // void set_dest(Node * a_d_node){
+    //   this->destin_node = a_d_node;
+    //   this->destin_node_id = a_d_node->get_id();
+    // };
     void set_orig(int a_o_node){
-      this->origin_node = a_o_node;
+      this->origin_node_id = a_o_node;
     };
     void set_dest(int a_d_node){
-      this->destin_node = a_d_node;
+      this->destin_node_id = a_d_node;
     };
     void set_opr(int a_opr){
       this->opr_id = a_opr;
     };
-    int get_opr(){ return opr_id;};
-
+    // Node * get_orig(){ return origin_node;};
+    // Node * get_dest(){ return destin_node;};
+    int get_orig_id(){ return origin_node_id;};
+    int get_dest_id(){ return destin_node_id;};
+    int * get_opr(){ return &opr_id;};
     /*
     * Method: addCodelet
     * Adds a codelet to the TP's list

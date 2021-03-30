@@ -31,32 +31,35 @@ int AbstractMachine::run()
   MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
 
   // Create Nodes
+  Node * new_Node;
+  Node * ths_Node;
   for (int i=0; i<world_size; ++i){
-    Node * newNode;
     if (i==world_rank){
       // Create Intern Node
-      newNode = new Node_Intern(i, world_size, &nodes);
+      new_Node = new Node_Intern(i, world_size, &nodes);
+      ths_Node = new_Node;
       // newNode->start_NODE();
     }else if (i!=world_rank){
       // Create Extern Node
-      newNode = new Node_Extern(i, world_size);
+      new_Node = new Node_Extern(i, world_size);
     }
-    nodes.push_back(newNode);
+    nodes.push_back(new_Node);
   }
   // Define operation mode for each node
-  node_mode n_mode = N_IDLE;
+  node_mode n_mode = N_RECEIVE;
 
   for (nodes_it = nodes.begin(); nodes_it != nodes.end(); ++nodes_it){
     (*nodes_it)->set_mode(n_mode);
   }
 
   // Setup current node
-  nodes_it = nodes.begin();
-  std::advance(nodes_it, world_rank);
-  (*nodes_it)->run();
+  // nodes_it = nodes.begin();
+  // std::advance(nodes_it, world_rank);
+  // (*nodes_it)->run();
+  ths_Node->run();
 
 
-
+  // TOBEDELETED
   // Node * local_Node; = nodes_it;
   // Node_Intern * localNode = (Node_Intern *) local_Node;
   // (*localNode)->start_NODE();
