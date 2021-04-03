@@ -61,7 +61,7 @@ int NCOM::run()
           // Check if msg has been recieved
           // ErrCode = MPI_Wait(n_ext->get_rreq(), n_ext->get_rsts());
           ErrCode = MPI_Test(n_ext->get_rreq(), n_ext->get_rflg(), n_ext->get_rsts());
-          printf("%s: TESTING R[%d] msg(%d) \t from R(%d/%d) \t to R(%d) \t ErrCode(%d)\n", 
+          printf("%s: NCOM: TESTING R[%d] msg(%d) \t from R(%d/%d) \t to R(%d) \t ErrCode(%d)\n", 
           n_int->node_name, *(n_ext->get_rflg()), *(n_ext->get_msgbox()), n_int->node_id, n_int->world_size, n_ext->get_id(), ErrCode);
           if (*(n_ext->get_rflg())){
             // Mssage recieved -> Set origin node -> Change to RECEIVE
@@ -88,7 +88,7 @@ int NCOM::run()
       // printf("%s: NCOM nrcv = %p\n", n_int->node_name, n_int->get_nrcv());
       if (n_int->get_nrcv()){
         // Message Recieved
-        printf("%s: NCOM: Pushing [%d] from rank %d\n", n_int->node_name, *(n_ext->get_msgbox()), n_ext->get_id()); // *((n_int->get_nrcv())->get_msgbox())
+        printf("%s: NCOM: Pushing [%d] to INTPQ from rank %d\n", n_int->node_name, *(n_ext->get_msgbox()), n_ext->get_id()); // *((n_int->get_nrcv())->get_msgbox())
         // Push to queue
         newTP = new ThreadedProcedure();
         // Simulated info from origin
@@ -102,7 +102,7 @@ int NCOM::run()
         // Reenable Channel
         ErrCode = MPI_Irecv(n_ext->get_msgbox(), 1, MPI_INT, n_ext->get_id(), 1, MPI_COMM_WORLD, n_ext->get_rreq()); 
         n_ext->set_renb();
-        printf("%s: OPENNING \t\t in R(%d/%d) \t to R(%d) \t ErrCode(%d)\n",
+        printf("%s: NCOM: OPENNING \t\t in R(%d/%d) \t to R(%d) \t ErrCode(%d)\n",
         n_int->node_name, n_int->node_id, n_int->world_size, n_ext->get_id(), ErrCode);
       } else {
         // Check all channels
@@ -114,7 +114,7 @@ int NCOM::run()
             if (!(n_ext->get_renb())){
               // Open channel
               // printf("%s: NCOM Here RA(%d) RB(%d)\n", n_int->node_name, n_int->node_id, n_ext->get_id());              
-              printf("%s: OPENNING \t\t in R(%d/%d) \t to R(%d) \t ErrCode(%d)\n",
+              printf("%s: NCOM: OPENNING \t\t in R(%d/%d) \t to R(%d) \t ErrCode(%d)\n",
               n_int->node_name, n_int->node_id, n_int->world_size, n_ext->get_id(), ErrCode);
               ErrCode = MPI_Irecv(n_ext->get_msgbox(), 1, MPI_INT, n_ext->get_id(), 1, MPI_COMM_WORLD, n_ext->get_rreq()); 
               n_ext->set_renb();
@@ -139,7 +139,7 @@ int NCOM::run()
         newTP = t_ONTPQ->popFront();
         // ACK before sending to the same node twice?
         ErrCode = MPI_Send(newTP->get_opr(), 1, MPI_INT, newTP->get_dest_id(), 1, MPI_COMM_WORLD);
-        printf("%s: SENDING msg(%d) \t from R(%d/%d) \t to R(%d) \t ErrCode(%d)\n",
+        printf("%s: NCOM: SENDING msg(%d) \t from R(%d/%d) \t to R(%d) \t ErrCode(%d)\n",
         n_int->node_name, *(newTP->get_opr()), n_int->node_id, n_int->world_size, newTP->get_dest_id(), ErrCode);
       }   
         

@@ -130,7 +130,7 @@ int NMGR::tst_gen_1(int y)
         usleep(1000000);
       } else{
         // INVALID
-        printf("%s: NMGR INVALID STATE\n", n_int->node_name);
+        printf("%s: NMGR Invalid State\n", n_int->node_name);
         usleep(1000000);
       }
       break;
