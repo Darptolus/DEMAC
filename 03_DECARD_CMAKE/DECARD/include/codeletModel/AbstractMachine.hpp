@@ -35,6 +35,7 @@ namespace decard
     };
     int run();
     int get_world_size() {return world_size;};
+    int end();
   }; 
 }
 #endif /* ABSTRACTMACHINE_H */

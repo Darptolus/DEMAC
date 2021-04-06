@@ -93,3 +93,9 @@ int AbstractMachine::run()
   return 0;
 }
 
+int AbstractMachine::end()
+{
+  // Finalize the MPI environment. No more MPI calls can be made after this
+  // MPI_Finalize();
+  return 0;
+}

@@ -20,7 +20,7 @@ int Runtime::run()
 
 int Runtime::end()
 {
-  
+  DECARD_AM.end();
   return 0;
 }
 
