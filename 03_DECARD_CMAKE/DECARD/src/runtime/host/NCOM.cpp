@@ -20,26 +20,10 @@ int NCOM::run()
   // todo: t_node -> n_int
   Node_Extern * n_ext;
   ThreadedProcedure * newTP;
-  // int codeA = 0;
-  // int codeB = 0;
-  // int node_dest = 0;
-  // int MsgA = 10;
-  // int MsgB = 0;
-  // int* MsgDest;
-  // int ErrCode = 0;
-
-  // int test_flagS = 0;
-  // int test_flagR = 0;
 
   // NCOM initialize channels
   printf("%s: NCOM: INIT\n", n_int->node_name);
-  
-  // for (n_it = nodes_list->begin(); n_it != nodes_list->end(); ++n_it){
-  //   // Clear channel availability
-  //   n_ext = dynamic_cast <Node_Extern *> (*n_it);
-  //   n_ext->clr_renb();
-  // }
-
+  DECARD_INFOMSG(0, "This is a test");
   do{
     switch(n_int->get_mode()) {
     case N_DONE: // Done Mode

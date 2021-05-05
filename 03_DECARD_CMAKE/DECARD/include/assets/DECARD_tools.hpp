@@ -14,12 +14,17 @@
 #include <cstdlib>
 #include <cstring>
 
-#define __FILENAME__ (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__)
 #ifndef VERBOSE_MODE
 #define VERBOSE_MODE -1
 #endif
 
 // Macro for output of information, warning and error messages
+#if VERBOSE_MODE >= 100
+  #define __FILENAME__ (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__)
+  #define VERBOSE_MODE = VERBOSE_MODE - 100
+#else
+  #define __FILENAME__ ""
+#endif
 #if VERBOSE_MODE >= 0
   #define DECARD_WARNING(level, message, ...) { \
     if(VERBOSE_MODE >= level) {\

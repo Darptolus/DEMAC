@@ -186,7 +186,7 @@ int NMGR::tst_gen_1(int y)
             newTP->set_orig(n_int->node_id);
             newTP->set_dest(n_ext->get_id());
             newTP->set_opr(oopr);
-            printf("%s: NMGR: REMT RO_%03d M_%04d\n", n_int->node_name, n_ext->get_id(), oopr);
+            printf("%s: NMGR: REMT RD_%03d M_%04d\n", n_int->node_name, n_ext->get_id(), oopr);
             // printf("%s: NMGR: Pushing [%d] for R(%d)\n", n_int->node_name, oopr, n_ext->get_id());
             t_ONTPQ->push_back(newTP);
           }
