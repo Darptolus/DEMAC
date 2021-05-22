@@ -23,7 +23,7 @@ int NCOM::run()
 
   // NCOM initialize channels
   printf("%s: NCOM: INIT\n", n_int->node_name);
-  DECARD_INFOMSG(0, "This is a test");
+  DECARD_INFOMSG(1, "This is a test");
   do{
     switch(n_int->get_mode()) {
     case N_DONE: // Done Mode

@@ -14,6 +14,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "NodeInterface.hpp"
+#include "DECARD_tools.hpp"
 #include <mpi.h>
 #include <vector>
 #include <iterator>

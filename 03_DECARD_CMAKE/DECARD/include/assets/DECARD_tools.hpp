@@ -19,9 +19,8 @@
 #endif
 
 // Macro for output of information, warning and error messages
-#if VERBOSE_MODE >= 100
+#ifdef FNAME 
   #define __FILENAME__ (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__)
-  #define VERBOSE_MODE = VERBOSE_MODE - 100
 #else
   #define __FILENAME__ ""
 #endif

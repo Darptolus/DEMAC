@@ -13,9 +13,6 @@ include_directories(include
                     include/assets
                     include)
 
-add_subdirectory( src )
-# add_subdirectory( tests )
-
 ## CHECK FOR DEBUG MODE
 if (DEBUG)
   message ("DEBUG MODE COMPILATION")
@@ -29,9 +26,17 @@ endif (DEBUG)
 
 ## CHECK FOR VERBOSE EXECUTION MODE
 if (VERBOSE_MODE)
+  message("=> DECARD VERBOSE MODE ENABLED\n")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DVERBOSE_MODE=${VERBOSE_MODE}")
+  if (FNAME)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DFNAMEM=${FNAME}")  
+  endif (FNAME)
 endif (VERBOSE_MODE)
 
+## CHECK FOR PROFILE EXECUTION MODE
+if (PROFILE_MODE)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DPROFILE_MODE=${PROFILE_MODE}")
+endif (PROFILE_MODE)
 
 #including DECARD
 message("=> Starting DECARD environment\n")
@@ -52,6 +57,9 @@ add_custom_command(
    COMMENT "Copying NodeList"
    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
    VERBATIM)
+
+add_subdirectory( src )
+# add_subdirectory( tests )
 
 add_executable(decard_main main_DECARD.cpp)
 
