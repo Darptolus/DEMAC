@@ -77,3 +77,9 @@ done
 
 #make clean; make; for i in `seq 1 15`; do make N_NODES=$i run; wait; done;
 #make clean; make;  make N_NODES=1 run; 
+
+# mpic++ -std=c++11 -fopenmp -o 00_nodeCheck 00_nodeCheck.cpp -I /opt/adapteva/esdk/tools/host/include -L /opt/adapteva/esdk/tools/host/lib -le-hal -le-loader -lpthread
+
+# e-gcc -T /opt/adapteva/esdk/bsps/current/internal.ldf -O0 e00_nodeCheck.c -o e00_nodeCheck.elf -le-lib
+
+# mpirun -machinefile nodeList -N 1 -np 3 ./00_nodeCheck

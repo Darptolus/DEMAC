@@ -19,44 +19,78 @@
 #endif
 
 // Macro for output of information, warning and error messages
-#ifdef FNAME 
-  #define __FILENAME__ (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__)
-#else
-  #define __FILENAME__ ""
-#endif
+
 #if VERBOSE_MODE >= 0
-  #define DECARD_WARNING(level, message, ...) { \
-    if(VERBOSE_MODE >= level) {\
-      printf("<[D_W]: %s:%i> " message "\n", __FILENAME__, __LINE__, ##__VA_ARGS__); \
-    } \
-  }
-  #define DECARD_WARNING_IF(level, condition, message, ...) { \
-    if(VERBOSE_MODE >= level && condition) { \
-      printf("<[D_W]: %s:%i> " message "\n", __FILENAME__, __LINE__, ##__VA_ARGS__); \
-    } \
-  }
-  
-  #define DECARD_ERROR(level, message, ...) { \
-    if(VERBOSE_MODE >= level) {\
-      fprintf(stderr, "<[D_E]: %s:%i> " message "\n", __FILENAME__, __LINE__, ##__VA_ARGS__); \
-    } \
-  }
-  #define DECARD_ERROR_IF(level, condition, message, ...) { \
-    if(VERBOSE_MODE >= level && condition) { \
-      fprintf(stderr, "<[D_E]: %s:%i> " message "\n", __FILENAME__, __LINE__, ##__VA_ARGS__); \
-    } \
-  }
-  
-  #define DECARD_INFOMSG(level, message, ...) { \
-    if(VERBOSE_MODE >= level) {\
-      printf("<[D_I]: %s:%i> " message "\n", __FILENAME__, __LINE__, ##__VA_ARGS__); \
-    } \
-  }
-  #define DECARD_INFOMSG_IF(level, condition, message, ...) { \
-    if(VERBOSE_MODE >= level && condition) { \
-      printf("<[D_I]: %s:%i> " message "\n", __FILENAME__, __LINE__, ##__VA_ARGS__); \
-    } \
-  }
+  #ifdef FNAME 
+    #define __FILENAME__ (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__)
+    #define DECARD_WARNING(level, message, ...) { \
+      if(VERBOSE_MODE >= level) {\
+        printf("<[D_W]: %s,%04i> " message "\n", __FILENAME__, __LINE__, ##__VA_ARGS__); \
+      } \
+    }
+    #define DECARD_WARNING_IF(level, condition, message, ...) { \
+      if(VERBOSE_MODE >= level && condition) { \
+        printf("<[D_W]: %s,%04i> " message "\n", __FILENAME__, __LINE__, ##__VA_ARGS__); \
+      } \
+    }
+    
+    #define DECARD_ERROR(level, message, ...) { \
+      if(VERBOSE_MODE >= level) {\
+        fprintf(stderr, "<[D_E]: %s,%04i> " message "\n", __FILENAME__, __LINE__, ##__VA_ARGS__); \
+      } \
+    }
+    #define DECARD_ERROR_IF(level, condition, message, ...) { \
+      if(VERBOSE_MODE >= level && condition) { \
+        fprintf(stderr, "<[D_E]: %s,%04i> " message "\n", __FILENAME__, __LINE__, ##__VA_ARGS__); \
+      } \
+    }
+    
+    #define DECARD_INFOMSG(level, message, ...) { \
+      if(VERBOSE_MODE >= level) {\
+        printf("<[D_I]: %s,%04i> " message "\n", __FILENAME__, __LINE__, ##__VA_ARGS__); \
+      } \
+    }
+    #define DECARD_INFOMSG_IF(level, condition, message, ...) { \
+      if(VERBOSE_MODE >= level && condition) { \
+        printf("<[D_I]: %s,%04i> " message "\n", __FILENAME__, __LINE__, ##__VA_ARGS__); \
+      } \
+    }
+  #else
+    // #define __FILENAME__ ""
+    #define DECARD_WARNING(level, message, ...) { \
+      if(VERBOSE_MODE >= level) {\
+        printf("[D_W]: " message "\n", ##__VA_ARGS__); \
+      } \
+    }
+    #define DECARD_WARNING_IF(level, condition, message, ...) { \
+      if(VERBOSE_MODE >= level && condition) { \
+        printf("[D_W]: " message "\n", ##__VA_ARGS__); \
+      } \
+    }
+    
+    #define DECARD_ERROR(level, message, ...) { \
+      if(VERBOSE_MODE >= level) {\
+        fprintf(stderr, "[D_E]: " message "\n", ##__VA_ARGS__); \
+      } \
+    }
+    #define DECARD_ERROR_IF(level, condition, message, ...) { \
+      if(VERBOSE_MODE >= level && condition) { \
+        fprintf(stderr, "[D_E]: " message "\n", ##__VA_ARGS__); \
+      } \
+    }
+    
+    #define DECARD_INFOMSG(level, message, ...) { \
+      if(VERBOSE_MODE >= level) {\
+        printf("[D_I]: " message "\n", ##__VA_ARGS__); \
+      } \
+    }
+    #define DECARD_INFOMSG_IF(level, condition, message, ...) { \
+      if(VERBOSE_MODE >= level && condition) { \
+        printf("[D_I]: " message "\n", ##__VA_ARGS__); \
+      } \
+    }
+
+  #endif
 #else
   #define DECARD_WARNING(level, message, ...) {}
   #define DECARD_WARNING_IF(level, message, ...) {}

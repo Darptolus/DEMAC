@@ -17,8 +17,10 @@ int Node_Intern::run()
   // Initialize NODE
   // printf("INITIALIZING Node_Intern\n");
 
-  eDARTS epiDARTS;
-  epiDARTS.start_eDARTS();
+  // Initialize eDARTS
+  epiDARTS.init();
+  epiDARTS.run();
+  usleep(100);
 
   // OpenMP
   #pragma omp parallel num_threads(2)
@@ -37,9 +39,11 @@ int Node_Intern::run()
       // printf("%s: NMGR: R(%d/%d) C(%d/%d)\n", this->node_name, this->node_id+1, this->world_size, core_id+1, core_tot);
       this_NMGR.run();
       this_NMGR.tst_gen_1(1);
+      epiDARTS.p_res();
     }
     #pragma omp barrier
   }
+  epiDARTS.end();
   return 0;
 }
 

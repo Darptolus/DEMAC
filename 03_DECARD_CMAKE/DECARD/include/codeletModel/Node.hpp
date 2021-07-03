@@ -84,6 +84,7 @@ namespace decard
     control_q ICTRQ;
     control_q OCTRQ;
     Node_Extern * node_rcv;
+    eDARTS epiDARTS;
   public: 
     char node_name[HOST_NAME_MAX+1];
     Node_Intern(int w_rank, int w_size, AllNodes * a_nodes):

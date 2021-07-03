@@ -19,37 +19,9 @@ int NMGR::run()
   
   Node_Intern * n_int = dynamic_cast <Node_Intern *> (t_node);
 
-  printf("%s: NMGR: INIT\n", n_int->node_name);
+  DECARD_INFOMSG(1, "%s: NMGR: INIT", n_int->node_name);
   return 0;
 }
-
-// int NMGR::tst_gen()
-// {
-//   // NMGR  
-//   Node_Intern * n_int = dynamic_cast <Node_Intern *> (t_node);
-//   Node_Extern * n_ext;
-//   printf("%s: NMGR: Generating TPs\n", (n_int)->node_name);
-//   ThreadedProcedure* newTP;
-//   for(int x = 0; x < 3; x++){
-//     for (n_it = nodes_list->begin(); n_it != nodes_list->end(); ++n_it){
-//       if ((*n_it)->get_id() != (n_int)->node_id){
-//         if ((*n_it)->get_mode(
-
-//         ) == N_RECEIVE){
-//           n_ext = dynamic_cast <Node_Extern *> (*n_it);
-//           printf("NMGR: NEW TP\n");
-//           newTP = new ThreadedProcedure();
-//           newTP->set_orig((n_int)->node_id);
-//           newTP->set_dest((*n_it)->get_id());
-//           newTP->set_opr(((*n_it)->get_id() + 1) * 10 + x);
-
-//           // ONTPQ.push_back(newTP);
-//         }
-//       }
-//     }
-//   }
-//   return 0;
-// }
 
 int NMGR::tst_gen_0()
 {
@@ -57,25 +29,25 @@ int NMGR::tst_gen_0()
   ThreadedProcedure * newTP;
   int x, y;
   // Producing
-  printf("%s: NMGR: Generating TPs\n", n_int->node_name);
+  DECARD_INFOMSG(1, "%s: NMGR: Generating TPs", n_int->node_name);
   for (x = 0; x < 3; ++x){
     newTP = new ThreadedProcedure();
     newTP->set_orig(n_int->node_id);
     // newTP->set_dest((*n_it)->get_id());
     newTP->set_opr(x);
-    printf("%s: NMGR: Pushing [%d]\n", n_int->node_name, x);
+    DECARD_INFOMSG(1, "%s: NMGR: Pushing [%d]", n_int->node_name, x);
     t_ONTPQ->push_back(newTP);
     // t_OCTRQ->push_back(x);
   }
   usleep(1000000);
   // Consuming
-  printf("%s: NMGR: Consuming TPs\n", n_int->node_name);
+  DECARD_INFOMSG(1, "%s: NMGR: Consuming TPs", n_int->node_name);
   x = 0;
   while (x < 3) {
     if(!t_INTPQ->empty()){
       newTP = t_INTPQ->popFront();
       y = *(newTP->get_opr());
-      printf("%s: NMGR: Popping [%d]\n", n_int->node_name, y);
+      DECARD_INFOMSG(1, "%s: NMGR: Popping [%d]", n_int->node_name, y);
       ++x;
     }
   }
@@ -91,12 +63,12 @@ int NMGR::tst_gen_1(int y)
   int x, oopr;
   int done;
   // Producing
-  printf("%s: NMGR: Test_Gen TPs\n", n_int->node_name);
+  DECARD_INFOMSG(1, "%s: NMGR: Test_Gen TPs", n_int->node_name);
 
   do{
     switch(this->get_mode()) {
     case M_DONE: // Done Mode
-      printf("%s: NMGR: DONE\n", n_int->node_name);
+      DECARD_INFOMSG(1, "%s: NMGR: DONE", n_int->node_name);
       // Check if all nodes are DONE
       done = 1;
       for (n_it = nodes_list->begin(); n_it != nodes_list->end(); ++n_it){
@@ -119,7 +91,7 @@ int NMGR::tst_gen_1(int y)
       break;
 
     case M_IDLE: // Idle Mode
-      printf("%s: NMGR: IDLE\n", n_int->node_name);
+      DECARD_INFOMSG(1, "%s: NMGR: IDLE", n_int->node_name);
       if (t_OSTPQ->size() > get_mltp()){ //*?*//
         // OSTPQ > MAX Local TP -> Change to REMOTE
         this->mode_rmt();
@@ -131,22 +103,20 @@ int NMGR::tst_gen_1(int y)
         usleep(1000000);
       } else{
         // INVALID
-        printf("%s: NMGR: Invalid State\n", n_int->node_name);
+        DECARD_INFOMSG(1, "%s: NMGR: Invalid State", n_int->node_name);
         usleep(1000000);
       }
       break;
 
     case M_LOCAL: // Local Mode
-      printf("%s: NMGR: LCAL\n", n_int->node_name);
+      DECARD_INFOMSG(1, "%s: NMGR: LCAL", n_int->node_name);
       // Check for available SU
 
       // Simulate Consuming -> Assigning to SU
-      // printf("%s: NMGR: Consuming TPs\n", n_int->node_name);
       if (!t_INTPQ->empty()){
         newTP = t_INTPQ->popFront();
         oopr = *(newTP->get_opr());
-        printf("%s: NMGR: LCAL RO_%03d M_%04d\n", n_int->node_name, newTP->get_orig_id(), oopr);
-        // printf("%s: NMGR: Popping [%d] from R(%d)\n", n_int->node_name, oopr, newTP->get_orig_id());
+        DECARD_INFOMSG(1, "%s: NMGR: LCAL RO_%03d M_%04d", n_int->node_name, newTP->get_orig_id(), oopr);
       }
 
       if(oopr == 999){
@@ -166,10 +136,8 @@ int NMGR::tst_gen_1(int y)
       break;
 
     case M_REMOTE: // Remote Mode
-      printf("%s: NMGR: REMT\n", n_int->node_name);
+      DECARD_INFOMSG(1, "%s: NMGR: REMT", n_int->node_name);
       // Simulate generation -> max_LTP reached
-      // printf("%s: NMGR: Generating TPs\n", n_int->node_name);
-      // for(x = 0; x <= y; ++x){
       x=0;
       do{
         for (n_it = nodes_list->begin(); n_it != nodes_list->end(); ++n_it){
@@ -186,8 +154,7 @@ int NMGR::tst_gen_1(int y)
             newTP->set_orig(n_int->node_id);
             newTP->set_dest(n_ext->get_id());
             newTP->set_opr(oopr);
-            printf("%s: NMGR: REMT RD_%03d M_%04d\n", n_int->node_name, n_ext->get_id(), oopr);
-            // printf("%s: NMGR: Pushing [%d] for R(%d)\n", n_int->node_name, oopr, n_ext->get_id());
+            DECARD_INFOMSG(1, "%s: NMGR: REMT RD_%03d M_%04d", n_int->node_name, n_ext->get_id(), oopr);
             t_ONTPQ->push_back(newTP);
           }
         }
@@ -198,7 +165,7 @@ int NMGR::tst_gen_1(int y)
       break;
 
     default:
-      printf("%s: NMGR: Invalid State\n", n_int->node_name);
+      DECARD_INFOMSG(1, "%s: NMGR: Invalid State", n_int->node_name);
     }
   }while(n_int->get_exec());
 
