@@ -1,10 +1,11 @@
-/*
- * Author: Noémien Kocher
- * Date: january 2016
- * Licence: MIT
- * Purpose:
- *   This file is run by each eCore, it represents the life of a cell. Until it
- *   is stopped, loops over and check its neighbor so as to update its status.
+/**
+ * @file e_darts.c
+ * @author Diego Roa
+ * @date 31 Dec 2020
+ * @brief eDarts
+ * @todo Add copyright
+ *
+ * Includes the definition of the Runtime
  */
 
 #include <stdio.h>
