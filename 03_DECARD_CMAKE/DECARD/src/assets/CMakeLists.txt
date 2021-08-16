@@ -1,12 +1,3 @@
-# set( decard_assets_src
-#      codeletsQueue.c
-#      syncSlot.c
-#      tpClosuresQueue.c)
-# set( decard_assets_inc
-#      ${CMAKE_SOURCE_DIR}/eDARTS/include/assets/codeletsQueue.h
-#      ${CMAKE_SOURCE_DIR}/eDARTS/include/assets/syncSlot.h
-#      ${CMAKE_SOURCE_DIR}/eDARTS/include/assets/tpClosuresQueue.h)
-
 set( decard_assets_src 
      )
 

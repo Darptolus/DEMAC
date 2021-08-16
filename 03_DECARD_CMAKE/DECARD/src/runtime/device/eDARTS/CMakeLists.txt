@@ -44,8 +44,8 @@ message_bgreen( "=== Project eDARTS CMAKE ===" )
 set(EPIPHANY_HOME /opt/adapteva/esdk)
 set(ELDF_INTERNAL ${EPIPHANY_HOME}/bsps/current/internal.ldf)
 set(ELDF_FAST ${EPIPHANY_HOME}/bsps/current/fast.ldf)
-set(ELDF_EDARTS_CACHEMAN ${CMAKE_SOURCE_DIR}/eDARTS/include/assets/fast_cacheman_codelets.ldf)
-set(ELDF_EDARTS ${CMAKE_SOURCE_DIR}/eDARTS/include/assets/darts.ldf)
+set(ELDF_EDARTS_CACHEMAN ${CMAKE_SOURCE_DIR}/include/assets/fast_cacheman_codelets.ldf)
+set(ELDF_EDARTS ${CMAKE_SOURCE_DIR}/include/assets/darts.ldf)
 
 # setting up the right compiler and linker
 set(CMAKE_C_COMPILER ${EPIPHANY_HOME}/tools/e-gnu.armv7l/bin/e-gcc)
@@ -58,13 +58,12 @@ set(CMAKE_C_LINK_EXECUTABLE
 # Include directories
 include_directories(include
                     include/assets
-                    include/codeletModel
                     include/multithreading
                     include/runtime
                     include)
 
 add_subdirectory( src )
-add_subdirectory( test )
+# add_subdirectory( test )                     include/codeletModel
 
 # We want to install in $HOME user directory
 if( "${CMAKE_INSTALL_PREFIX}" STREQUAL "/usr/local" )
@@ -157,7 +156,7 @@ endif()
 #Compilation flags
 option(DEBUG "DEBUG" ON)
 if (DEBUG)
-    message_yellow("=> DEBUG MODE ON!!")
+    message_yellow("=> DEBUG MODE ON!")
     set (CMAKE_C_FLAGS ${CMAKE_C_FLAGS} "-g -ffast-math -mfp-mode=round-nearest -fpic ")
 else ()
     set (CMAKE_C_FLAGS ${CMAKE_C_FLAGS} "-ffast-math -mfp-mode=round-nearest -fpic ")
@@ -165,11 +164,18 @@ endif()
 
 set(EPIPHANY_LIBS ${M_LIB} ${ELIB_LIB} ${GCC_LIB} ${G_LIB} ${C_LIB} ${EPIPHANY_LIB})
 
+set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -T ${ELDF_EDARTS}")
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -T ${ELDF_EDARTS} ${CMAKE_BINARY_DIR}/src/softcache/cachemanager.o")
+
 #including eDARTS
 message_bgreen("=> Starting eDARTS environment")
 
 add_executable(e_darts.elf e_darts.c)
 
-target_link_libraries(e_darts.elf ${EPIPHANY_LIBS})
+target_link_libraries(e_darts.elf ${EPIPHANY_LIBS}
+                                  e_darts)
 
-# ~/DEMAC_nfs/debug/edarts$ cmake ../../DECARD/src/runtime/device/eDARTS/
+add_dependencies(e_darts.elf edarts_cachemanager)
+
+# cd ~/DEMAC_nfs/debug/edarts
+# cmake ../../DECARD/src/runtime/device/eDARTS/

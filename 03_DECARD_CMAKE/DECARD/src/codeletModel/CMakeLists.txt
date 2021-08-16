@@ -1,12 +1,3 @@
-# set( decard_codeletModel_src
-#      codeletsQueue.c
-#      syncSlot.c
-#      tpClosuresQueue.c)
-# set( decard_codeletModel_inc
-#      ${CMAKE_SOURCE_DIR}/eDARTS/include/codeletModel/codeletsQueue.h
-#      ${CMAKE_SOURCE_DIR}/eDARTS/include/codeletModel/syncSlot.h
-#      ${CMAKE_SOURCE_DIR}/eDARTS/include/codeletModel/tpClosuresQueue.h)
-
 set( decard_codeletModel_src 
      AbstractMachine.cpp
      Node.cpp

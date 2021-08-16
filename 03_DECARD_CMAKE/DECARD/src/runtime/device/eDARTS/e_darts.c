@@ -8,17 +8,14 @@
  * Includes the definition of the Runtime
  */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdint.h>
-#include <time.h>
+#include "e_darts.h"
 
-#include <e-lib.h> // Epiphany cores library
-
-char swap[8] SECTION(".text_bank2");
+// char swap[8] SECTION(".text_bank2");
 volatile uint32_t *result;
 
 int main(void) {
+
+  e_darts_print("Starting eDARTS\n");
 
   unsigned core_row, core_col,
            group_rows, group_cols,
@@ -36,6 +33,8 @@ int main(void) {
   result  = (volatile uint32_t*) (0x8f000000 + 0x4*core_num); // writing to external memory, writing 4bytes
  
   *result = core_num; // store result
-    
+
+  e_darts_run();
+  testSyncSlot();
   
 }

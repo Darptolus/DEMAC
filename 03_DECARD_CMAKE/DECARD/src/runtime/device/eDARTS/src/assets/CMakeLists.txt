@@ -29,25 +29,24 @@
 #                                                                              #
 ################################################################################
 
-add_subdirectory( assets )
-add_subdirectory( multithreading )
-# add_subdirectory( codeletModel )
-add_subdirectory( runtime )
-add_subdirectory( softcache )
+set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -T ${ELDF_EDARTS_CACHEMAN}")
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -T ${ELDF_EDARTS_CACHEMAN} ${CMAKE_BINARY_DIR}/src/softcache/cachemanager.o")
 
-set( e_darts_src
-     runtime/e_darts_rt.c
-     )
+set( e_darts_assets_src
+     syncSlot.c)
 
-set( e_darts_inc
-     ${CMAKE_SOURCE_DIR}/include/runtime/e_darts.h
-     )
+set( e_darts_assets_inc
+     ${CMAKE_SOURCE_DIR}/include/assets/syncSlot.h)
 
-add_library( e_darts SHARED ${e_darts_src} ${e_darts_inc} )
+add_library( e_darts_assets ${e_darts_assets_src} ${e_darts_assets_inc})
+#target_link_libraries( edarts_assets )
 
-target_link_libraries(e_darts e_darts_runtime
-                              e_darts_assets
-                              e_darts_multithreading
-                              )
+set_target_properties(e_darts_assets PROPERTIES LINKER_LANGUAGE C)
+set_target_properties(e_darts_assets PROPERTIES PUBLIC_HEADER "${CMAKE_SOURCE_DIR}/include/assets/syncSlot.h")
 
-# e_darts_codeletModel e_darts_runtime_host e_darts_runtime_device e_darts_runtime
+# set_target_properties(e_darts_assets PROPERTIES PUBLIC_HEADER "${CMAKE_SOURCE_DIR}/eDARTS/include/assets/codeletsQueue.h ${CMAKE_SOURCE_DIR}/eDARTS/include/assets/syncSlot.h ${CMAKE_SOURCE_DIR}/eDARTS/include/assets/tpClosuresQueue.h")
+
+# install(TARGETS edarts_assets
+#         EXPORT edartsLibraryDepends
+#         ARCHIVE DESTINATION edarts/lib/             COMPONENT bin
+#         PUBLIC_HEADER DESTINATION edarts/include/   COMPONENT dev)

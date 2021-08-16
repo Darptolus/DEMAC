@@ -29,25 +29,24 @@
 #                                                                              #
 ################################################################################
 
-add_subdirectory( assets )
-add_subdirectory( multithreading )
-# add_subdirectory( codeletModel )
-add_subdirectory( runtime )
-add_subdirectory( softcache )
+set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -T ${ELDF_EDARTS_CACHEMAN}")
 
-set( e_darts_src
-     runtime/e_darts_rt.c
-     )
+if (DEBUG)
+    set(CACHEMANAGER_FLAGS "-g -ffast-math -mfp-mode=round-nearest")
+else ()
+    set(CACHEMANAGER_FLAGS "-ffast-math -mfp-mode=round-nearest")
+endif(DEBUG)
 
-set( e_darts_inc
-     ${CMAKE_SOURCE_DIR}/include/runtime/e_darts.h
-     )
 
-add_library( e_darts SHARED ${e_darts_src} ${e_darts_inc} )
+#cmake does not support assembly apparently
+add_custom_command(
+   OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/cachemanager.o
+   COMMAND e-gcc ${EXTERNAL_FLAGS} -c -o ${CMAKE_CURRENT_BINARY_DIR}/cachemanager.o cachemanager.S
+   DEPENDS cachemanager.S
+   COMMENT "Compiling cachemanager.o"
+   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+   VERBATIM
+)
 
-target_link_libraries(e_darts e_darts_runtime
-                              e_darts_assets
-                              e_darts_multithreading
-                              )
-
-# e_darts_codeletModel e_darts_runtime_host e_darts_runtime_device e_darts_runtime
+add_custom_target(edarts_cachemanager
+    DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/cachemanager.o)

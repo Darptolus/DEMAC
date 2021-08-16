@@ -37,4 +37,5 @@ void eDARTS::p_res(){
 
 void eDARTS::end(){
   e_close(&dev);
+  e_finalize();
 }
