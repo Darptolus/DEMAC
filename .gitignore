@@ -3,8 +3,12 @@ Node_Config/DEMAC_check_nfs_mD.sh
 Node_Config/DEMAC_sshfsEnable_mD.sh
 Node_Config/DEMAC_pingAll_mD.sh
 Node_Config/DEMAC_reboot_mount_mD.sh
+00_MPI_OMP/caviness/
 01_MPI_OMP_EPI/nodeList
 02_DECARD/proj_DECARD.code-workspace
 03_DECARD_CMAKE/test_proj/
 03_DECARD_CMAKE/test_proj_v2/
+03_DECARD_CMAKE/build/
+04_DECARD_HPC/build/
+04_DECARD_HPC/debug/
 *~
