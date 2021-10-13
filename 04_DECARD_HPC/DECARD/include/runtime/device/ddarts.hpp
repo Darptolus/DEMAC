@@ -8,37 +8,33 @@
  * Includes the definition of the accelerator for each node of the cluster
  */
 
-#ifndef EDARTS_HPP
-#define EDARTS_HPP
+#ifndef DDARTS_HPP
+#define DDARTS_HPP
 
 #include <stdio.h>
 #include <stdlib.h>
-
-// #include <e-loader.h>
-// #include <e-hal.h>  // Epiphany Hardware Abstraction Layer
-//                     // functionality for communicating with epiphany chip when
-//                     // the application runs on a host, typically the ARM µp
-
-// #define BUFOFFSET (0x01000000)  // SDRAM is at 0x8f00'0000,
-//                                 // offset in e_read starts at 0x8e00'0000
+#include <omp.h>
+#include "NodeInterface.hpp"
+#include "DECARD_tools.hpp"
 
 namespace decard
 {
   class dDARTS
   {
     private:
-      // unsigned rows, cols, i, j, ncores, row, col;
-      // e_platform_t platform;
-      // e_epiphany_t dev;       // provides access to cores workgroup
-      // e_mem_t emem;           // shared memory buffer
-      // e_return_stat_t result_e;
-      // uint32_t result[16];     // to store the results, size of cores
-      // allocate a space to share data between e_cores and here
-      // offset starts from 0x8e00'0000
-      // sdram (shared space) is at 0x8f00'0000
-      // so 0x8e00'0000 + 0x0100'0000 = 0x8f00'0000
+      Node * t_node;
+      cl_q * t_ISCLQ; // Input Scheduler Control Queue
+      cl_q * t_OSCLQ; // Output Scheduler Control Queue
+      tp_q * t_ISTPQ; // Input Scheduler Threaded Procedure Queue
+      tp_q * t_OSTPQ; // Output Scheduler Threaded Procedure Queue
     public:
-      dDARTS(){};
+      dDARTS( Node * a_node, 
+              cl_q * a_ISCLQ, cl_q * a_OSCLQ,
+              tp_q * a_ISTPQ, tp_q * a_OSTPQ):
+              t_node(a_node), 
+              t_ISCLQ(a_ISCLQ), t_OSCLQ(a_OSCLQ), 
+              t_ISTPQ(a_ISTPQ), t_OSTPQ(a_OSTPQ)
+              {};
       ~dDARTS(){};
       // unsigned get_rows(){ return rows;};
       // unsigned get_cols(){ return cols;};
@@ -52,7 +48,8 @@ namespace decard
         // cols = platform.cols;
         // ncores = rows * cols;
       };
-      int run();
+      int run_SU();
+      int run_CU();
       void p_res();
       void end();
   };

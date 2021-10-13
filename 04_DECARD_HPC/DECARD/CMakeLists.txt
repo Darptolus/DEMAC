@@ -119,18 +119,19 @@ include_directories(${MPI_INCLUDE_PATH})
 
 # target_link_libraries(my_mpi_target ${MPI_C_LIBRARIES})
 
-message_green("=> Copying NodeList")
-add_custom_command(
-   OUTPUT nodeList
-  #  COMMAND cp ../decard/nodeList nodeList
-   COMMAND touch ThisIsATest.txt
-   DEPENDS nodeList
-   COMMENT "Copying NodeList"
-   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-   VERBATIM)
+# message_green("=> Copying NodeList")
+# add_custom_command(
+#    OUTPUT nodeList
+#   #  COMMAND cp ../decard/nodeList nodeList
+#    COMMAND touch ThisIsATest.txt
+#    DEPENDS nodeList
+#    COMMENT "Copying NodeList"
+#    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+#    VERBATIM)
 
 add_subdirectory( src )
 # add_subdirectory( tests )
+add_subdirectory( apps )
 
 add_executable(decard_main main_DECARD.cpp)
 
@@ -147,20 +148,6 @@ target_link_libraries(decard_main PRIVATE OpenMP::OpenMP_CXX
 # endif (EPIPH)
 
 message_green("=> END CMAKE <=")
-
-# set( decard_src
-#      decard_runtime_host_src
-#      )
-
-# set( decard_inc
-#      decard_runtime_host_inc
-#      )
-
-# add_library( decard SHARED ${decard_src} ${decard_inc})
-
-
-# set_target_properties(decard PROPERTIES VERSION ${PROJECT_VERSION}
-#                                         PUBLIC_HEADER include/decard.hpp)
 
 # configure_file(decard.pc.in decard.pc @ONLY)
 
@@ -212,3 +199,8 @@ message_green("=> END CMAKE <=")
 # vpkg_require cmake/3.11.3 libfabric/1.9.0 openmpi/4.0.2 git/2.29.3 gcc/9.2.0 intel/2020u2
 # N_NODES=2; sbatch -N $N_NODES -n $N_NODES openmpi_00.qs
 # N_NODES=2; sbatch -N $N_NODES -n $N_NODES openmpi_decard.qs
+
+# DARTS
+# cmake ../ -DHWLOC_ROOT=/work/ececis_research/CAPSL/soft/hwloc-2.4.0 -DCUDA=OFF
+# make -j
+# make install

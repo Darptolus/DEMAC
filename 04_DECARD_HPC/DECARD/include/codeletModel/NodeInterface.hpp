@@ -71,7 +71,7 @@ namespace decard
   };
 
   typedef std::vector<Node*> AllNodes;
-  typedef thread_safe::deque<int> control_q;
+  typedef thread_safe::deque<int> cl_q;
   typedef thread_safe::deque<ThreadedProcedure*> tp_q;
 } // namespace decard
 #endif /* NODEINIT_H */

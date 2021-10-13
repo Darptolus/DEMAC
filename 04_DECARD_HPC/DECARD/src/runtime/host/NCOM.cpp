@@ -61,7 +61,7 @@ int NCOM::run()
             n_ext->clr_renb();
             n_int->mode_rcv();
             break;
-          } else if ((!t_ONTPQ->empty()) || (!t_OCTRQ->empty())){
+          } else if ((!t_ONTPQ->empty()) || (!t_ONTPQ->empty())){
             // Outgoing message(s) -> Change to SEND
             n_int->mode_snd();
             break;
@@ -118,7 +118,7 @@ int NCOM::run()
         }
       }
 
-      if ((!t_ONTPQ->empty()) || (!t_OCTRQ->empty())){
+      if ((!t_ONTPQ->empty()) || (!t_ONTPQ->empty())){
         // Outgoing message(s) -> Change to SEND
         n_int->mode_snd();
       } else {

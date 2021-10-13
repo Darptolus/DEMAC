@@ -23,7 +23,7 @@ int Node_Intern::run()
   // usleep(100);
 
   // OpenMP
-  #pragma omp parallel num_threads(2)
+  #pragma omp parallel num_threads(4)
   {
     int core_id = omp_get_thread_num();
     int core_tot = omp_get_num_threads();
@@ -39,7 +39,15 @@ int Node_Intern::run()
       // printf("%s: NMGR: R(%d/%d) C(%d/%d)\n", this->node_name, this->node_id+1, this->world_size, core_id+1, core_tot);
       this_NMGR.run();
       this_NMGR.tst_gen_1(1);
-      d_DARTS.p_res();
+      // d_DARTS.p_res();
+    }else if (core_id == 2){
+      // Core c
+      // printf("%s: NMGR: R(%d/%d) C(%d/%d)\n", this->node_name, this->node_id+1, this->world_size, core_id+1, core_tot);
+      this_dDARTS.run_SU();
+    }else if (core_id == 3){
+      // Core D
+      // printf("%s: NMGR: R(%d/%d) C(%d/%d)\n", this->node_name, this->node_id+1, this->world_size, core_id+1, core_tot);
+      this_dDARTS.run_CU();
     }
     #pragma omp barrier
   }

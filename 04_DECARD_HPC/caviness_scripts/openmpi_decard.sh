@@ -10,7 +10,7 @@ if [ -z "$UD_JOB_ENV_OPENMPI_DONE" ]; then
     # Include OpenMP (threads) setup if necessary; also chains-in
     # the common setup:
     #
-    . /opt/shared/slurm/templates/libexec/openmp.sh
+    . /home/2088/DEMAC/04_DECARD_HPC/caviness_scripts/openmp_decard.sh
 
     #
     # Location the command we'll use to launch the workers:

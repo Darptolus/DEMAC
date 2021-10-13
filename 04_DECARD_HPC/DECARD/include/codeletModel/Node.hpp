@@ -77,20 +77,24 @@ namespace decard
     // thread_safe::deque<ThreadedProcedure*> ONTPQ;
     // thread_safe::deque<ThreadedProcedure*> ISTPQ;
     // thread_safe::deque<ThreadedProcedure*> OSTPQ;
-    tp_q INTPQ;
-    tp_q ONTPQ;
-    tp_q ISTPQ;
-    tp_q OSTPQ;
-    control_q ICTRQ;
-    control_q OCTRQ;
+    cl_q INCLQ; // Input Node Control Queue
+    cl_q ONCLQ; // Output Node Control Queue
+    cl_q ISCLQ; // Input Scheduler Control Queue
+    cl_q OSCLQ; // Output Scheduler Control Queue
+    tp_q INTPQ; // Input Node Threaded Procedure Queue
+    tp_q ONTPQ; // Output Node Threaded Procedure Queue
+    tp_q ISTPQ; // Input Scheduler Threaded Procedure Queue
+    tp_q OSTPQ; // Output Scheduler Threaded Procedure Queue
     Node_Extern * node_rcv;
-    dDARTS d_DARTS;
+    dDARTS this_dDARTS;
   public: 
     char node_name[HOST_NAME_MAX+1];
     Node_Intern(int w_rank, int w_size, AllNodes * a_nodes):
-    Node(w_rank, w_size), 
-    this_NCOM(a_nodes, this, &ICTRQ, &OCTRQ, &INTPQ, &ONTPQ),
-    this_NMGR(a_nodes, this, &ICTRQ, &OCTRQ, &INTPQ, &ONTPQ, &ISTPQ, &OSTPQ){
+    Node(w_rank, w_size),
+    this_NCOM(a_nodes, this, &INCLQ, &ONCLQ, &INTPQ, &ONTPQ),
+    this_NMGR(a_nodes, this, &INCLQ, &ONCLQ, &ISCLQ, &OSCLQ, &INTPQ, &ONTPQ, &ISTPQ, &OSTPQ),
+    this_dDARTS(this, &ISCLQ, &OSCLQ, &ISTPQ, &OSTPQ)
+    {
       gethostname(node_name, HOST_NAME_MAX+1);
       this->exec = 1;
       node_rcv = NULL;

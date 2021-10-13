@@ -3,12 +3,12 @@
 # SBATCH --nodes=2
 # SBATCH --ntasks=2
 #SBATCH --tasks-per-node=1
-#SBATCH --cpus-per-task=1
+#SBATCH --cpus-per-task=4
 
 # SBATCH --mem=8G
 # SBATCH --mem-per-cpu=1024M
 
-#SBATCH --job-name=00_nodeCheck
+#SBATCH --job-name=decard
 
 # SBATCH --partition=standard
 
@@ -60,14 +60,14 @@ vpkg_require intel/2020u2
 # Do standard Open MPI environment setup (networks, etc.)
 #
 #. /opt/shared/slurm/templates/libexec/openmpi.sh
-. /home/2088/DEMAC/04_DECARD_HPC/build/openmpi_decard.sh
+. /home/2088/DEMAC/04_DECARD_HPC/caviness_scripts/openmpi_decard.sh
 #
 # [EDIT] Execute your MPI program
 #
 #${UD_MPIRUN} ./my_mpi_program arg1 "arg2 has spaces" arg3
 #mpi_rc=$?
 
-${UD_MPIRUN} ./decard_main
+${UD_MPIRUN} ./../build/decard_main
 mpi_rc=$?
 
 #

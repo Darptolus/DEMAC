@@ -11,4 +11,7 @@ Node_Config/DEMAC_reboot_mount_mD.sh
 03_DECARD_CMAKE/build/
 04_DECARD_HPC/build/
 04_DECARD_HPC/debug/
+04_DECARD_HPC/caviness_scripts/old/
+04_DECARD_HPC/caviness_scripts/slurm*
+04_DECARD_HPC/tmp/
 *~

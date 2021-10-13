@@ -28,17 +28,19 @@ namespace decard
     // Node * n_recv;
     AllNodes * nodes_list;
     AllNodes::iterator n_it;
-    control_q * t_ICTRQ;
-    control_q * t_OCTRQ;
-    tp_q * t_INTPQ;
-    tp_q * t_ONTPQ;
+    cl_q * t_INCLQ; // Input Node Control Queue
+    cl_q * t_ONCLQ; // Output Node Control Queue
+    tp_q * t_INTPQ; // Input Node Control Queue
+    tp_q * t_ONTPQ; // Output Node Control Queue
     int ErrCode;
   public:
-    NCOM(AllNodes * a_nodes, Node * a_node, 
-          control_q * a_ICTRQ, control_q * a_OCTRQ,
+    NCOM( AllNodes * a_nodes, Node * a_node, 
+          cl_q * a_INCLQ, cl_q * a_ONCLQ,
           tp_q * a_INTPQ, tp_q * a_ONTPQ):
-          nodes_list(a_nodes), t_node(a_node), t_ICTRQ(a_ICTRQ), t_OCTRQ(a_OCTRQ),
-          t_INTPQ(a_INTPQ), t_ONTPQ(a_ONTPQ) {};
+          nodes_list(a_nodes), t_node(a_node), 
+          t_INCLQ(a_INCLQ), t_ONCLQ(a_ONCLQ),
+          t_INTPQ(a_INTPQ), t_ONTPQ(a_ONTPQ)
+          {};
     ~NCOM(){};
     int run();
     int tst_gen_0();

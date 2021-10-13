@@ -17,3 +17,6 @@ target_link_libraries(decard decard_assets
                              decard_runtime_host 
                              decard_runtime_device
                              )
+
+set_target_properties(decard PROPERTIES LINKER_LANGUAGE CXX
+                                        PUBLIC_HEADER "${CMAKE_SOURCE_DIR}/include/decard.hpp")
