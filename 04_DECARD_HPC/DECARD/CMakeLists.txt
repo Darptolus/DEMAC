@@ -52,6 +52,20 @@ if (PROFILE_MODE)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DPROFILE_MODE=${PROFILE_MODE}")
 endif (PROFILE_MODE)
 
+if (DARTS)
+  set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules")
+  cmake_policy(PUSH)
+  cmake_policy(SET CMP0074 NEW) # Allow to use DARTS_ROOT without having to explicitely defined it (envarimental variable)
+    find_package(DARTS)
+  cmake_policy(POP)
+
+  if (DARTS_FOUND)
+    message_yellow("Building with the cool DARTS")
+  else ()
+    message_red("Couldn't find DARTS")
+  endif (DARTS_FOUND)
+endif(DARTS)
+
 # ## Check for ACCELERATOR
 # if (EPIPH)
 #   # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -le-hal -le-loader -lpthread")
