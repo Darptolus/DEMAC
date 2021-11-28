@@ -92,7 +92,7 @@ int NMGR::tst_gen_1(int y)
 
     case M_IDLE: // Idle Mode
       DECARD_INFOMSG(1, "%s: NMGR: IDLE", n_int->node_name);
-      if (t_OSTPQ->size() > get_mltp()){ //*?*//
+      if (t_OSTPQ->size() > get_mltp()){
         // OSTPQ > MAX Local TP -> Change to REMOTE
         this->mode_rmt();
       } else if (!t_INTPQ->empty()){
@@ -108,7 +108,7 @@ int NMGR::tst_gen_1(int y)
       }
       break;
 
-    case M_LOCAL: // Local Mode
+    case M_LOCL: // Local Mode
       DECARD_INFOMSG(1, "%s: NMGR: LCAL", n_int->node_name);
       // Check for available SU
 
@@ -135,7 +135,7 @@ int NMGR::tst_gen_1(int y)
       
       break;
 
-    case M_REMOTE: // Remote Mode
+    case M_REMT: // Remote Mode
       DECARD_INFOMSG(1, "%s: NMGR: REMT", n_int->node_name);
       // Simulate generation -> max_LTP reached
       x=0;

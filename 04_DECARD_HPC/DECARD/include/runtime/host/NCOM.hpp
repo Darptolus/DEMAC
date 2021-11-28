@@ -24,7 +24,7 @@ namespace decard
   class NCOM
   {
   private:
-    Node * t_node;
+    Node * t_node;  // This node
     // Node * n_recv;
     AllNodes * nodes_list;
     AllNodes::iterator n_it;
@@ -34,13 +34,14 @@ namespace decard
     tp_q * t_ONTPQ; // Output Node Control Queue
     int ErrCode;
   public:
-    NCOM( AllNodes * a_nodes, Node * a_node, 
-          cl_q * a_INCLQ, cl_q * a_ONCLQ,
-          tp_q * a_INTPQ, tp_q * a_ONTPQ):
-          nodes_list(a_nodes), t_node(a_node), 
-          t_INCLQ(a_INCLQ), t_ONCLQ(a_ONCLQ),
-          t_INTPQ(a_INTPQ), t_ONTPQ(a_ONTPQ)
-          {};
+    NCOM( 
+      AllNodes * a_nodes, Node * a_node, 
+      cl_q * a_INCLQ, cl_q * a_ONCLQ,
+      tp_q * a_INTPQ, tp_q * a_ONTPQ):
+      nodes_list(a_nodes), t_node(a_node), 
+      t_INCLQ(a_INCLQ), t_ONCLQ(a_ONCLQ),
+      t_INTPQ(a_INTPQ), t_ONTPQ(a_ONTPQ)
+      {};
     ~NCOM(){};
     int run();
     int tst_gen_0();

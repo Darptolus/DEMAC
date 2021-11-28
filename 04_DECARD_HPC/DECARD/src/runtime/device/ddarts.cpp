@@ -2,7 +2,7 @@
  * @file edarts.cpp
  * @author Diego Roa
  * @date 31 Dec 2020
- * @brief eDARTS 
+ * @brief dDARTS 
  * @todo Add copyright
  *
  * Includes the definition of the accelerator for each board of the cluster
@@ -14,13 +14,15 @@ using namespace decard;
 
 int dDARTS::run_SU(){
   Node_Intern * n_int = dynamic_cast <Node_Intern *> (t_node);
-  DECARD_INFOMSG(1, "%s: SU: INIT", n_int->node_name);
+  // DECARD_INFOMSG(1, "%s: SU: INIT", n_int->node_name);
+
   return 0;
 }
 
 int dDARTS::run_CU(){
   Node_Intern * n_int = dynamic_cast <Node_Intern *> (t_node);
-  DECARD_INFOMSG(1, "%s: CU: INIT", n_int->node_name);
+
+  // DECARD_INFOMSG(1, "%s: CU: INIT", n_int->node_name);
   return 0;
 }
 

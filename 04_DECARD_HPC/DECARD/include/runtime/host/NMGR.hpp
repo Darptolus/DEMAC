@@ -19,10 +19,10 @@ namespace decard
 {
   enum nmgr_mode
   {
-    M_DONE,
-    M_IDLE,
-    M_LOCAL,
-    M_REMOTE,
+    M_DONE, // Manager Done
+    M_IDLE, // Manager Idle
+    M_LOCL, // Manager Local
+    M_REMT  // Manager Remote
   };
 
   class NMGR
@@ -69,15 +69,15 @@ namespace decard
       this->m_mode = M_IDLE;
     };
     void mode_lcl(){
-      this->m_mode = M_LOCAL;
+      this->m_mode = M_LOCL;
     };
     void mode_rmt(){
-      this->m_mode = M_REMOTE;
+      this->m_mode = M_REMT;
     };
     // int tst_gen();
     int tst_gen_0();
     int tst_gen_1(int x);
-};
+  };
 }
 
 #endif /* NMGR_H */

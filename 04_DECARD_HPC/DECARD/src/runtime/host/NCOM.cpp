@@ -74,7 +74,7 @@ int NCOM::run()
       }
       break;
 
-    case N_RECEIVE: // Recieve Mode
+    case N_RECV: // Recieve Mode
       DECARD_INFOMSG(1, "%s: NCOM: RECV", n_int->node_name);
       // Check for incoming message
       if (n_int->get_nrcv()){

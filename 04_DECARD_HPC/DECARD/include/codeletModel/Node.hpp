@@ -89,17 +89,18 @@ namespace decard
     dDARTS this_dDARTS;
   public: 
     char node_name[HOST_NAME_MAX+1];
-    Node_Intern(int w_rank, int w_size, AllNodes * a_nodes):
-    Node(w_rank, w_size),
-    this_NCOM(a_nodes, this, &INCLQ, &ONCLQ, &INTPQ, &ONTPQ),
-    this_NMGR(a_nodes, this, &INCLQ, &ONCLQ, &ISCLQ, &OSCLQ, &INTPQ, &ONTPQ, &ISTPQ, &OSTPQ),
-    this_dDARTS(this, &ISCLQ, &OSCLQ, &ISTPQ, &OSTPQ)
-    {
-      gethostname(node_name, HOST_NAME_MAX+1);
-      this->exec = 1;
-      node_rcv = NULL;
-      // printf("NODENAME: %s \n", node_name);
-    };
+    Node_Intern(
+      int w_rank, int w_size, AllNodes * a_nodes):
+      Node(w_rank, w_size),
+      this_NCOM(a_nodes, this, &INCLQ, &ONCLQ, &INTPQ, &ONTPQ),
+      this_NMGR(a_nodes, this, &INCLQ, &ONCLQ, &ISCLQ, &OSCLQ, &INTPQ, &ONTPQ, &ISTPQ, &OSTPQ),
+      this_dDARTS(this, &ISCLQ, &OSCLQ, &ISTPQ, &OSTPQ)
+      {
+        gethostname(node_name, HOST_NAME_MAX+1);
+        this->exec = 1;
+        node_rcv = NULL;
+        // printf("NODENAME: %s \n", node_name);
+      };
     ~Node_Intern(){
       // for (auto& element : nodes) {
       //   delete element;

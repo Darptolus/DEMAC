@@ -24,10 +24,10 @@ namespace decard
 {
   enum node_mode
   {
-    N_DONE,
-    N_IDLE,
-    N_RECEIVE,
-    N_SEND  
+    N_DONE, // Node Done
+    N_IDLE, // Node Idle
+    N_RECV, // Node Receive
+    N_SEND  // Node Send
   };
   
   enum node_type
@@ -44,7 +44,9 @@ namespace decard
     int world_size;
     node_type n_type;
     node_mode n_mode;
-    Node(int w_rank, int w_size):node_id(w_rank),world_size(w_size){};
+    Node(
+      int w_rank, int w_size):
+      node_id(w_rank), world_size(w_size){};
     ~Node(){};
     virtual int run() = 0; // Pure virtual
     void set_mode(node_mode a_n_mode){
@@ -56,16 +58,16 @@ namespace decard
     int get_id(){ return node_id;};
     node_mode get_mode(){ return n_mode;};
     node_type get_type(){ return n_type;};
-    void mode_dne(){
+    void mode_dne(){ // Set mode DONE
       this->n_mode = N_DONE;
     };
-    void mode_idl(){
+    void mode_idl(){ // Set mode IDLE
       this->n_mode = N_IDLE;
     };
-    void mode_rcv(){
-      this->n_mode = N_RECEIVE;
+    void mode_rcv(){ // Set mode RECV
+      this->n_mode = N_RECV;
     };
-    void mode_snd(){
+    void mode_snd(){ // Set mode SEND
       this->n_mode = N_SEND;
     };
   };
