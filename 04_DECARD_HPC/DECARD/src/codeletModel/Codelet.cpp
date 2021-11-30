@@ -20,7 +20,4 @@ void Codelet::decDep()
   }
 }
 
-void Codelet::resetCodelet()
-{
-  s_slot.resetCounter()
-}
+// void Codelet::resetCodelet()

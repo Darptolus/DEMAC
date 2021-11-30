@@ -27,15 +27,15 @@ int SU::run()
       DECARD_INFOMSG(1, "%s: SU: IDLE", n_int->node_name);
         // Check for enabled Codelets
         // Sort Codelets
-        sch->sort_codelets();
+        sch.sort_codelets();
         // Evaluate conditions for next state
         if(!t_ISTPQ->empty()){  // Available TP Closure
           // Switch to Init TP
           this->mode_itp();
-        }else if(sch->get_CDrdy()){ // Codelet Ready
+        }else if(sch.get_CDrdy()){ // Codelet Ready
           // Switch to Push codelet
           this->mode_pcd();
-        }else if(t_ISTPQ->size() > get_mstp()){ // ISTPQ > MAX Scheduler TP 
+        }else if(t_ISTPQ->size() > this->get_mstp()){ // ISTPQ > MAX Scheduler TP 
           // Switch to remote
           this->mode_rmt();
         }

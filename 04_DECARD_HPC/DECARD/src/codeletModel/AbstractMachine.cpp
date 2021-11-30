@@ -46,7 +46,7 @@ int AbstractMachine::run()
     nodes.push_back(new_Node);
   }
   // Define operation mode for each node
-  node_mode n_mode = N_RECEIVE;
+  node_mode n_mode = N_RECV;
 
   for (nodes_it = nodes.begin(); nodes_it != nodes.end(); ++nodes_it){
     (*nodes_it)->set_mode(n_mode);

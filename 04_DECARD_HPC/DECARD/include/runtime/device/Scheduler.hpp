@@ -13,6 +13,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include "NodeInterface.hpp"
 #include "Codelet.hpp"
 
 namespace decard
@@ -21,10 +22,16 @@ namespace decard
   {
   private:
     cd_q * t_CDQ; // Codelet Queue
+    Node * t_node; // This node
   public:
-    Scheduler(cd_q * a_CDQ):
-    t_CDQ(a_CDQ){};
+    Scheduler(
+      cd_q * a_CDQ):
+      t_CDQ(a_CDQ){};
+    Scheduler(){};
     ~Scheduler(){};
+    void setCDQ(cd_q * a_CDQ){
+      this->t_CDQ = a_CDQ;
+    };
     void sort_codelets();
     // Codelet * get_CDrdy ();
     int get_CDrdy ();

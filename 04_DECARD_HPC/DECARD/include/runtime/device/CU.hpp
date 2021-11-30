@@ -31,13 +31,18 @@ namespace decard
     cu_mode c_mode;
     Node * t_node; // This node
     cd_q t_CDQ; // Codelet Queue
+    bool inv_TP; // Invoke TP
   public:
     CU(Node * a_node):
     t_node(a_node){};
+    CU(){};
     ~CU(){};
+    int run();
+    bool get_invTP(){ return inv_TP;};
     void set_mode(cu_mode a_c_mode){
       this->c_mode = a_c_mode;
     };
+
     cu_mode get_mode(){ return c_mode;};
   };
 }

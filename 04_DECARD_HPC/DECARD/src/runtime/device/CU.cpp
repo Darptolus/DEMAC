@@ -14,7 +14,7 @@
 
 using namespace decard;
 
-int SU::run()
+int CU::run()
 {
   Node_Intern * n_int = dynamic_cast <Node_Intern *> (t_node);
   
@@ -24,32 +24,31 @@ int SU::run()
   DECARD_INFOMSG(1, "%s: SU: INIT", n_int->node_name);
   // DECARD_INFOMSG(1, "This is a test");
   do{
-    switch(cu_mod) {
+    switch(c_mode) {
     case C_IDLE: // Idle Mode
       DECARD_INFOMSG(1, "%s: SU: IDLE", n_int->node_name);
-      // 
-      
+      if(!t_CDQ.empty()){  // Codelet Ready
+        // Switch to Execute
+        c_mode = C_EXEC;
+      }
       break;
 
     case C_EXEC: // Init TP Mode
       DECARD_INFOMSG(1, "%s: SU: INTP", n_int->node_name);
-      if(){  // Available TP Closure
-        // Init TP
-        s_mode = S_INTP;
-      }else if(){ // Codelet Ready
-        // Push codelet
-        s_mode = S_PCDT;
+      if(this->get_invTP()){  // Invoke TP
+        // Switch to Invoke TP
+        c_mode = C_IVTP;
       }
-
       break;
 
     case C_IVTP:
-    DECARD_INFOMSG(1, "%s: SU: PCDT", n_int->node_name);
-      
+      DECARD_INFOMSG(1, "%s: SU: PCDT", n_int->node_name);
+      c_mode = C_IDLE;
       break;
 
     default:
       DECARD_INFOMSG(1, "%s: SU: Invalid State", n_int->node_name);
+      c_mode = C_IDLE;
     }
   }while (n_int->get_exec());
 

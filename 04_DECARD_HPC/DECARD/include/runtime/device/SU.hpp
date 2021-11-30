@@ -31,7 +31,7 @@ namespace decard
   class SU
   {
   private:
-    su_mode s_mode;
+    su_mode s_mode; // Scheduler mode
     Node * t_node;  // This node
     Scheduler sch;  // Scheduler for SU
     cl_q * t_ISCLQ; // Input Scheduler Control Queue
@@ -40,16 +40,19 @@ namespace decard
     tp_q * t_OSTPQ; // Output Scheduler Threaded Procedure Queue
     int maxstp;     // Max Scheduler TP
   public:
-    SU(Node * a_node,
-    cl_q * a_ISCLQ, cl_q * a_OSCLQ,
-    tp_q * a_ISTPQ, tp_q * a_OSTPQ):
-    t_node(a_node),
-    t_ISCLQ(a_ISCLQ), t_OSCLQ(a_OSCLQ),
-    t_ISTPQ(a_ISTPQ), t_OSTPQ(a_OSTPQ)
-    {
-      s_mode = S_IDLE;
-    };
+    SU(
+      Node * a_node,
+      cl_q * a_ISCLQ, cl_q * a_OSCLQ,
+      tp_q * a_ISTPQ, tp_q * a_OSTPQ):
+      t_node(a_node),
+      t_ISCLQ(a_ISCLQ), t_OSCLQ(a_OSCLQ),
+      t_ISTPQ(a_ISTPQ), t_OSTPQ(a_OSTPQ)
+      {
+        s_mode = S_IDLE;
+      };
+    SU(){};
     ~SU(){};
+    int run();
     void addCU(CU * a_CU){};
     void set_mode(su_mode a_su_mode){
       this->s_mode = a_su_mode;
@@ -58,6 +61,7 @@ namespace decard
       this->maxstp = a_maxstp;
     };
     su_mode get_mode(){ return s_mode;};
+    int get_mstp(){ return maxstp;};
     void mode_idl(){
       this->s_mode = S_IDLE;
     };

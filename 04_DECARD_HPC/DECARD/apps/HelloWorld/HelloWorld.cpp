@@ -4,6 +4,15 @@
 
 using namespace decard;
 
+// class cd_01 : public Codelet
+// {
+//   public:
+//   cd_01():
+//   Codelet(){}
+
+//   virtual void fire(void);
+// };
+
 int main(int argc, char** argv) {
   // Initialize the MPI environment. The two arguments to MPI Init are not
   // currently used by MPI implementations, but are there in case future

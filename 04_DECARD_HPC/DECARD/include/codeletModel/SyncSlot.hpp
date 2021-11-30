@@ -29,6 +29,7 @@ namespace decard
       SS_count(a_dep),
       SS_reset(a_res)
       {};
+    SyncSlot(){};
     ~SyncSlot(){};
     void initSS(uint32_t a_dep, uint32_t a_res){
       SS_count = a_dep;
@@ -36,7 +37,7 @@ namespace decard
     };
     bool decCount(){
       // Returns true when dependencies reach 0
-      return (0==Atomics::fetchSub(counter_, 1U));
+      return (0==Atomics::fetchSub(SS_count, 1U));
     };
     void resetCounter(){
       SS_count = SS_reset;
@@ -46,7 +47,7 @@ namespace decard
     };
     //returns the if the counter has reached zero
     bool ready(void) const{
-        return (counter_ == 0);
+        return (SS_count == 0);
     } 
     
   };
