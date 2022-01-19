@@ -18,6 +18,26 @@
 
 namespace decard
 {
+  class NMGR_Sch
+  {
+  private:
+    tp_q * t_TPQ; // Codelet Queue
+    Node * t_node; // This node
+  public:
+    NMGR_Sch(
+      tp_q * a_TPQ):
+      t_TPQ(a_TPQ){};
+    NMGR_Sch(){};
+    ~NMGR_Sch(){};
+    void setTPQ(tp_q * a_TPQ){
+      this->t_TPQ = a_TPQ;
+    };
+    // void sort_codelets();
+    // // Codelet * get_CDrdy ();
+    // int getTP ();
+    // int get_CDnum ();
+  };
+
   class Scheduler
   {
   private:

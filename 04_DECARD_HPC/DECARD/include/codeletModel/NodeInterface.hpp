@@ -45,8 +45,8 @@ namespace decard
     node_type n_type;
     node_mode n_mode;
     Node(
-      int w_rank, int w_size):
-      node_id(w_rank), world_size(w_size){};
+      int a_rank, int a_size):
+      node_id(a_rank), world_size(a_size){};
     ~Node(){};
     virtual int run() = 0; // Pure virtual
     void set_mode(node_mode a_n_mode){
@@ -56,6 +56,7 @@ namespace decard
       this->n_type = a_n_type;
     };
     int get_id(){ return node_id;};
+    int get_wz(){ return world_size;};
     node_mode get_mode(){ return n_mode;};
     node_type get_type(){ return n_type;};
     void mode_dne(){ // Set mode DONE

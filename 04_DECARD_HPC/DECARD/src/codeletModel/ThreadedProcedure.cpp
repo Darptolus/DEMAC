@@ -26,6 +26,7 @@
  */
 
 #include "ThreadedProcedure.hpp"
+// #include "Node.hpp"
 
 using namespace decard;
 
@@ -84,6 +85,18 @@ ThreadedProcedure::checkParent(void)
     return true;
     //return (parentTP_!=this);
 }
+
+// void
+// ThreadedProcedure::set_orig(Node * a_o_node){
+//   this->orig_node = a_o_node;
+//   this->orig_node_id = a_o_node->get_id();
+// }
+
+// void
+// ThreadedProcedure::set_dest(Node * a_d_node){
+//   this->dest_node = a_d_node;
+//   this->dest_node_id = a_d_node->get_id();
+// }
 
 //*****COMMENTED*****//
 // void 

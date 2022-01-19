@@ -3,7 +3,7 @@
 # SBATCH --nodes=2
 # SBATCH --ntasks=2
 #SBATCH --tasks-per-node=1
-#SBATCH --cpus-per-task=1
+#SBATCH --cpus-per-task=4
 
 # SBATCH --mem=8G
 # SBATCH --mem-per-cpu=1024M
@@ -11,10 +11,10 @@
 #SBATCH --job-name=GameOfWorlds
 
 # SBATCH --partition=standard
-
 #SBATCH --partition=ececis_research
+
 # SBATCH --time=0-02:00:00
-#SBATCH --time=0-00:10:00
+#SBATCH --time=0-00:01:00
 
 # SBATCH --time-min=0-01:00:00
 

@@ -1,11 +1,13 @@
 set( decard_codeletModel_src 
      AbstractMachine.cpp
+     CodeletGraph.cpp
      Node.cpp
      ThreadedProcedure.cpp
      Codelet.cpp)
 
 set( decard_codeletModel_inc 
      ${CMAKE_SOURCE_DIR}/include/codeletModel/AbstractMachine.hpp
+     ${CMAKE_SOURCE_DIR}/include/codeletModel/CodeletGraph.hpp
      ${CMAKE_SOURCE_DIR}/include/codeletModel/ThreadedProcedure.hpp
      ${CMAKE_SOURCE_DIR}/include/codeletModel/NodeInterface.hpp
      ${CMAKE_SOURCE_DIR}/include/codeletModel/Node.hpp
@@ -16,6 +18,7 @@ add_library( decard_codeletModel SHARED ${decard_codeletModel_src} ${decard_code
 
 set_target_properties(decard_codeletModel PROPERTIES LINKER_LANGUAGE CXX
                                                      PUBLIC_HEADER "${CMAKE_SOURCE_DIR}/include/codeletModel/AbstractMachine.hpp 
+                                                                    ${CMAKE_SOURCE_DIR}/include/codeletModel/CodeletGraph.hpp
                                                                     ${CMAKE_SOURCE_DIR}/include/codeletModel/ThreadedProcedure.hpp
                                                                     ${CMAKE_SOURCE_DIR}/include/codeletModel/NodeInterface.hpp
                                                                     ${CMAKE_SOURCE_DIR}/include/codeletModel/Node.hpp
