@@ -15,4 +15,3 @@ Node_Config/DEMAC_reboot_mount_mD.sh
 04_DECARD_HPC/caviness_scripts/slurm*
 04_DECARD_HPC/tmp/
 *~
-04_DECARD_HPC/caviness_scripts/joblist.txt

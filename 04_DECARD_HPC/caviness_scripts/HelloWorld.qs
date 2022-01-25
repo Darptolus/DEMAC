@@ -14,7 +14,7 @@
 
 #SBATCH --partition=ececis_research
 # SBATCH --time=0-02:00:00
-#SBATCH --time=0-00:01:00
+#SBATCH --time=0-00:10:00
 
 # SBATCH --time-min=0-01:00:00
 

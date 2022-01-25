@@ -154,8 +154,8 @@ int NCOM::run()
   return 0;
 }
 
-// TOBEDELETED
 int NCOM::tst_gen_0()
+// TOBEDELETED
 {
   Node_Intern * n_int = dynamic_cast <Node_Intern *> (t_node);
   ThreadedProcedure * newTP;

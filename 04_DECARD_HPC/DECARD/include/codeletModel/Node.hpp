@@ -20,7 +20,6 @@
 #include <mpi.h>
 #include <vector>
 #include "NodeInterface.hpp"
-#include "CodeletGraph.hpp"
 #include <NCOM.hpp>
 #include <NMGR.hpp>
 #include <ddarts.hpp>
@@ -72,9 +71,12 @@ namespace decard
   {
   private:
     int exec;
-    CodeletGraph * t_CDG;
-    NCOM t_NCOM;
-    NMGR t_NMGR;
+    NCOM this_NCOM;
+    NMGR this_NMGR;
+    // thread_safe::deque<ThreadedProcedure*> INTPQ;
+    // thread_safe::deque<ThreadedProcedure*> ONTPQ;
+    // thread_safe::deque<ThreadedProcedure*> ISTPQ;
+    // thread_safe::deque<ThreadedProcedure*> OSTPQ;
     cl_q INCLQ; // Input Node Control Queue
     cl_q ONCLQ; // Output Node Control Queue
     cl_q ISCLQ; // Input Scheduler Control Queue
@@ -84,15 +86,15 @@ namespace decard
     tp_q ISTPQ; // Input Scheduler Threaded Procedure Queue
     tp_q OSTPQ; // Output Scheduler Threaded Procedure Queue
     Node_Extern * node_rcv;
-    dDARTS t_dDARTS;
+    dDARTS this_dDARTS;
   public: 
     char node_name[HOST_NAME_MAX+1];
     Node_Intern(
-      int w_rank, int w_size, AllNodes * a_nodes, CodeletGraph * a_CDG):
-      Node(w_rank, w_size), t_CDG(a_CDG),
-      t_NCOM(a_nodes, this, &INCLQ, &ONCLQ, &INTPQ, &ONTPQ),
-      t_NMGR(a_nodes, this, a_CDG, &INCLQ, &ONCLQ, &ISCLQ, &OSCLQ, &INTPQ, &ONTPQ, &ISTPQ, &OSTPQ),
-      t_dDARTS(this, &ISCLQ, &OSCLQ, &ISTPQ, &OSTPQ)
+      int w_rank, int w_size, AllNodes * a_nodes):
+      Node(w_rank, w_size),
+      this_NCOM(a_nodes, this, &INCLQ, &ONCLQ, &INTPQ, &ONTPQ),
+      this_NMGR(a_nodes, this, &INCLQ, &ONCLQ, &ISCLQ, &OSCLQ, &INTPQ, &ONTPQ, &ISTPQ, &OSTPQ),
+      this_dDARTS(this, &ISCLQ, &OSCLQ, &ISTPQ, &OSTPQ)
       {
         gethostname(node_name, HOST_NAME_MAX+1);
         this->exec = 1;
@@ -115,13 +117,6 @@ namespace decard
     };
     int get_exec(){return exec;};
     Node_Extern * get_nrcv(){return node_rcv;};
-    void pushto_INTPQ(ThreadedProcedure * a_TP){
-      INTPQ.push_back(a_TP);
-    };
-    // char * get_nodename(){return &node_name;};
-    void pushto_ONTPQ(ThreadedProcedure * a_TP){
-      ONTPQ.push_back(a_TP);
-    };
     int run();
   };
 

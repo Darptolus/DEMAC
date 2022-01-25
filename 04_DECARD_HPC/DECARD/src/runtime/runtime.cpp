@@ -14,15 +14,13 @@ using namespace decard;
 
 int Runtime::run()
 {
-  DECARD_INFOMSG(1, "%s: Starting Runtime ", this->get_nodename());
-  DECARD_CAM.run();
+  DECARD_AM.run();
   return 0;
 }
 
 int Runtime::end()
 {
-  DECARD_INFOMSG(1, "%s: Ending Runtime ", this->get_nodename());
-  DECARD_CAM.end();
+  DECARD_AM.end();
   return 0;
 }
 

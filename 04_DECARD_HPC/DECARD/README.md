@@ -29,9 +29,6 @@ make
 N_NODES=2; sbatch -N $N_NODES -n $N_NODES decard.qs
 ```
 
-Get job status
-squeue | grep -n 'decard'
-
 ## DARTS
 
 How to run with darts:
