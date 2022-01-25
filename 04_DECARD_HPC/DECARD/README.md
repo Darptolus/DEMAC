@@ -27,7 +27,12 @@ Debug mode
 cmake ../DECARD -DDEBUG=0 -DVERBOSE_MODE=1
 make
 N_NODES=2; sbatch -N $N_NODES -n $N_NODES decard.qs
+N_NODES=2; N_CORES=4; sbatch -N $N_NODES -n $N_NODES -c $N_CORES decard.qs
+
 ```
+
+Get job status
+squeue | grep -n 'decard'
 
 ## DARTS
 

@@ -15,18 +15,30 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include "AbstractMachine.hpp"
+#include "CodeletGraph.hpp"
+#include "Codelet.hpp"
+
 
 namespace decard
 {
   class Runtime
   {
     private:
-      AbstractMachine DECARD_AM;
+      AbstractMachine DECARD_CAM;
+      CodeletGraph DECARD_CDG;
+      Node * t_Node;
     public:
-      Runtime(){};
+      char node_name[HOST_NAME_MAX+1];
+      Runtime():
+      DECARD_CAM(&DECARD_CDG){
+        gethostname(node_name, HOST_NAME_MAX+1);
+      };;
       ~Runtime(){};
       int run();
       int end();
+      int get_worldsize() {return DECARD_CAM.get_worldsize();};
+      int get_worldrank() {return DECARD_CAM.get_worldrank();};
+      Node * get_Node() {return t_Node;};
   };
 }
 #endif /* RUNTIME_H */

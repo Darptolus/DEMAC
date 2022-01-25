@@ -12,54 +12,30 @@
 
 using namespace decard;
 
+int AbstractMachine::run()
+{
+  // Run current node
+  t_Node->run();
+
+  return 0;
+}
+
+int AbstractMachine::end()
+{
+  // Finalize the MPI environment. No more MPI calls can be made after this
+  // MPI_Finalize();
+  return 0;
+}
+
+// TOBEDELETED
+
 // int world_size;
-int world_rank;
+
 
 // AbstractMachine::AbstractMachine(){
 //   printf("CREATING AbstractMachine\n");
 // }
 
-int AbstractMachine::run()
-{
-  // Initialize AbstractMachine
-  MPI_Init(NULL, NULL);
-
-  // Get the number of processes
-  MPI_Comm_size(MPI_COMM_WORLD, &world_size);
-
-  // Get the rank of the process
-  MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
-
-  // Create Nodes
-  Node * new_Node;
-  Node * ths_Node;
-  for (int i=0; i<world_size; ++i){
-    if (i==world_rank){
-      // Create Intern Node
-      new_Node = new Node_Intern(i, world_size, &nodes);
-      ths_Node = new_Node;
-      // newNode->start_NODE();
-    }else if (i!=world_rank){
-      // Create Extern Node
-      new_Node = new Node_Extern(i, world_size);
-    }
-    nodes.push_back(new_Node);
-  }
-  // Define operation mode for each node
-  node_mode n_mode = N_RECV;
-
-  for (nodes_it = nodes.begin(); nodes_it != nodes.end(); ++nodes_it){
-    (*nodes_it)->set_mode(n_mode);
-  }
-
-  // Setup current node
-  // nodes_it = nodes.begin();
-  // std::advance(nodes_it, world_rank);
-  // (*nodes_it)->run();
-  ths_Node->run();
-
-
-  // TOBEDELETED
   // Node * local_Node; = nodes_it;
   // Node_Intern * localNode = (Node_Intern *) local_Node;
   // (*localNode)->start_NODE();
@@ -89,13 +65,3 @@ int AbstractMachine::run()
   //   nodes.rbegin()->start_Node();
   // }
   // Node_Exter::emplace
-
-  return 0;
-}
-
-int AbstractMachine::end()
-{
-  // Finalize the MPI environment. No more MPI calls can be made after this
-  // MPI_Finalize();
-  return 0;
-}
