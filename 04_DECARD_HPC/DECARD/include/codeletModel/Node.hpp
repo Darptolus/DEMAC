@@ -20,6 +20,7 @@
 #include <mpi.h>
 #include <vector>
 #include "NodeInterface.hpp"
+#include "CodeletGraph.hpp"
 #include <NCOM.hpp>
 #include <NMGR.hpp>
 #include <ddarts.hpp>
@@ -31,6 +32,7 @@ namespace decard
   private:
     MPI_Request rcv_req;
     MPI_Status rcv_sts;
+    // int ncom_done;
     int rcv_enb;
     int snd_flg;
     // int test_flagS;
@@ -43,6 +45,12 @@ namespace decard
     };
     ~Node_Extern(){}
     int run();
+    // void set_ncom_done(){
+    //   this->ncom_done = 1;
+    // }
+    // void clr_ncom_done(){
+    //   this->ncom_done = 0;
+    // }
     void set_renb(){
       this->rcv_enb = 1;
     }
@@ -60,6 +68,7 @@ namespace decard
     }
     MPI_Request * get_rreq(){return &rcv_req;}
     MPI_Status * get_rsts(){return &rcv_sts;}
+    // int get_ncom_done(){return snd_ncom_done;}
     int * get_rflg(){return &rcv_flg;}
     int * get_msgbox(){return &msg_box;}
     int get_msgout(){return msg_out;}
@@ -71,12 +80,9 @@ namespace decard
   {
   private:
     int exec;
-    NCOM this_NCOM;
-    NMGR this_NMGR;
-    // thread_safe::deque<ThreadedProcedure*> INTPQ;
-    // thread_safe::deque<ThreadedProcedure*> ONTPQ;
-    // thread_safe::deque<ThreadedProcedure*> ISTPQ;
-    // thread_safe::deque<ThreadedProcedure*> OSTPQ;
+    NCOM t_NCOM;
+    NMGR t_NMGR;
+    CodeletGraph * t_CDG;
     cl_q INCLQ; // Input Node Control Queue
     cl_q ONCLQ; // Output Node Control Queue
     cl_q ISCLQ; // Input Scheduler Control Queue
@@ -86,20 +92,22 @@ namespace decard
     tp_q ISTPQ; // Input Scheduler Threaded Procedure Queue
     tp_q OSTPQ; // Output Scheduler Threaded Procedure Queue
     Node_Extern * node_rcv;
-    dDARTS this_dDARTS;
+    dDARTS t_dDARTS;
+    int ncom_idle;
   public: 
     char node_name[HOST_NAME_MAX+1];
     Node_Intern(
-      int w_rank, int w_size, AllNodes * a_nodes):
-      Node(w_rank, w_size),
-      this_NCOM(a_nodes, this, &INCLQ, &ONCLQ, &INTPQ, &ONTPQ),
-      this_NMGR(a_nodes, this, &INCLQ, &ONCLQ, &ISCLQ, &OSCLQ, &INTPQ, &ONTPQ, &ISTPQ, &OSTPQ),
-      this_dDARTS(this, &ISCLQ, &OSCLQ, &ISTPQ, &OSTPQ)
+      int w_rank, int w_size, AllNodes * a_nodes, CodeletGraph * a_CDG):
+      Node(w_rank, w_size), t_CDG(a_CDG),
+      t_NCOM(a_nodes, this, &INCLQ, &ONCLQ, &INTPQ, &ONTPQ),
+      t_NMGR(a_nodes, this, a_CDG, &INCLQ, &ONCLQ, &ISCLQ, &OSCLQ, &INTPQ, &ONTPQ, &ISTPQ, &OSTPQ),
+      t_dDARTS(this, &ISCLQ, &OSCLQ, &ISTPQ, &OSTPQ)
       {
         gethostname(node_name, HOST_NAME_MAX+1);
+        // printf("NODENAME: %s \n", node_name);
         this->exec = 1;
         node_rcv = NULL;
-        // printf("NODENAME: %s \n", node_name);
+        ncom_idle = 1;
       };
     ~Node_Intern(){
       // for (auto& element : nodes) {
@@ -109,13 +117,20 @@ namespace decard
     void set_exec(){
       this->exec = 1;
     };
+    void set_cidle(){
+      this->ncom_idle = 1;
+    };
     void clr_exec(){
       this->exec = 0;
+    };
+    void clr_cidle(){
+      this->ncom_idle = 0;
     };
     void set_nrcv(Node_Extern * a_nrcv){
       this->node_rcv = a_nrcv;
     };
     int get_exec(){return exec;};
+    int get_cidle(){return ncom_idle;};
     Node_Extern * get_nrcv(){return node_rcv;};
     int run();
   };

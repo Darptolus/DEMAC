@@ -28,17 +28,21 @@ namespace decard
       CodeletGraph DECARD_CDG;
       Node * t_Node;
     public:
-      char node_name[HOST_NAME_MAX+1];
+      char hostname[HOST_NAME_MAX+1];
       Runtime():
       DECARD_CAM(&DECARD_CDG){
-        gethostname(node_name, HOST_NAME_MAX+1);
-      };;
+        gethostname(hostname, HOST_NAME_MAX+1);
+        this->t_Node = DECARD_CAM.get_Node();
+      };
       ~Runtime(){};
       int run();
       int end();
       int get_worldsize() {return DECARD_CAM.get_worldsize();};
       int get_worldrank() {return DECARD_CAM.get_worldrank();};
       Node * get_Node() {return t_Node;};
+      CodeletGraph * get_cdg(){return &DECARD_CDG;};
+      void add_TP(ThreadedProcedure * a_TP){
+        DECARD_CDG.add_tp(a_TP);};
   };
 }
 #endif /* RUNTIME_H */

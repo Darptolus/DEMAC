@@ -21,10 +21,17 @@
 
 namespace decard
 {
+  enum ncom_mode
+  {
+    C_IDLE, // Communicator Idle
+    C_RECV, // Communicator Receive
+    C_SEND  // Communicator Send
+  };
   class NCOM
   {
   private:
-    Node * t_node;  // This node
+    ncom_mode c_mode; // Node Communicator Mode
+    Node * t_node;  // This Node
     // Node * n_recv;
     AllNodes * nodes_list;
     AllNodes::iterator n_it;
@@ -41,11 +48,26 @@ namespace decard
       nodes_list(a_nodes), t_node(a_node), 
       t_INCLQ(a_INCLQ), t_ONCLQ(a_ONCLQ),
       t_INTPQ(a_INTPQ), t_ONTPQ(a_ONTPQ)
-      {};
+      {
+        c_mode = C_IDLE;
+      };
     ~NCOM(){};
     int run();
     int tst_gen_0();
     // int tst_gen_1();
+    void set_mode(ncom_mode a_c_mode){
+      this->c_mode = a_c_mode;
+    };    
+    ncom_mode get_mode(){ return c_mode;};
+    void mode_idl(){ // Set mode IDLE
+      this->c_mode = C_IDLE;
+    };
+    void mode_rcv(){ // Set mode RECV
+      this->c_mode = C_RECV;
+    };
+    void mode_snd(){ // Set mode SEND
+      this->c_mode = C_SEND;
+    };
   };
 }
 

@@ -30,7 +30,9 @@ namespace decard
     // AllTPs node_tps;
     // AllTPs::iterator ntps_it;
   public:
-    CodeletGraph(){};
+    CodeletGraph(){
+      num_tp = 0;
+    };
     ~CodeletGraph() {
       for (auto& element : all_tps) {
         delete element;
@@ -38,11 +40,13 @@ namespace decard
     };
     void add_tp(ThreadedProcedure * a_TP){
       all_tps.push_back(a_TP);
+      ++num_tp;
     };
-    void get_tps (Node * a_node);
+    tp_q * get_atps() {return &all_tps;};
+    int get_tps_size() {return num_tp;};
     // void get_tps (Node * a_node, tp_q * a_tpq);
     // ThreadedProcedure * get_tps (Node * a_node);
-    int get_tps_size() {return num_tp;};
+    
   }; 
 }
 #endif /* CODELETGRAPH_H */

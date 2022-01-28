@@ -42,8 +42,8 @@ namespace decard
   */
     // Node * origin_node;
     // Node * destin_node;
-    int origin_node_id;
-    int destin_node_id;
+    int orig_node_id;
+    int dest_node_id;
     int opr_id;
     unsigned int ref_;
   public:
@@ -60,25 +60,25 @@ namespace decard
 
     // void set_orig(Node * a_o_node){
     //   this->origin_node = a_o_node;
-    //   this->origin_node_id = a_o_node->get_id();
+    //   this->orig_node_id = a_o_node->get_id();
     // };
     // void set_dest(Node * a_d_node){
     //   this->destin_node = a_d_node;
-    //   this->destin_node_id = a_d_node->get_id();
+    //   this->dest_node_id = a_d_node->get_id();
     // };
     void set_orig(int a_o_node){
-      this->origin_node_id = a_o_node;
+      this->orig_node_id = a_o_node;
     };
     void set_dest(int a_d_node){
-      this->destin_node_id = a_d_node;
+      this->dest_node_id = a_d_node;
     };
     void set_opr(int a_opr){
       this->opr_id = a_opr;
     };
     // Node * get_orig(){ return origin_node;};
     // Node * get_dest(){ return destin_node;};
-    int get_orig_id(){ return origin_node_id;};
-    int get_dest_id(){ return destin_node_id;};
+    int get_orig_id(){ return orig_node_id;};
+    int get_dest_id(){ return dest_node_id;};
     int * get_opr(){ return &opr_id;};
     /*
     * Method: addCodelet

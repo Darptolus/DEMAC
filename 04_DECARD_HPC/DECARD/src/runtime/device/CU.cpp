@@ -24,31 +24,31 @@ int CU::run()
   DECARD_INFOMSG(1, "%s: SU: INIT", n_int->node_name);
   // DECARD_INFOMSG(1, "This is a test");
   do{
-    switch(c_mode) {
-    case C_IDLE: // Idle Mode
+    switch(u_mode) {
+    case U_IDLE: // Idle Mode
       DECARD_INFOMSG(1, "%s: SU: IDLE", n_int->node_name);
       if(!t_CDQ.empty()){  // Codelet Ready
         // Switch to Execute
-        c_mode = C_EXEC;
+        u_mode = U_EXEC;
       }
       break;
 
-    case C_EXEC: // Init TP Mode
+    case U_EXEC: // Init TP Mode
       DECARD_INFOMSG(1, "%s: SU: INTP", n_int->node_name);
       if(this->get_invTP()){  // Invoke TP
         // Switch to Invoke TP
-        c_mode = C_IVTP;
+        u_mode = U_IVTP;
       }
       break;
 
-    case C_IVTP:
+    case U_IVTP:
       DECARD_INFOMSG(1, "%s: SU: PCDT", n_int->node_name);
-      c_mode = C_IDLE;
+      u_mode = U_IDLE;
       break;
 
     default:
       DECARD_INFOMSG(1, "%s: SU: Invalid State", n_int->node_name);
-      c_mode = C_IDLE;
+      u_mode = U_IDLE;
     }
   }while (n_int->get_exec());
 

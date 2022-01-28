@@ -5,7 +5,7 @@
  * @brief Abstrac tMachine
  * @todo Add copyright
  *
- * Includes the definition of the Abstract Machine for the cluster
+ * Includes the definition of the Abstract Machine for the runtime
  */
 
 #ifndef ABSTRACTMACHINE_H
@@ -48,7 +48,7 @@ namespace decard
       for (int i=0; i<world_size; ++i){
         if (i==world_rank){
           // Create Intern Node
-          new_Node = new Node_Intern(i, world_size, &nodes);
+          new_Node = new Node_Intern(i, world_size, &nodes, decard_CDG);
           t_Node = new_Node;
           // newNode->start_NODE();
         }else if (i!=world_rank){
@@ -71,8 +71,7 @@ namespace decard
     };
     int run();
     void set_CDG(CodeletGraph * a_CDG){
-      this->decard_CDG = a_CDG;
-    };
+      this->decard_CDG = a_CDG;};
     int get_worldsize() {return world_size;};
     int get_worldrank() {return world_rank;};
     Node * get_Node() {return t_Node;};
