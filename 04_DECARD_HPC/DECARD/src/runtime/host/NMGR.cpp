@@ -55,10 +55,11 @@ int NMGR::run()
           }
         }
       }
-      if(done && t_OSTPQ->empty() && t_ISTPQ->empty()){
+      if(done && n_int->get_cidle() && t_OSTPQ->empty() && t_ISTPQ->empty()){
         // Scheduling queues are empty -> Set Node Mode DONE 
         DECARD_INFOMSG(1, "%s: NMGR: ALL DONE", n_int->node_name);
         n_int->mode_dne();
+        n_int->clr_exec();
         usleep(1000000);
       }else {
         // Change to IDLE

@@ -107,7 +107,7 @@ namespace decard
         // printf("NODENAME: %s \n", node_name);
         this->exec = 1;
         node_rcv = NULL;
-        ncom_idle = 1;
+        ncom_idle = 0;
       };
     ~Node_Intern(){
       // for (auto& element : nodes) {

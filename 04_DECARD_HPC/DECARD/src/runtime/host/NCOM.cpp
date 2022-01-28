@@ -25,18 +25,18 @@ int NCOM::run()
   DECARD_INFOMSG(1, "%s: NCOM: INIT", n_int->node_name);
   // DECARD_INFOMSG(1, "This is a test");
   do{
-    switch(n_int->get_mode()) {
-    case N_DONE: // Done Mode
-      DECARD_INFOMSG(1, "%s: NCOM: DONE", n_int->node_name);
-      // Send DONE msg
+    switch(this->get_mode()) {
+    // case N_DONE: // Done Mode
+    //   DECARD_INFOMSG(1, "%s: NCOM: DONE", n_int->node_name);
+    //   // Send DONE msg
 
-      // Wait for ACK?
+    //   // Wait for ACK?
 
-      // set exec = 0
-      n_int->clr_exec();
-      break;
+    //   // set exec = 0
+    //   n_int->clr_exec();
+    //   break;
 
-    case N_IDLE: // Idle Mode
+    case C_IDLE: // Idle Mode
       DECARD_INFOMSG(1, "%s: NCOM: IDLE", n_int->node_name);
       // Test
       for (n_it = nodes_list->begin(); n_it != nodes_list->end(); ++n_it){
@@ -59,22 +59,25 @@ int NCOM::run()
             // Mssage recieved -> Set origin node -> Change to RECEIVE
             n_int->set_nrcv(n_ext);
             n_ext->clr_renb();
-            n_int->mode_rcv();
+            this->mode_rcv();
+            n_int->clr_cidle(); // Communicator Not Idle
             break;
           } else if ((!t_ONTPQ->empty()) || (!t_ONTPQ->empty())){
             // Outgoing message(s) -> Change to SEND
-            n_int->mode_snd();
+            this->mode_snd();
+            n_int->clr_cidle(); // Communicator Not Idle
             break;
           }
         }
       }
-      if (n_int->get_mode() == N_IDLE){
+      if (this->get_mode() == C_IDLE){
         // Stay in IDLE
+        n_int->set_cidle();
         usleep(1000000);
       }
       break;
 
-    case N_RECV: // Recieve Mode
+    case C_RECV: // Recieve Mode
       DECARD_INFOMSG(1, "%s: NCOM: RECV", n_int->node_name);
       // Check for incoming message
       if (n_int->get_nrcv()){
@@ -120,14 +123,14 @@ int NCOM::run()
 
       if ((!t_ONTPQ->empty()) || (!t_ONTPQ->empty())){
         // Outgoing message(s) -> Change to SEND
-        n_int->mode_snd();
+        this->mode_snd();
       } else {
         // Change to IDLE
-        n_int->mode_idl();
+        this->mode_idl();
       }
       break;
 
-    case N_SEND:
+    case C_SEND:
     DECARD_INFOMSG(1, "%s: NCOM: SEND", n_int->node_name);
       while (!t_ONTPQ->empty()){
         // Send msg to node
@@ -143,7 +146,7 @@ int NCOM::run()
         }
       }   
       // Change to IDLE
-      n_int->mode_idl();
+      this->mode_idl();
 
       break;
     default:

@@ -49,7 +49,7 @@ namespace decard
       t_INCLQ(a_INCLQ), t_ONCLQ(a_ONCLQ),
       t_INTPQ(a_INTPQ), t_ONTPQ(a_ONTPQ)
       {
-        c_mode = C_IDLE;
+        c_mode = C_RECV;
       };
     ~NCOM(){};
     int run();
