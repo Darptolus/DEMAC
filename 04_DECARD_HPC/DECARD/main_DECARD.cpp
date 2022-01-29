@@ -14,7 +14,7 @@ int main(int argc, char *argv[]){
   x = 0;
   // Generate TPs
   do{
-    for (int i = 1; i <= w_size; ++i){
+    for (int i = 0; i < w_size; ++i){
       if (i != n_rank){
         if (x==y){
           // End TP
@@ -28,9 +28,10 @@ int main(int argc, char *argv[]){
         newTP->set_dest(i);
         DECARD_INFOMSG(1, "%s: Generating M_%04d", decard_rt.hostname, oopr);
         decard_rt.add_TP(newTP);
-        ++x;
+        
       }
     }
+    ++x;
   }while(x <= y);
   // Start Runtime
   decard_rt.run();

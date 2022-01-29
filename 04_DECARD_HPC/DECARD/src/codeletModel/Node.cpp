@@ -32,12 +32,10 @@ int Node_Intern::run()
       // t_NMGR.tst_gen_1(1);
     }else if (core_id == 2){
       // Core c
-      // printf("%s: SU: R(%d/%d) C(%d/%d)\n", this->node_name, this->node_id+1, this->world_size, core_id+1, core_tot);
       DECARD_INFOMSG(1, "%s: SU", this->node_name);
       t_dDARTS.run_SU();
     }else if (core_id == 3){
       // Core D
-      // printf("%s: CU: R(%d/%d) C(%d/%d)\n", this->node_name, this->node_id+1, this->world_size, core_id+1, core_tot);
       DECARD_INFOMSG(1, "%s: CU", this->node_name);
       t_dDARTS.run_CU();
     }

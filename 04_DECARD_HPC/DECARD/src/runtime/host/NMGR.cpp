@@ -17,12 +17,12 @@ int NMGR::get_tps(){
   // Assigns TPs to corresponding TPQ
  Node_Intern * n_int = dynamic_cast <Node_Intern *> (t_node);
   for (tps_it = all_tps->begin(); tps_it != all_tps->end(); ++tps_it){
-    if((*tps_it)->get_orig_id() == n_int->get_id()){
+    if((*tps_it)->get_dest_id() == n_int->get_id()){
       DECARD_INFOMSG(1, "%s: TP assigned to INTPQ", n_int->node_name);
-      // n_int->pushto_INTPQ(*tps_it);
-    }else if((*tps_it)->get_orig_id() != n_int->get_id()){
+      //t_INTPQ->push_back(*tps_it);
+    }else if((*tps_it)->get_dest_id() != n_int->get_id()){
       DECARD_INFOMSG(1, "%s: TP assigned to ONTPQ", n_int->node_name);
-      // n_int->pushto_ONTPQ(*tps_it);
+      t_ONTPQ->push_back(*tps_it);
     }else{
       DECARD_INFOMSG(1, "%s: TP not assigned", n_int->node_name);
     }
@@ -114,28 +114,28 @@ int NMGR::run()
     case M_REMT: // Remote Mode
       DECARD_INFOMSG(1, "%s: NMGR: REMT", n_int->node_name);
       // Simulate generation -> max_LTP reached
-      x=0;
-      do{
-        for (n_it = nodes_list->begin(); n_it != nodes_list->end(); ++n_it){
-          // printf("%s: NMGR x= %d, y= %d\n", n_int->node_name,x,y);
-          if ((*n_it)->get_id() != n_int->node_id){
-            n_ext = dynamic_cast <Node_Extern *> (*n_it);
-            if (x==y){
-              oopr = 999;
-            }else{
-              oopr = (n_ext->get_id() + 1) * 1000 + (n_int->node_id + 1) * 10 + x;
-            }      
-            // Generate TP
-            newTP = new ThreadedProcedure();
-            newTP->set_orig(n_int->node_id);
-            newTP->set_dest(n_ext->get_id());
-            newTP->set_opr(oopr);
-            DECARD_INFOMSG(1, "%s: NMGR: REMT RD_%03d M_%04d", n_int->node_name, n_ext->get_id(), oopr);
-            t_ONTPQ->push_back(newTP);
-          }
-        }
-        ++x;
-      }while(x <= y);
+      // x=0;
+      // do{
+      //   for (n_it = nodes_list->begin(); n_it != nodes_list->end(); ++n_it){
+      //     // printf("%s: NMGR x= %d, y= %d\n", n_int->node_name,x,y);
+      //     if ((*n_it)->get_id() != n_int->node_id){
+      //       n_ext = dynamic_cast <Node_Extern *> (*n_it);
+      //       if (x==y){
+      //         oopr = 999;
+      //       }else{
+      //         oopr = (n_ext->get_id() + 1) * 1000 + (n_int->node_id + 1) * 10 + x;
+      //       }      
+      //       // Generate TP
+      //       newTP = new ThreadedProcedure();
+      //       newTP->set_orig(n_int->node_id);
+      //       newTP->set_dest(n_ext->get_id());
+      //       newTP->set_opr(oopr);
+      //       DECARD_INFOMSG(1, "%s: NMGR: REMT RD_%03d M_%04d", n_int->node_name, n_ext->get_id(), oopr);
+      //       t_ONTPQ->push_back(newTP);
+      //     }
+      //   }
+      //   ++x;
+      // }while(x <= y);
       // Change to IDLE
       this->mode_idl();
       break; // End Remote Mode
