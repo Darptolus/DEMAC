@@ -1,5 +1,5 @@
 /**
- * @file edarts.hpp
+ * @file ddarts.hpp
  * @author Diego Roa
  * @date 31 Dec 2020
  * @brief eDARTS
@@ -26,8 +26,8 @@ namespace decard
     private:
       Node * t_node;
       // TODO: Create array of SU and CU
-      SU t_SU; 
-      CU t_CU;
+      SU t_SU; // Computational Unit(s)
+      CU t_CU; // Scheduling Unit(s)
       cl_q * t_ISCLQ; // Input Scheduler Control Queue
       cl_q * t_OSCLQ; // Output Scheduler Control Queue
       tp_q * t_ISTPQ; // Input Scheduler Threaded Procedure Queue
@@ -44,7 +44,17 @@ namespace decard
       // unsigned get_rows(){ return rows;};
       // unsigned get_cols(){ return cols;};
       
-      void init(){
+      void init(){};
+      int run_SU();
+      int run_CU();
+      void p_res();
+      void end();
+  };
+}
+#endif /* dDARTS_HPP */
+
+// eDARTS
+// void init(){
         // printf("INITIALIZING eDARTS\n");
         // e_init(NULL);
         // e_reset_system();
@@ -52,11 +62,4 @@ namespace decard
         // rows = platform.rows;
         // cols = platform.cols;
         // ncores = rows * cols;
-      };
-      int run_SU();
-      int run_CU();
-      void p_res();
-      void end();
-  };
-}
-#endif /* eDARTS_HPP */
+      // };

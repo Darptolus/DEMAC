@@ -8,7 +8,7 @@
  * Includes the definition of the Runtime
  */
 
-#include "runtime.hpp"
+#include "Runtime.hpp"
 
 using namespace decard;
 

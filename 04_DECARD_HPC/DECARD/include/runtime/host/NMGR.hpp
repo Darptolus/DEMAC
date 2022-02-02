@@ -48,6 +48,7 @@ namespace decard
     tp_q * t_OSTPQ; // Output Scheduler Threaded Procedure Queue
     int max_ostpq; // Max Local TP 
     int sptsu; // Set Point for Scheduler Unit 
+    int all_empty; // All queues empty
   public:
     NMGR(
       AllNodes * a_nodes, Node * a_node, CodeletGraph * a_CDG,
@@ -57,7 +58,7 @@ namespace decard
       t_INCLQ(a_INCLQ), t_ONCLQ(a_ONCLQ), t_ISCLQ(a_ISCLQ), t_OSCLQ(a_OSCLQ),
       t_INTPQ(a_INTPQ), t_ONTPQ(a_ONTPQ), t_ISTPQ(a_ISTPQ), t_OSTPQ(a_OSTPQ)
       {
-        m_mode = M_REMT;
+        m_mode = M_IDLE;
         all_tps = t_CDG->get_atps();
         max_ostpq = 0; // Max number of local TPS in OSTPQ
       };
@@ -70,8 +71,8 @@ namespace decard
     void set_mx_ostpq(int a_max_ostpq){
       this->max_ostpq = a_max_ostpq;
     };
-    nmgr_mode get_mode(){ return m_mode;};
-    int get_mx_ostpq(){ return max_ostpq;};
+    nmgr_mode get_mode(){return m_mode;};
+    int get_mx_ostpq(){return max_ostpq;};
     void mode_dne(){
       this->m_mode = M_DONE;
     };

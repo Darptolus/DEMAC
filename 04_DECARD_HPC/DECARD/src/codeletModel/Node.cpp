@@ -29,7 +29,6 @@ int Node_Intern::run()
       // Core B
       t_NMGR.get_tps();
       t_NMGR.run();
-      // t_NMGR.tst_gen_1(1);
     }else if (core_id == 2){
       // Core c
       DECARD_INFOMSG(1, "%s: SU", this->node_name);

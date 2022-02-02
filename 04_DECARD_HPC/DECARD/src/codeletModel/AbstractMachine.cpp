@@ -7,7 +7,7 @@
  *
  * Includes the definition of the Abstract Machine for the cluster
  */
-#include "runtime.hpp"
+#include "Runtime.hpp"
 #include "AbstractMachine.hpp"
 
 using namespace decard;

@@ -53,8 +53,6 @@ namespace decard
       };
     ~NCOM(){};
     int run();
-    int tst_gen_0();
-    // int tst_gen_1();
     void set_mode(ncom_mode a_c_mode){
       this->c_mode = a_c_mode;
     };    
@@ -68,6 +66,8 @@ namespace decard
     void mode_snd(){ // Set mode SEND
       this->c_mode = C_SEND;
     };
+    int tst_gen_0();
+    int tst_gen_1();
   };
 }
 

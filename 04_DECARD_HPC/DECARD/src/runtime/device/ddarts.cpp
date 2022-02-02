@@ -1,5 +1,5 @@
 /**
- * @file edarts.cpp
+ * @file ddarts.cpp
  * @author Diego Roa
  * @date 31 Dec 2020
  * @brief dDARTS 
@@ -26,7 +26,10 @@ int dDARTS::run_CU(){
   return 0;
 }
 
-void dDARTS::end(){
+void dDARTS::end(){}
+
+// eDARTS
+// void eDARTS::end(){
   // e_close(&dev);
   // e_finalize();
-}
+// }

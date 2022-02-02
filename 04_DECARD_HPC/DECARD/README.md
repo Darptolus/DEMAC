@@ -35,6 +35,9 @@ Get job status
 squeue | grep -n 'decard'
 watch -n 2 "squeue | head -n 1; squeue | grep -n 'diegor'"
 
+Delete domain from nodes in output files
+sed -i 's/.localdomain.hpc.udel.edu//g' *.out
+
 ## DARTS
 
 How to run with darts:
