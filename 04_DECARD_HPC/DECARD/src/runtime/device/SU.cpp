@@ -13,18 +13,16 @@
 
 using namespace decard;
 
-int SU::run()
-{
+int SU::run(){
   Node_Intern * n_int = dynamic_cast <Node_Intern *> (t_node);
-  // ThreadedProcedure * newTP;
+  ThreadedProcedure * newTP;
 
   // SU initialize 
   DECARD_INFOMSG(1, "%s: SU: INIT", n_int->node_name);
-  // DECARD_INFOMSG(1, "This is a test");
   do{
     switch(s_mode) {
-    case S_IDLE: // Idle Mode
-      DECARD_INFOMSG(1, "%s: SU: IDLE", n_int->node_name);
+      case S_IDLE: // Idle Mode
+        DECARD_INFOMSG(1, "%s: SU: IDLE", n_int->node_name);
         // Check for enabled Codelets
         // Sort Codelets
         sch.sort_codelets();
@@ -35,14 +33,21 @@ int SU::run()
         }else if(sch.get_CDrdy()){ // Codelet Ready
           // Switch to Push codelet
           this->mode_pcd();
-        }else if(t_ISTPQ->size() > this->get_mstp()){ // ISTPQ > MAX Scheduler TP 
+        }else if(t_ISTPQ->size() > this->max_istpq){ // ISTPQ > MAX Scheduler TP 
           // Switch to remote
           this->mode_rmt();
+        }
+        if (this->get_mode() == S_IDLE){
+          // Stay in IDLE
+          usleep(1000000);
         }
       break;
 
     case S_INTP: // Init TP Mode
       DECARD_INFOMSG(1, "%s: SU: INTP", n_int->node_name);
+        if(!t_ISTPQ->empty()){
+          newTP = t_ISTPQ->popFront();
+        }
       // Allocate Memory
       // Check Codelets
       s_mode = S_IDLE;

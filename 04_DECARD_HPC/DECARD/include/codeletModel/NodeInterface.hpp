@@ -1,5 +1,5 @@
 /**
- * @file NodeInit.hpp
+ * @file NodeInterface.hpp
  * @author Diego Roa
  * @date 31 Dec 2020
  * @brief Node Initialization

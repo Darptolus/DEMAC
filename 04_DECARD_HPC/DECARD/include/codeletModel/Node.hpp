@@ -21,9 +21,9 @@
 #include <vector>
 #include "NodeInterface.hpp"
 #include "CodeletGraph.hpp"
-#include <NCOM.hpp>
-#include <NMGR.hpp>
-#include <ddarts.hpp>
+#include "NCOM.hpp"
+#include "NMGR.hpp"
+#include "ddarts.hpp"
 
 namespace decard
 {
@@ -91,8 +91,8 @@ namespace decard
     tp_q ONTPQ; // Output Node Threaded Procedure Queue
     tp_q ISTPQ; // Input Scheduler Threaded Procedure Queue
     tp_q OSTPQ; // Output Scheduler Threaded Procedure Queue
-    Node_Extern * node_rcv;
-    dDARTS t_dDARTS;
+    Node_Extern * node_rcv; // Receiver Node 
+    dDARTS t_dDARTS; // DARTS
     int ncom_idle;
   public: 
     char node_name[HOST_NAME_MAX+1];
@@ -100,7 +100,7 @@ namespace decard
       int w_rank, int w_size, AllNodes * a_nodes, CodeletGraph * a_CDG):
       Node(w_rank, w_size), t_CDG(a_CDG),
       t_NCOM(a_nodes, this, &INCLQ, &ONCLQ, &INTPQ, &ONTPQ),
-      t_NMGR(a_nodes, this, a_CDG, &INCLQ, &ONCLQ, &ISCLQ, &OSCLQ, &INTPQ, &ONTPQ, &ISTPQ, &OSTPQ),
+      t_NMGR(a_nodes, this, &t_dDARTS, a_CDG, &INCLQ, &ONCLQ, &ISCLQ, &OSCLQ, &INTPQ, &ONTPQ, &ISTPQ, &OSTPQ),
       t_dDARTS(this, &ISCLQ, &OSCLQ, &ISTPQ, &OSTPQ)
       {
         gethostname(node_name, HOST_NAME_MAX+1);

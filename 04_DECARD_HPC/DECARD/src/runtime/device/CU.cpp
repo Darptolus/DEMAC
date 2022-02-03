@@ -21,20 +21,24 @@ int CU::run()
   ThreadedProcedure * newTP;
 
   // SU initialize 
-  DECARD_INFOMSG(1, "%s: SU: INIT", n_int->node_name);
+  DECARD_INFOMSG(1, "%s: CU: INIT", n_int->node_name);
   // DECARD_INFOMSG(1, "This is a test");
   do{
     switch(u_mode) {
     case U_IDLE: // Idle Mode
-      DECARD_INFOMSG(1, "%s: SU: IDLE", n_int->node_name);
+      DECARD_INFOMSG(1, "%s: CU: IDLE", n_int->node_name);
       if(!t_CDQ.empty()){  // Codelet Ready
         // Switch to Execute
         u_mode = U_EXEC;
       }
+      if (this->get_mode() == U_IDLE){
+        // Stay in IDLE
+        usleep(1000000);
+      }
       break;
 
     case U_EXEC: // Init TP Mode
-      DECARD_INFOMSG(1, "%s: SU: INTP", n_int->node_name);
+      DECARD_INFOMSG(1, "%s: CU: EXEC", n_int->node_name);
       if(this->get_invTP()){  // Invoke TP
         // Switch to Invoke TP
         u_mode = U_IVTP;
@@ -42,7 +46,7 @@ int CU::run()
       break;
 
     case U_IVTP:
-      DECARD_INFOMSG(1, "%s: SU: PCDT", n_int->node_name);
+      DECARD_INFOMSG(1, "%s: CU: IVTP", n_int->node_name);
       u_mode = U_IDLE;
       break;
 

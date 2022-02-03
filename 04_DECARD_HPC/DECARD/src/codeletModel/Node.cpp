@@ -30,7 +30,7 @@ int Node_Intern::run()
       t_NMGR.get_tps();
       t_NMGR.run();
     }else if (core_id == 2){
-      // Core c
+      // Core C
       DECARD_INFOMSG(1, "%s: SU", this->node_name);
       t_dDARTS.run_SU();
     }else if (core_id == 3){

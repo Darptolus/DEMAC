@@ -17,3 +17,5 @@ Node_Config/DEMAC_reboot_mount_mD.sh
 04_DECARD_HPC/caviness_scripts/joblist.txt
 TMP/
 *~
+04_DECARD_HPC/DECARD/src/runtime/host/NCOM.cpp
+04_DECARD_HPC/caviness_scripts/DECARD_Caviness*

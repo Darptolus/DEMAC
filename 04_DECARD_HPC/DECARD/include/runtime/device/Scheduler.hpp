@@ -38,17 +38,20 @@ namespace decard
     // int get_CDnum ();
   };
 
-  class Scheduler
+  class SU_Sch
   {
   private:
     cd_q * t_CDQ; // Codelet Queue
+    tp_q * t_TPQ; // Codelet Queue
     Node * t_node; // This node
   public:
-    Scheduler(
-      cd_q * a_CDQ):
-      t_CDQ(a_CDQ){};
-    Scheduler(){};
-    ~Scheduler(){};
+    SU_Sch(
+      Node * a_node,
+      tp_q * a_TPQ):
+      t_node(a_node),
+      t_TPQ(a_TPQ){};
+    // SU_Sch(){};
+    ~SU_Sch(){};
     void setCDQ(cd_q * a_CDQ){
       this->t_CDQ = a_CDQ;
     };

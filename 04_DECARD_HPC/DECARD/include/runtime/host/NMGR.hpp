@@ -16,6 +16,7 @@
 #include "NodeInterface.hpp"
 #include "CodeletGraph.hpp"
 #include "Scheduler.hpp"
+#include "ddarts.hpp"
 
 namespace decard
 {
@@ -32,6 +33,7 @@ namespace decard
   private:
     nmgr_mode m_mode; // Node Manager Mode
     Node * t_node; // This Node
+    dDARTS * t_dDARTS; // DARTS
     AllNodes * nodes_list;
     AllNodes::iterator n_it;
     CodeletGraph * t_CDG; // Codelet Graph 
@@ -46,21 +48,21 @@ namespace decard
     tp_q * t_ONTPQ; // Output Node Threaded Procedure Queue
     tp_q * t_ISTPQ; // Input Scheduler Threaded Procedure Queue
     tp_q * t_OSTPQ; // Output Scheduler Threaded Procedure Queue
-    int max_ostpq; // Max Local TP 
-    int sptsu; // Set Point for Scheduler Unit 
-    int all_empty; // All queues empty
+    int max_ostpq; // Max number of TPS in OSTPQ 
+    int max_istpq; // Max number of TPs in ISTPQ
   public:
     NMGR(
-      AllNodes * a_nodes, Node * a_node, CodeletGraph * a_CDG,
+      AllNodes * a_nodes, Node * a_node, dDARTS * a_dDARTS, CodeletGraph * a_CDG,
       cl_q * a_INCLQ, cl_q * a_ONCLQ, cl_q * a_ISCLQ, cl_q * a_OSCLQ,
       tp_q * a_INTPQ, tp_q * a_ONTPQ, tp_q * a_ISTPQ, tp_q * a_OSTPQ):
-      nodes_list(a_nodes), t_node(a_node), t_CDG(a_CDG),
+      nodes_list(a_nodes), t_node(a_node), t_dDARTS(a_dDARTS), t_CDG(a_CDG),
       t_INCLQ(a_INCLQ), t_ONCLQ(a_ONCLQ), t_ISCLQ(a_ISCLQ), t_OSCLQ(a_OSCLQ),
       t_INTPQ(a_INTPQ), t_ONTPQ(a_ONTPQ), t_ISTPQ(a_ISTPQ), t_OSTPQ(a_OSTPQ)
       {
         m_mode = M_IDLE;
         all_tps = t_CDG->get_atps();
-        max_ostpq = 0; // Max number of local TPS in OSTPQ
+        max_ostpq = 0; // Max number of TPS in OSTPQ
+        max_istpq = 10; // Max number of TPs in ISTPQ
       };
     ~NMGR(){};
     int get_tps();
@@ -85,9 +87,19 @@ namespace decard
     void mode_rmt(){
       this->m_mode = M_REMT;
     };
+    int all_empty(){
+      // Check if all Queues are empty
+      int empty = 0;
+      if (t_INCLQ->empty() && t_ONCLQ->empty() && t_ISCLQ->empty() && t_OSCLQ->empty() &&
+          t_INTPQ->empty() && t_ONTPQ->empty() && t_OSTPQ->empty() && t_ISTPQ->empty()){
+            empty = 1; // All queues empty
+      }
+      return empty;
+    };
+    int all_done();
     // int tst_gen();
-    int tst_gen_0();
-    int tst_gen_1(int x);
+    // int tst_gen_0();
+    // int tst_gen_1(int x);
   };
 }
 

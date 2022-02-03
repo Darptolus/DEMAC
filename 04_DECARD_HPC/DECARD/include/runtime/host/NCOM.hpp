@@ -66,8 +66,8 @@ namespace decard
     void mode_snd(){ // Set mode SEND
       this->c_mode = C_SEND;
     };
-    int tst_gen_0();
-    int tst_gen_1();
+    // int tst_gen_0();
+    // int tst_gen_1();
   };
 }
 

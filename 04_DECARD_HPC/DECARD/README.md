@@ -32,11 +32,26 @@ N_NODES=2; N_CORES=4; sbatch -N $N_NODES -n $N_NODES -c $N_CORES decard.qs
 ```
 
 Get job status
+```
 squeue | grep -n 'decard'
 watch -n 2 "squeue | head -n 1; squeue | grep -n 'diegor'"
+```
+
+Cancel Job
+```
+scancel -u $USER
+```
 
 Delete domain from nodes in output files
+```
 sed -i 's/.localdomain.hpc.udel.edu//g' *.out
+```
+Add DECARD Info Message:
+DECARD_INFOMSG(Priority, "Message");
+Example:
+DECARD_INFOMSG(1, "This is a test");
+
+
 
 ## DARTS
 
