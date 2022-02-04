@@ -22,7 +22,7 @@ int dDARTS::run_SU(){
 int dDARTS::run_CU(){
   Node_Intern * n_int = dynamic_cast <Node_Intern *> (t_node);
   // DECARD_INFOMSG(1, "%s: CU: INIT", n_int->node_name);
-  // t_CU.run();
+  t_CU.run();
   return 0;
 }
 

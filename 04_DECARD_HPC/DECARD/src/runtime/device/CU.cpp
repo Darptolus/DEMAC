@@ -17,19 +17,18 @@ using namespace decard;
 int CU::run()
 {
   Node_Intern * n_int = dynamic_cast <Node_Intern *> (t_node);
-  
   ThreadedProcedure * newTP;
 
   // SU initialize 
   DECARD_INFOMSG(1, "%s: CU: INIT", n_int->node_name);
   // DECARD_INFOMSG(1, "This is a test");
   do{
-    switch(u_mode) {
+    switch(this->get_mode()) {
     case U_IDLE: // Idle Mode
       DECARD_INFOMSG(1, "%s: CU: IDLE", n_int->node_name);
       if(!t_CDQ.empty()){  // Codelet Ready
         // Switch to Execute
-        u_mode = U_EXEC;
+        this->mode_exe();
       }
       if (this->get_mode() == U_IDLE){
         // Stay in IDLE
@@ -41,18 +40,18 @@ int CU::run()
       DECARD_INFOMSG(1, "%s: CU: EXEC", n_int->node_name);
       if(this->get_invTP()){  // Invoke TP
         // Switch to Invoke TP
-        u_mode = U_IVTP;
+        this->mode_ivt();
       }
       break;
 
     case U_IVTP:
       DECARD_INFOMSG(1, "%s: CU: IVTP", n_int->node_name);
-      u_mode = U_IDLE;
+      this->mode_idl();
       break;
 
     default:
       DECARD_INFOMSG(1, "%s: SU: Invalid State", n_int->node_name);
-      u_mode = U_IDLE;
+      this->mode_idl();
     }
   }while (n_int->get_exec());
 

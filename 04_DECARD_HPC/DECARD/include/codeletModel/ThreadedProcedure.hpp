@@ -26,7 +26,7 @@
  */
 
 #include "Atomics.h"
-
+#include "thread_safe_deque.h"
 namespace decard
 {
   //This is a forward declaration since there is a circular dependence
@@ -100,4 +100,7 @@ namespace decard
     // void add (Codelet * toAdd); //*****COMMENTED*****//
       
   };
+
+  // Threaded Procedure Queue
+  typedef thread_safe::deque<ThreadedProcedure*> tp_q;
 }

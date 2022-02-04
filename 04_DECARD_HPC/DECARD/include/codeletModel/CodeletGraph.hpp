@@ -14,21 +14,20 @@
 #include <stdlib.h>
 #include <vector>
 #include <iterator>
-#include "thread_safe_deque.h"
-#include "NodeInterface.hpp"
+// #include "thread_safe_deque.h"
+#include "ThreadedProcedure.hpp"
 #include "DECARD_tools.hpp"
+// #include "NodeInterface.hpp"
 
 namespace decard
 {
   class CodeletGraph
   {
   private:
-    int num_tp;
-    int num_cd;
-    tp_q all_tps;
+    int num_tp; // Number of TPs
+    int num_cd; // Number of Codelets
+    tp_q all_tps; // Contains all TPS
     tp_q::iterator tps_it;
-    // AllTPs node_tps;
-    // AllTPs::iterator ntps_it;
   public:
     CodeletGraph(){
       num_tp = 0;
@@ -44,9 +43,6 @@ namespace decard
     };
     tp_q * get_atps() {return &all_tps;};
     int get_tps_size() {return num_tp;};
-    // void get_tps (Node * a_node, tp_q * a_tpq);
-    // ThreadedProcedure * get_tps (Node * a_node);
-    
   }; 
 }
 #endif /* CODELETGRAPH_H */

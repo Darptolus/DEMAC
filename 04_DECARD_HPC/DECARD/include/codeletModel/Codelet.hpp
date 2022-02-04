@@ -13,7 +13,7 @@
 
 #include <stdlib.h>
 #include <SyncSlot.hpp>
-
+#include "thread_safe_deque.h"
 namespace decard
 {
   //This is a forward declaration since there is a circular dependence
@@ -104,5 +104,8 @@ namespace decard
       this->c_status = C_ACTV;
     };
   };
+
+  // Codelet Queue
+  typedef thread_safe::deque<Codelet*> cd_q;
 }
 #endif /* CODELET_H */

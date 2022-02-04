@@ -33,19 +33,24 @@ namespace decard
     cd_q t_CDQ; // Codelet Queue
     bool inv_TP; // Invoke TP
   public:
-    CU(Node * a_node):
-    t_node(a_node){};
-    CU(){
-      u_mode = U_IDLE;
-    };
+    CU(
+      Node * a_node):
+      t_node(a_node)
+      {
+        u_mode = U_IDLE;
+      };
     ~CU(){};
     int run();
-    bool get_invTP(){ return inv_TP;};
-    void set_mode(cu_mode a_u_mode){
-      this->u_mode = a_u_mode;
+    bool get_invTP()
+    {
+      inv_TP = 0;
+      return inv_TP;
     };
-
+    void set_mode(cu_mode a_u_mode){ this->u_mode = a_u_mode;};
     cu_mode get_mode(){ return u_mode;};
+    void mode_idl(){ this->u_mode = U_IDLE;};
+    void mode_exe(){ this->u_mode = U_EXEC;};
+    void mode_ivt(){ this->u_mode = U_IVTP;};
   };
 }
 

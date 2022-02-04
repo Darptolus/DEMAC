@@ -17,7 +17,8 @@
 #include <omp.h>
 #include <mpi.h>
 #include "thread_safe_deque.h"
-#include "ThreadedProcedure.hpp"
+#include "CodeletGraph.hpp"
+// #include "ThreadedProcedure.hpp"
 #include "Operations.hpp"
 #include "Messages.hpp"
 #include <vector>
@@ -75,8 +76,8 @@ namespace decard
   };
 
   typedef std::vector<Node*> AllNodes;
-  typedef thread_safe::deque<Message*> cl_q;
-  typedef thread_safe::deque<ThreadedProcedure*> tp_q;
-  typedef thread_safe::deque<Codelet*> cd_q;
+  // typedef thread_safe::deque<Message*> cl_q;
+  // typedef thread_safe::deque<ThreadedProcedure*> tp_q;
+  // typedef thread_safe::deque<Codelet*> cd_q;
 } // namespace decard
 #endif /* NODEINIT_H */

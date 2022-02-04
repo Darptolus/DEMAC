@@ -43,8 +43,6 @@ namespace decard
         t_ISCLQ(a_ISCLQ), t_OSCLQ(a_OSCLQ), 
         t_ISTPQ(a_ISTPQ), t_OSTPQ(a_OSTPQ){};
       ~dDARTS(){};
-      // unsigned get_rows(){ return rows;};
-      // unsigned get_cols(){ return cols;};
       void init(){};
       int run_SU();
       int run_CU();
@@ -56,11 +54,14 @@ namespace decard
 
 // eDARTS
 // void init(){
-        // printf("INITIALIZING eDARTS\n");
-        // e_init(NULL);
-        // e_reset_system();
-        // e_get_platform_info(&platform);
-        // rows = platform.rows;
-        // cols = platform.cols;
-        // ncores = rows * cols;
-      // };
+//   printf("INITIALIZING eDARTS\n");
+//   e_init(NULL);
+//   e_reset_system();
+//   e_get_platform_info(&platform);
+//   rows = platform.rows;
+//   cols = platform.cols;
+//   ncores = rows * cols;
+// };
+
+// unsigned get_rows(){ return rows;};
+// unsigned get_cols(){ return cols;};

@@ -58,7 +58,7 @@ int NMGR::run()
   tp_type tptype;
   Message * newMsg;
   ops_type op_type;
-  int x, oopr;
+  int oopr;
   int done;
 
   DECARD_INFOMSG(1, "%s: NMGR: INIT", n_int->node_name);

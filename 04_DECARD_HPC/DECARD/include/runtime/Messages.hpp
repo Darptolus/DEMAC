@@ -33,6 +33,9 @@ namespace decard
     ~Message(){};
     ops_type get_opr(){return op_type;};
   };
+  
+  // Message Queue
+  typedef thread_safe::deque<Message*> cl_q;
 }
 #endif /* MESSAGES_HPP */
 

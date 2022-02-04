@@ -54,7 +54,6 @@ namespace decard
         max_istpq = 10;
         min_istpq = 0;
       };
-    // SU(){};
     ~SU(){};
     int run();
     void addCU(CU * a_CU){};
@@ -66,19 +65,10 @@ namespace decard
     // };
     su_mode get_mode(){ return s_mode;};
     // int get_mstp(){ return maxstp;};
-    void mode_idl(){
-      this->s_mode = S_IDLE;
-    };
-    void mode_itp(){
-      this->s_mode = S_INTP;
-    };
-    void mode_pcd(){
-      this->s_mode = S_PCDT;
-    };
-    void mode_rmt(){
-      this->s_mode = S_REMT;
-    };
-    
+    void mode_idl(){ this->s_mode = S_IDLE;};
+    void mode_itp(){ this->s_mode = S_INTP;};
+    void mode_pcd(){ this->s_mode = S_PCDT;};
+    void mode_rmt(){ this->s_mode = S_REMT;};
   };
 }
 

@@ -27,16 +27,17 @@ int SU::run(){
         // Sort Codelets
         sch.sort_codelets();
         // Evaluate conditions for next state
-        if(!t_ISTPQ->empty()){  // Available TP Closure
-          // Switch to Init TP
+        if(!t_ISTPQ->empty()){  
+          // Available TP Closure -> Switch to Init TP
           this->mode_itp();
-        }else if(sch.get_CDrdy()){ // Codelet Ready
-          // Switch to Push codelet
+        }else if(sch.get_CDrdy()){
+          // Codelet Ready -> Switch to Push codelet
           this->mode_pcd();
-        }else if(t_ISTPQ->size() > this->max_istpq){ // ISTPQ > MAX Scheduler TP 
-          // Switch to remote
+        }else if(t_ISTPQ->size() > this->max_istpq){
+          // ISTPQ > MAX Scheduler TP -> Switch to remote
           this->mode_rmt();
         }
+        // ToDo: Add conditional for verbose mode
         if (this->get_mode() == S_IDLE){
           // Stay in IDLE
           usleep(1000000);
