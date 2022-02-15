@@ -16,6 +16,7 @@
 #include <iterator>
 // #include "thread_safe_deque.h"
 #include "ThreadedProcedure.hpp"
+#include "Codelet.hpp"
 #include "DECARD_tools.hpp"
 // #include "NodeInterface.hpp"
 
@@ -26,8 +27,8 @@ namespace decard
   private:
     int num_tp; // Number of TPs
     int num_cd; // Number of Codelets
-    tp_q all_tps; // Contains all TPS
-    tp_q::iterator tps_it;
+    tp_v all_tps; // Contains all TPS
+    tp_v::iterator tps_it;
   public:
     CodeletGraph(){
       num_tp = 0;
@@ -37,12 +38,9 @@ namespace decard
         delete element;
       }
     };
-    void add_tp(ThreadedProcedure * a_TP){
-      all_tps.push_back(a_TP);
-      ++num_tp;
-    };
-    tp_q * get_atps() {return &all_tps;};
-    int get_tps_size() {return num_tp;};
+    void add_tp(ThreadedProcedure * a_TP){ all_tps.push_back(a_TP);};
+    tp_v * get_atps() {return &all_tps;};
+    int get_tps_size() {return all_tps.size();};
   }; 
 }
 #endif /* CODELETGRAPH_H */

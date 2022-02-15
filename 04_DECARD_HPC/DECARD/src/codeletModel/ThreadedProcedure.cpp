@@ -54,6 +54,9 @@ ThreadedProcedure::~ThreadedProcedure(void)
       }
     }
   }
+  for (auto& element : tp_cds) {
+        delete element;
+      }
 }
 
 bool 

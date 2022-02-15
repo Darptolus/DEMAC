@@ -166,6 +166,7 @@ int NCOM::run()
             for (n_it = nodes_list->begin(); n_it != nodes_list->end(); ++n_it){
               // Check channel availability
               if ((*n_it)->get_id() != n_int->node_id){
+                // Send Done Message
                 int oopr = 999;
                 ErrCode = MPI_Send(&oopr, 1, MPI_INT, (*n_it)->get_id(), 1, MPI_COMM_WORLD);
                 if(!ErrCode){

@@ -37,9 +37,9 @@ namespace decard
     AllNodes * nodes_list;
     AllNodes::iterator n_it;
     CodeletGraph * t_CDG; // Codelet Graph 
-    tp_q * all_tps;
-    tp_q::iterator tps_it;
-    NMGR_Sch nmgr_sch;  // Node Manager Scheduler
+    tp_v * all_tps; // All TPs Vector
+    tp_v::iterator tps_it; // Iterator
+    // NMGR_Sch nmgr_sch;  // Node Manager Scheduler
     cl_q * t_INCLQ; // Input Manager Control Queue
     cl_q * t_ONCLQ; // Output Manager Control Queue
     cl_q * t_ISCLQ; // Input Scheduler Control Queue
@@ -67,26 +67,18 @@ namespace decard
     ~NMGR(){};
     int get_tps();
     int run();
-    void set_mode(nmgr_mode a_m_mode){
-      this->m_mode = a_m_mode;
-    };
-    void set_mx_ostpq(int a_max_ostpq){
-      this->max_ostpq = a_max_ostpq;
-    };
-    nmgr_mode get_mode(){return m_mode;};
-    int get_mx_ostpq(){return max_ostpq;};
-    void mode_dne(){
-      this->m_mode = M_DONE;
-    };
-    void mode_idl(){
-      this->m_mode = M_IDLE;
-    };
-    void mode_lcl(){
-      this->m_mode = M_LOCL;
-    };
-    void mode_rmt(){
-      this->m_mode = M_REMT;
-    };
+    void set_mode(nmgr_mode a_m_mode){ this->m_mode = a_m_mode;};
+    void set_mx_ostpq(int a_max_ostpq){ this->max_ostpq = a_max_ostpq;};
+    nmgr_mode get_mode(){ return m_mode;};
+    int get_mx_ostpq(){ return max_ostpq;};
+    // Set mode DONE
+    void mode_dne(){ this->m_mode = M_DONE;};
+    // Set mode IDLE
+    void mode_idl(){ this->m_mode = M_IDLE;};
+    // Set mode LOCAL
+    void mode_lcl(){ this->m_mode = M_LOCL;};
+    // Set mode REMOTE
+    void mode_rmt(){ this->m_mode = M_REMT;};
     int all_empty(){
       // Check if all Queues are empty
       int empty = 0;

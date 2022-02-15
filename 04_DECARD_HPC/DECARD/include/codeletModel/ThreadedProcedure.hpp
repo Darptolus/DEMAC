@@ -27,6 +27,9 @@
 
 #include "Atomics.h"
 #include "thread_safe_deque.h"
+#include "Codelet.hpp"
+#include <vector>
+
 namespace decard
 {
   //This is a forward declaration since there is a circular dependence
@@ -48,9 +51,10 @@ namespace decard
   * Variable: ref_
   * ref_ says when the TP is done
   */
+    cd_v tp_cds; // TP's Codelets
     tp_type tptype;
-    Node * origin_node;
-    Node * destin_node;
+    Node * orig_node;
+    Node * dest_node;
     int orig_node_id;
     int dest_node_id;
     int opr_id;
@@ -61,38 +65,31 @@ namespace decard
     //ThreadedProcedure(unsigned int num, ThreadedProcedure * parentTP);
     //Destructor
     virtual ~ThreadedProcedure();
-    
     bool decRef (void);
     void incRef (void);
     bool zeroRef (void);
     bool checkParent(void);
-
+    void add_cd(Codelet * a_CD){ tp_cds.push_back(a_CD);};
     void set_orig(Node * a_o_node){
-      this->origin_node = a_o_node;
+      this->orig_node = a_o_node;
       // this->orig_node_id = a_o_node->get_id();
     };
     void set_dest(Node * a_d_node){
-      this->destin_node = a_d_node;
+      this->dest_node = a_d_node;
       // this->dest_node_id = a_d_node->get_id();
     };
-    void set_tptype(tp_type a_tptype){
-      this->tptype = a_tptype;
-    };
-    void set_orig_id(int a_o_node){
-      this->orig_node_id = a_o_node;
-    };
-    void set_dest_id(int a_d_node){
-      this->dest_node_id = a_d_node;
-    };
-    void set_opr(int a_opr){
-      this->opr_id = a_opr;
-    };
-    Node * get_orig(){ return origin_node;};
-    Node * get_dest(){ return destin_node;};
+    void set_tptype(tp_type a_tptype){ this->tptype = a_tptype;};
+    void set_orig_id(int a_o_node){ this->orig_node_id = a_o_node;};
+    void set_dest_id(int a_d_node){ this->dest_node_id = a_d_node;};
+    void set_opr(int a_opr){ this->opr_id = a_opr;};
+    Node * get_orig(){return orig_node;};
+    Node * get_dest(){ return dest_node;};
     tp_type get_tptype(){ return tptype;};
+    cd_v * get_cdv(){ return &tp_cds;};
     int get_orig_id(){ return orig_node_id;};
     int get_dest_id(){ return dest_node_id;};
     int * get_opr(){ return &opr_id;};
+    int get_ncd(){ return tp_cds.size();};
     /*
     * Method: addCodelet
     * Adds a codelet to the TP's list
@@ -100,6 +97,8 @@ namespace decard
     // void add (Codelet * toAdd); //*****COMMENTED*****//
       
   };
+  // Threaded Procedure Vector
+  typedef std::vector<ThreadedProcedure*> tp_v;
 
   // Threaded Procedure Queue
   typedef thread_safe::deque<ThreadedProcedure*> tp_q;

@@ -14,6 +14,8 @@
 #include <stdlib.h>
 #include <SyncSlot.hpp>
 #include "thread_safe_deque.h"
+#include <vector>
+
 namespace decard
 {
   //This is a forward declaration since there is a circular dependence
@@ -32,7 +34,7 @@ namespace decard
     P_HIHI, // High-High
     C_HIMD, // High
     C_MDMD, // Medium
-    C_LWMD,  // Low
+    C_LWMD, // Low
     C_LWLW  // Low-Low
   };
 
@@ -42,6 +44,8 @@ namespace decard
     ThreadedProcedure * t_TP;
     SyncSlot s_slot;
     codelet_status c_status;
+    codelet_priority c_priority;
+    int cd_id;
   public:
     // TP, # Dependences, # Reset, Status
     Codelet(
@@ -80,30 +84,31 @@ namespace decard
     void resetCodelet(){
       s_slot.resetCounter();
     };
-    void setStatus(codelet_status a_status){
-      c_status = a_status;
+    void set_status(codelet_status a_status){ c_status = a_status;};
+    void set_id(int a_id){ cd_id = a_id;};
+    void setTP(ThreadedProcedure * a_TP){ t_TP = a_TP;};
+    codelet_status get_status(){ 
+      if (s_slot.getCounter() == 0){
+        c_status = C_ENBL;
+      }
+      return c_status;
     };
-    void setTP(ThreadedProcedure * a_TP){
-      t_TP = a_TP;
-    };
-    codelet_status getStatus(){ return c_status;};
     ThreadedProcedure * getTP(){ return t_TP;};
     uint32_t getDep(){ return s_slot.getCounter();};
     SyncSlot * getSyncSlot();
-    virtual void fire(void) = 0; // Codelet firing rule
-    void stus_drmt(){ // Set status DRMT
-      this->c_status = C_DRMT;
-    };
-    void stus_enbl(){ // Set status ENBL
-      this->c_status = C_ENBL;
-    };
-    void stus_fire(){ // Set status FIRE
-      this->c_status = C_FIRE;
-    };
-    void stus_actv(){ // Set status ACTV
-      this->c_status = C_ACTV;
-    };
+    int get_id(){return cd_id;};
+    // virtual void fire(void) = 0; // Codelet firing rule
+    // Set status DRMT
+    void stus_drmt(){ this->c_status = C_DRMT;};
+    // Set status ENBL
+    void stus_enbl(){ this->c_status = C_ENBL;};
+    // Set status FIRE
+    void stus_fire(){ this->c_status = C_FIRE;};
+    // Set status ACTV
+    void stus_actv(){ this->c_status = C_ACTV;};
   };
+  // Codelet Vector
+  typedef std::vector<Codelet*> cd_v;
 
   // Codelet Queue
   typedef thread_safe::deque<Codelet*> cd_q;

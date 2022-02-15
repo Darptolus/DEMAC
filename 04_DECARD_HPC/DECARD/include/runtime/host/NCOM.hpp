@@ -57,15 +57,12 @@ namespace decard
       this->c_mode = a_c_mode;
     };    
     ncom_mode get_mode(){ return c_mode;};
-    void mode_idl(){ // Set mode IDLE
-      this->c_mode = C_IDLE;
-    };
-    void mode_rcv(){ // Set mode RECV
-      this->c_mode = C_RECV;
-    };
-    void mode_snd(){ // Set mode SEND
-      this->c_mode = C_SEND;
-    };
+    // Set mode IDLE
+    void mode_idl(){ this->c_mode = C_IDLE;};
+    // Set mode RECV
+    void mode_rcv(){ this->c_mode = C_RECV;};
+    // Set mode SEND
+    void mode_snd(){ this->c_mode = C_SEND;};
     // int tst_gen_0();
     // int tst_gen_1();
   };

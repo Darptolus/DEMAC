@@ -18,6 +18,7 @@ int CU::run()
 {
   Node_Intern * n_int = dynamic_cast <Node_Intern *> (t_node);
   ThreadedProcedure * newTP;
+  Codelet * newCD;
 
   // SU initialize 
   DECARD_INFOMSG(1, "%s: CU: INIT", n_int->node_name);
@@ -26,7 +27,7 @@ int CU::run()
     switch(this->get_mode()) {
     case U_IDLE: // Idle Mode
       DECARD_INFOMSG(1, "%s: CU: IDLE", n_int->node_name);
-      if(!t_CDQ.empty()){  // Codelet Ready
+      if(!CDQ.empty()){  // Codelet Ready
         // Switch to Execute
         this->mode_exe();
       }

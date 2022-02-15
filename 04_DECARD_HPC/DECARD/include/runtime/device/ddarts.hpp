@@ -38,7 +38,7 @@ namespace decard
         cl_q * a_ISCLQ, cl_q * a_OSCLQ,
         tp_q * a_ISTPQ, tp_q * a_OSTPQ):
         t_node(a_node), 
-        t_SU(a_node, a_ISCLQ, a_OSCLQ, a_ISTPQ, a_OSTPQ),
+        t_SU(a_node, &t_CU, a_ISCLQ, a_OSCLQ, a_ISTPQ, a_OSTPQ),
         t_CU(a_node),
         t_ISCLQ(a_ISCLQ), t_OSCLQ(a_OSCLQ), 
         t_ISTPQ(a_ISTPQ), t_OSTPQ(a_OSTPQ){};
