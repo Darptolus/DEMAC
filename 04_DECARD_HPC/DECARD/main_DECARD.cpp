@@ -92,7 +92,7 @@ int main(int argc, char *argv[]){
           newTP->add_cd(newCD);
         }
       }
-      DECARD_INFOMSG(1, "%s: Generating M_%04d", decard_rt.hostname, oopr);
+      DECARD_INFOMSG(1, "%s: Generating TP_%04d", decard_rt.hostname, oopr);
       decard_rt.add_TP(newTP);
          
         
@@ -107,7 +107,7 @@ int main(int argc, char *argv[]){
   newTP->set_tptype(tptype);
   newTP->set_orig_id(n_rank);
   newTP->set_dest_id(n_rank);
-  DECARD_INFOMSG(1, "%s: Generating M_%04d", decard_rt.hostname, oopr);
+  DECARD_INFOMSG(1, "%s: Generating TP_%04d", decard_rt.hostname, oopr);
   decard_rt.add_TP(newTP);
 
   // Start Runtime

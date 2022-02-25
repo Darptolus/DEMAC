@@ -20,10 +20,10 @@ int NMGR::get_tps()
 
   for (tps_it = all_tps->begin(); tps_it != all_tps->end(); ++tps_it){
     if((*tps_it)->get_dest_id() == n_int->get_id()){
-      DECARD_INFOMSG(1, "%s: TP assigned to INTPQ", n_int->node_name);
+      DECARD_INFOMSG(1, "%s: TP_%04d assigned to INTPQ", n_int->node_name, (*tps_it)->get_id());
       t_INTPQ->push_back(*tps_it);
     }else if((*tps_it)->get_dest_id() != n_int->get_id()){
-      DECARD_INFOMSG(1, "%s: TP assigned to ONTPQ", n_int->node_name);
+      DECARD_INFOMSG(1, "%s: TP_%04d assigned to ONTPQ", n_int->node_name, (*tps_it)->get_id());
       t_ONTPQ->push_back(*tps_it);
     }else{
       DECARD_INFOMSG(1, "%s: TP not assigned", n_int->node_name);
@@ -84,19 +84,19 @@ int NMGR::run()
             // Node Done, All Nodes are DONE, NCOM Idle
             this->mode_dne();
           }
-        }
-        if (t_OSTPQ->size() > get_mx_ostpq()){
+        } else if (t_OSTPQ->size() > get_mx_ostpq()){
           // OSTPQ > MAX Local TP -> Change to REMOTE
           this->mode_rmt();
         } else if (!t_INTPQ->empty() || !t_INCLQ->empty()){
           // INTPQ > 0 -> Change to LOCAL
           this->mode_lcl();
-        } else if (this->get_mode() == M_IDLE){
-          // Stay in IDLE
-          usleep(1000000);
         } else{
           // INVALID
           DECARD_INFOMSG(1, "%s: NMGR: Invalid State", n_int->node_name);
+          usleep(1000000);
+        }
+        if (this->get_mode() == M_IDLE){
+          // Stay in IDLE
           usleep(1000000);
         }
       break; // End Idle Mode
@@ -109,8 +109,8 @@ int NMGR::run()
         oopr = *(newTP->get_opr());
         tptype = newTP->get_tptype();
         DECARD_INFOMSG(1, "%s: NMGR: LCAL RO_%03d M_%04d", n_int->node_name, newTP->get_orig_id(), oopr);
-        if(tptype == END){ // End TP
-          // Send Done Message to NCOM
+        if(tptype == END){
+          // End TP -> Send Done Message to NCOM
           DECARD_INFOMSG(1, "%s: NMGR: LCAL END_TP", n_int->node_name);
           n_int->mode_dne();
           op_type = N_D;
@@ -132,7 +132,9 @@ int NMGR::run()
         if(op_type == N_D){ // Node Done
           this->mode_dne();
         }
-      }else if (t_INTPQ->empty() && t_INCLQ->empty()){
+      }
+      // Check conditions for next state
+      if (t_INTPQ->empty() && t_INCLQ->empty()){
         this->mode_idl();
       }
       break; // End Local Mode

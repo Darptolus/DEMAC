@@ -22,8 +22,9 @@ namespace decard
 {
   enum su_mode
   {
+    S_DONE, // Scheduling Unit Done
     S_IDLE, // Scheduling Unit Idle
-    S_INTP, // Scheduling Unit Init TP
+    // S_INTP, // Scheduling Unit Init TP (?)
     S_PSCD, // Scheduling Unit Push Codelet
     S_REMT  // Scheduling Unit Switch TP Remote
   };
@@ -69,8 +70,9 @@ namespace decard
     // };
     su_mode get_mode(){ return s_mode;};
     // int get_mstp(){ return maxstp;};
+    void mode_dne(){ this->s_mode = S_DONE;};
     void mode_idl(){ this->s_mode = S_IDLE;};
-    void mode_itp(){ this->s_mode = S_INTP;};
+    // void mode_itp(){ this->s_mode = S_INTP;};
     void mode_pcd(){ this->s_mode = S_PSCD;};
     void mode_rmt(){ this->s_mode = S_REMT;};
   };

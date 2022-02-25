@@ -15,7 +15,7 @@
 #include <SyncSlot.hpp>
 #include "thread_safe_deque.h"
 #include <vector>
-
+#include "Atomics.h"
 namespace decard
 {
   //This is a forward declaration since there is a circular dependence
@@ -46,6 +46,7 @@ namespace decard
     codelet_status c_status;
     codelet_priority c_priority;
     int cd_id;
+    int n_exec; // Number of executions -> Default = 1
   public:
     // TP, # Dependences, # Reset, Status
     Codelet(
@@ -56,6 +57,7 @@ namespace decard
       c_status(a_status)
       {
         s_slot.initSS(a_dep, a_res);
+        n_exec = 1;
       };
     // TP, # Dependences, # Reset
     Codelet(
@@ -64,6 +66,7 @@ namespace decard
       t_TP(a_TP){
         c_status = C_DRMT;
         s_slot.initSS(a_dep, a_res);
+        n_exec = 1;
       };
     // TP, # Dependences
     Codelet(
@@ -72,6 +75,7 @@ namespace decard
       t_TP(a_TP){
         c_status = C_DRMT;
         s_slot.initSS(a_dep, a_dep);
+        n_exec = 1;
     };
     Codelet(){};
     ~Codelet(){};
@@ -87,17 +91,17 @@ namespace decard
     void set_status(codelet_status a_status){ c_status = a_status;};
     void set_id(int a_id){ cd_id = a_id;};
     void setTP(ThreadedProcedure * a_TP){ t_TP = a_TP;};
-    codelet_status get_status(){ 
-      if (s_slot.getCounter() == 0){
-        c_status = C_ENBL;
-      }
-      return c_status;
-    };
+    codelet_status get_status(){ return c_status;};
     ThreadedProcedure * getTP(){ return t_TP;};
     uint32_t getDep(){ return s_slot.getCounter();};
     SyncSlot * getSyncSlot();
-    int get_id(){return cd_id;};
+    int get_id(){ return cd_id;};
+    int get_nexec(){ return n_exec;};
     // virtual void fire(void) = 0; // Codelet firing rule
+    void exe(){
+      this->dec_nexec();
+      this->c_status = C_ACTV;
+      };
     // Set status DRMT
     void stus_drmt(){ this->c_status = C_DRMT;};
     // Set status ENBL
@@ -106,6 +110,7 @@ namespace decard
     void stus_fire(){ this->c_status = C_FIRE;};
     // Set status ACTV
     void stus_actv(){ this->c_status = C_ACTV;};
+    int dec_nexec();
   };
   // Codelet Vector
   typedef std::vector<Codelet*> cd_v;

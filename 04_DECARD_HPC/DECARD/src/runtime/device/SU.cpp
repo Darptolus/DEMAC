@@ -22,21 +22,61 @@ int SU::run(){
   DECARD_INFOMSG(1, "%s: SU: INIT", n_int->node_name);
   do{
     switch(s_mode) {
+      case S_DONE:
+        DECARD_INFOMSG(1, "%s: SU: DONE", n_int->node_name);
+        if(!t_ISTPQ->empty()){
+          s_mode = S_IDLE;
+        }else if (this->get_mode() == S_DONE){
+          // Stay in DONE
+          // ToDo: Add conditional for verbose mode
+          usleep(1000000);
+        }
+      break; // End Done Scheduler
+
       case S_IDLE: // Idle Mode
         DECARD_INFOMSG(1, "%s: SU: IDLE ISC=%03d OSC=%03d IST=%03d OST=%03d", n_int->node_name, 
         t_ISCLQ->size(), t_OSCLQ->size(), t_ISTPQ->size(), t_OSTPQ->size());
+        // ToDo: Monitor CU States
         // Evaluate conditions for next state
         if(!t_ISTPQ->empty()){
-          for (tps_it = t_ISTPQ->begin(); tps_it != t_ISTPQ->end(); ++tps_it){
-            // Get TP's Codelet Queue
-            t_cds = (*tps_it)->get_cdv();
-            for (cds_it = t_cds->begin(); cds_it != t_cds->end(); ++cds_it){
-              if ((*cds_it)->get_status() == C_ENBL){
-                DECARD_INFOMSG(1, "%s: SU_Sch: CD_rdy CD_%03d", n_int->node_name, (*cds_it)->get_id());
-                // Return Codelet
+          // Available TP Closure
+          for (tps_it = t_ISTPQ->begin(); tps_it != t_ISTPQ->end(); ){
+            // Check for CDs
+            DECARD_INFOMSG(1, "%s: SU: IDLE NCD=%03d", n_int->node_name, (*tps_it)->get_cdnexec());
+            if (!(*tps_it)->get_cdnexec()){
+              // TP Done -> Pop TP
+              DECARD_INFOMSG(1, "%s: SU: IDLE TPDNE RO_%03d TP_%04d", n_int->node_name, (*tps_it)->get_orig_id(), *((*tps_it)->get_opr()));
+              tps_it = t_ISTPQ->erase(tps_it);
+              break; // Exit outer loop
+            }else{
+              // Get TP's Codelet Queue
+              t_cds = (*tps_it)->get_cdv();
+              for (cds_it = t_cds->begin(); cds_it != t_cds->end(); ++cds_it){
+                // Check Codelet state
+                if ((*cds_it)->get_status() == C_ACTV){
+                  // Codelet Active
+                  DECARD_INFOMSG(1, "%s: SU: M_%04d CD_Active CD_%03d", n_int->node_name, *((*tps_it)->get_opr()), (*cds_it)->get_id());
+                }else if (!(*cds_it)->getDep() && (*cds_it)->get_nexec() && t_CU->is_avail()){
+                  // Codelet Ready -> Switch to Push Codelet
+                  (*cds_it)->stus_enbl();
+                  this->mode_pcd();
+                  DECARD_INFOMSG(1, "%s: SU: M_%04d CD_Rdy CD_%03d", n_int->node_name, *((*tps_it)->get_opr()), (*cds_it)->get_id());break; // Exit inner loop
+                  break; // Exit inner loop
+                }
+              } // End Codelets for loop
+              if(this->get_mode() != S_IDLE){
+                break; // Exit outer loop
               }
+              ++tps_it; // Next TP
             }
-          }
+          }// End TPs for loop
+        }else if(t_ISTPQ->size() > this->max_istpq){
+          // ISTPQ > MAX Scheduler TP -> Switch to remote
+          this->mode_rmt();
+        }else if(t_ISTPQ->empty() && t_CU->get_mode() == U_IDLE){
+          // IF ISTPQ and CU(s) Done -> Set mode Done
+          this->mode_dne();
+        }
         // if(!t_ISTPQ->empty()){  
         //   // Available TP Closure 
         //   // Check for enabled Codelets
@@ -49,41 +89,35 @@ int SU::run(){
         // }else if(sch.cd_rdy()){
         //   // Codelet Ready -> Switch to Push codelet
         //   this->mode_pcd();
-        }else if(t_ISTPQ->size() > this->max_istpq){
-          // ISTPQ > MAX Scheduler TP -> Switch to remote
-          this->mode_rmt();
-        }
         if (this->get_mode() == S_IDLE){
           // Stay in IDLE
           // ToDo: Add conditional for verbose mode
           usleep(1000000);
         }
-      break;
+      break; // End Idle Scheduler
 
-    case S_INTP: // Init TP Mode
-      DECARD_INFOMSG(1, "%s: SU: INTP", n_int->node_name);
-        if(!t_ISTPQ->empty()){
-          DECARD_INFOMSG(1, "%s: SU: INTP TP Avail", n_int->node_name);
-          // ToDo: Don't pop tp until it is done 
-          newTP = t_ISTPQ->popFront();
-          if (newTP->get_ncd() && sch.cd_rdy()){
-            // Check if there is an avalable CU
-            if (t_CU->is_avail()){
-              // Assign Codelets to CU
-              newCD = sch.get_rdy();
-              // sch.get_rdy();
-              t_CU->add_cd(newCD);
-            }
-          }
-        }
+    // case S_INTP: // Init TP Mode
+    //   DECARD_INFOMSG(1, "%s: SU: INTP", n_int->node_name);
+      // if(!t_ISTPQ->empty()){
+      //   if (newTP->get_ncd() && sch.cd_rdy()){
+      //       newCD = sch.get_rdy();
+      //       // sch.get_rdy();
+      //       t_CU->add_cd(newCD);
+      //     }
+      //   }
       // Allocate Memory
       // Check Codelets
-      s_mode = S_IDLE;
-      break;
+      // s_mode = S_IDLE;
+      // break;
 
     case S_PSCD: // Push Codelet to CDQ
-      DECARD_INFOMSG(1, "%s: SU: PCDT", n_int->node_name);
+      DECARD_INFOMSG(1, "%s: SU: PSCD", n_int->node_name);
       // Check for available CU
+      if (t_CU->is_avail()){
+        // Assign Codelets to CU
+        DECARD_INFOMSG(1, "%s: SU: Assign to CU CD_%03d", n_int->node_name, (*cds_it)->get_id());
+        t_CU->add_cd(*cds_it);
+      }
       s_mode = S_IDLE;
       break;
 

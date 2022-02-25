@@ -43,7 +43,7 @@ namespace decard
       t_node(a_node)
       {
         u_mode = U_IDLE;
-        max_cdq = 10;
+        max_cdq = 1;
         min_cdq = 0;
       };
     ~CU(){};
@@ -59,6 +59,7 @@ namespace decard
     };
     void set_mode(cu_mode a_u_mode){ this->u_mode = a_u_mode;};
     cu_mode get_mode(){ return u_mode;};
+    cd_q * get_cdq(){ return &CDQ;};
     void mode_idl(){ this->u_mode = U_IDLE;};
     void mode_exe(){ this->u_mode = U_EXEC;};
     void mode_ivt(){ this->u_mode = U_IVTP;};

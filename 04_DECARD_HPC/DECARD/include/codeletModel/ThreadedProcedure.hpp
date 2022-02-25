@@ -58,6 +58,7 @@ namespace decard
     int orig_node_id;
     int dest_node_id;
     int opr_id;
+    int cdn_exec;
     unsigned int ref_;
   public:
     ThreadedProcedure * parentTP_;
@@ -67,9 +68,12 @@ namespace decard
     virtual ~ThreadedProcedure();
     bool decRef (void);
     void incRef (void);
-    bool zeroRef (void);
+    bool zeroRef (void);  
     bool checkParent(void);
-    void add_cd(Codelet * a_CD){ tp_cds.push_back(a_CD);};
+    void add_cd(Codelet * a_CD){
+      tp_cds.push_back(a_CD);
+      cdn_exec += a_CD->get_nexec();
+    };
     void set_orig(Node * a_o_node){
       this->orig_node = a_o_node;
       // this->orig_node_id = a_o_node->get_id();
@@ -88,8 +92,11 @@ namespace decard
     cd_v * get_cdv(){ return &tp_cds;};
     int get_orig_id(){ return orig_node_id;};
     int get_dest_id(){ return dest_node_id;};
+    int get_id(){ return opr_id;};
     int * get_opr(){ return &opr_id;};
     int get_ncd(){ return tp_cds.size();};
+    int get_cdnexec(){ return cdn_exec;};; 
+    int dec_cdnexec();
     /*
     * Method: addCodelet
     * Adds a codelet to the TP's list

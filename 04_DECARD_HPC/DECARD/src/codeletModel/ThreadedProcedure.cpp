@@ -30,7 +30,10 @@
 using namespace decard;
 
 ThreadedProcedure::ThreadedProcedure(void):
-ref_(1){}//,
+ref_(1)
+{
+  cdn_exec = 0; 
+}//,
 // parentTP_(myThread.tempParent){ } //*****COMMENTED*****//
 
 //This is for paraFor loop
@@ -88,6 +91,11 @@ ThreadedProcedure::checkParent(void)
     //return (parentTP_!=this);
 }
 
+int
+ThreadedProcedure::dec_cdnexec()
+{ 
+  return (Atomics::fetchSub(cdn_exec, 1));
+}
 //*****COMMENTED*****//
 // void 
 // ThreadedProcedure::add(Codelet * toAdd)

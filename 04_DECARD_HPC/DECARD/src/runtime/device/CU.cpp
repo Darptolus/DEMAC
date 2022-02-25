@@ -29,6 +29,7 @@ int CU::run()
       DECARD_INFOMSG(1, "%s: CU: IDLE", n_int->node_name);
       if(!CDQ.empty()){  // Codelet Ready
         // Switch to Execute
+        DECARD_INFOMSG(1, "%s: CU: IDLE NOT EMPTY", n_int->node_name);
         this->mode_exe();
       }
       if (this->get_mode() == U_IDLE){
@@ -39,10 +40,22 @@ int CU::run()
 
     case U_EXEC: // Init TP Mode
       DECARD_INFOMSG(1, "%s: CU: EXEC", n_int->node_name);
-      if(this->get_invTP()){  // Invoke TP
-        // Switch to Invoke TP
-        this->mode_ivt();
+      if(!CDQ.empty()){
+        newCD = CDQ.popFront();
+        DECARD_INFOMSG(1, "%s: CU: EXEC CD_%03d", n_int->node_name, newCD->get_id());
+        if(this->get_invTP()){  // Invoke TP
+          // Switch to Invoke TP
+          this->mode_ivt();
+        }
+        // Execute Codelet -> Decrease execution counter
+        newCD->exe();
+        if (!newCD->get_nexec()){
+          // Execution Complete -> Codelet Dormant
+          DECARD_INFOMSG(1, "%s: CU: EXEC CD_%03d Over", n_int->node_name, newCD->get_id());
+          newCD->stus_drmt();
+        }
       }
+      this->mode_idl();
       break;
 
     case U_IVTP:
