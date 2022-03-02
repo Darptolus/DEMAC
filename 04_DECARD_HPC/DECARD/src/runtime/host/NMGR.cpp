@@ -84,8 +84,8 @@ int NMGR::run()
             // Node Done, All Nodes are DONE, NCOM Idle
             this->mode_dne();
           }
-        } else if (t_OSTPQ->size() > get_mx_ostpq()){
-          // OSTPQ > MAX Local TP -> Change to REMOTE
+        } else if (t_SU->is_full()){
+          // OSTPQ > Min Local TP -> Change to REMOTE
           this->mode_rmt();
         } else if (!t_INTPQ->empty() || !t_INCLQ->empty()){
           // INTPQ > 0 -> Change to LOCAL
@@ -120,9 +120,11 @@ int NMGR::run()
           DECARD_INFOMSG(1, "%s: NMGR: LCAL Assign to SU", n_int->node_name);
           // Check for available ISTPQ
           // ToDo: add multiple ISTPQs
-            if (t_ISTPQ->size() < max_istpq){
+            // if (t_ISTPQ->size() < max_istpq){
+            if (t_SU->is_avail()){
               // Assign TP to available ISTPQ
-              t_ISTPQ->push_back(newTP);
+              // t_ISTPQ->push_back(newTP);
+              t_SU->add_TP(newTP);
             }
         }
       }else if (!t_INCLQ->empty()){

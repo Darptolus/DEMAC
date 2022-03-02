@@ -26,29 +26,39 @@ namespace decard
     private:
       Node * t_node;
       // TODO: Create array of SU and CU
-      SU t_SU; // Computational Unit(s)
-      CU t_CU; // Scheduling Unit(s)
-      cl_q * t_ISCLQ; // Input Scheduler Control Queue
-      cl_q * t_OSCLQ; // Output Scheduler Control Queue
-      tp_q * t_ISTPQ; // Input Scheduler Threaded Procedure Queue
-      tp_q * t_OSTPQ; // Output Scheduler Threaded Procedure Queue
+      SchedulingUnit SU; // Computational Unit(s)
+      ComputationalUnit CU; // Scheduling Unit(s)
+      // cl_q * t_ISCLQ; // Input Scheduler Control Queue
+      // cl_q * t_OSCLQ; // Output Scheduler Control Queue
+      // tp_q * t_ISTPQ; // Input Scheduler Threaded Procedure Queue
+      // tp_q * t_OSTPQ; // Output Scheduler Threaded Procedure Queue
     public:
       dDARTS( 
-        Node * a_node,
-        cl_q * a_ISCLQ, cl_q * a_OSCLQ,
-        tp_q * a_ISTPQ, tp_q * a_OSTPQ):
+        Node * a_node):
         t_node(a_node), 
-        t_SU(a_node, &t_CU, a_ISCLQ, a_OSCLQ, a_ISTPQ, a_OSTPQ),
-        t_CU(a_node),
-        t_ISCLQ(a_ISCLQ), t_OSCLQ(a_OSCLQ), 
-        t_ISTPQ(a_ISTPQ), t_OSTPQ(a_OSTPQ){};
+        SU(a_node, &CU),
+        CU(a_node){};
+      
+      // dDARTS( 
+      //   Node * a_node,
+      //   cl_q * a_ISCLQ, cl_q * a_OSCLQ,
+      //   tp_q * a_ISTPQ, tp_q * a_OSTPQ):
+      //   t_node(a_node), 
+      //   SU(a_node, &t_CU, a_ISCLQ, a_OSCLQ, a_ISTPQ, a_OSTPQ),
+      //   t_CU(a_node),
+      //   t_ISCLQ(a_ISCLQ), t_OSCLQ(a_OSCLQ), 
+      //   t_ISTPQ(a_ISTPQ), t_OSTPQ(a_OSTPQ){};
       ~dDARTS(){};
       void init(){};
+      SchedulingUnit * get_SU(){ return &SU;};
+      ComputationalUnit * get_CU(){ return &CU;}; 
       int run_SU();
       int run_CU();
       void p_res();
       void end();
   };
+
+  typedef std::vector<SchedulingUnit*> AllSU;
 }
 #endif /* dDARTS_HPP */
 

@@ -13,7 +13,7 @@
 
 using namespace decard;
 
-int SU::run(){
+int SchedulingUnit::run(){
   Node_Intern * n_int = dynamic_cast <Node_Intern *> (t_node);
   ThreadedProcedure * newTP;
   Codelet * newCD;
@@ -24,7 +24,7 @@ int SU::run(){
     switch(s_mode) {
       case S_DONE:
         DECARD_INFOMSG(1, "%s: SU: DONE", n_int->node_name);
-        if(!t_ISTPQ->empty()){
+        if(!ISTPQ.empty()){
           s_mode = S_IDLE;
         }else if (this->get_mode() == S_DONE){
           // Stay in DONE
@@ -35,18 +35,18 @@ int SU::run(){
 
       case S_IDLE: // Idle Mode
         DECARD_INFOMSG(1, "%s: SU: IDLE ISC=%03d OSC=%03d IST=%03d OST=%03d", n_int->node_name, 
-        t_ISCLQ->size(), t_OSCLQ->size(), t_ISTPQ->size(), t_OSTPQ->size());
+        ISCLQ.size(), OSCLQ.size(), ISTPQ.size(), OSTPQ.size());
         // ToDo: Monitor CU States
         // Evaluate conditions for next state
-        if(!t_ISTPQ->empty()){
+        if(!ISTPQ.empty()){
           // Available TP Closure
-          for (tps_it = t_ISTPQ->begin(); tps_it != t_ISTPQ->end(); ){
+          for (tps_it = ISTPQ.begin(); tps_it != ISTPQ.end(); ){
             // Check for CDs
             DECARD_INFOMSG(1, "%s: SU: IDLE NCD=%03d", n_int->node_name, (*tps_it)->get_cdnexec());
             if (!(*tps_it)->get_cdnexec()){
               // TP Done -> Pop TP
               DECARD_INFOMSG(1, "%s: SU: IDLE TPDNE RO_%03d TP_%04d", n_int->node_name, (*tps_it)->get_orig_id(), *((*tps_it)->get_opr()));
-              tps_it = t_ISTPQ->erase(tps_it);
+              tps_it = ISTPQ.erase(tps_it);
               break; // Exit outer loop
             }else{
               // Get TP's Codelet Queue
@@ -70,14 +70,14 @@ int SU::run(){
               ++tps_it; // Next TP
             }
           }// End TPs for loop
-        }else if(t_ISTPQ->size() > this->max_istpq){
+        }else if(ISTPQ.size() > this->max_istpq){
           // ISTPQ > MAX Scheduler TP -> Switch to remote
           this->mode_rmt();
-        }else if(t_ISTPQ->empty() && t_CU->get_mode() == U_IDLE){
+        }else if(ISTPQ.empty() && t_CU->get_mode() == U_IDLE){
           // IF ISTPQ and CU(s) Done -> Set mode Done
           this->mode_dne();
         }
-        // if(!t_ISTPQ->empty()){  
+        // if(!ISTPQ.empty()){  
         //   // Available TP Closure 
         //   // Check for enabled Codelets
         
@@ -98,7 +98,7 @@ int SU::run(){
 
     // case S_INTP: // Init TP Mode
     //   DECARD_INFOMSG(1, "%s: SU: INTP", n_int->node_name);
-      // if(!t_ISTPQ->empty()){
+      // if(!ISTPQ.empty()){
       //   if (newTP->get_ncd() && sch.cd_rdy()){
       //       newCD = sch.get_rdy();
       //       // sch.get_rdy();

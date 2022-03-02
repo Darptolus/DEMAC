@@ -14,7 +14,7 @@
 
 using namespace decard;
 
-int CU::run()
+int ComputationalUnit::run()
 {
   Node_Intern * n_int = dynamic_cast <Node_Intern *> (t_node);
   ThreadedProcedure * newTP;

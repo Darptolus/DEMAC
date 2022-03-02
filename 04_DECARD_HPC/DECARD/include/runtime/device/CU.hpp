@@ -25,7 +25,7 @@ namespace decard
     U_IVTP, // Computational Unit Push Codelet
   };
 
-  class CU
+  class ComputationalUnit
   {
   private:
     cu_mode u_mode; // CU Mode
@@ -38,7 +38,7 @@ namespace decard
     int min_cdq; // Min number of CDs in CDQ
     int inv_TP; // Invoke TP
   public:
-    CU(
+    ComputationalUnit(
       Node * a_node):
       t_node(a_node)
       {
@@ -46,7 +46,7 @@ namespace decard
         max_cdq = 1;
         min_cdq = 0;
       };
-    ~CU(){};
+    ~ComputationalUnit(){};
     int run();
     int is_avail(){ return CDQ.size() < max_cdq ? 1 : 0;};
     int get_invTP()
