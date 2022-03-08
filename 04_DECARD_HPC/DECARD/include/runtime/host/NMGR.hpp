@@ -98,11 +98,10 @@ namespace decard
     void mode_rmt(){ this->m_mode = M_REMT;};
     int all_empty(){
       // Check if all Queues are empty
-      int empty = 0;
-      if (t_INCLQ->empty() && t_ONCLQ->empty() && t_INTPQ->empty() && t_ONTPQ->empty() && t_SU->empty()){
-            empty = 1; // All queues empty
-      }
-      return empty;
+      return (t_INCLQ->empty() && t_ONCLQ->empty() && 
+              t_INTPQ->empty() && t_ONTPQ->empty() && 
+              t_SU->empty())
+              ? 1 : 0;
     };
     int all_done();
     // int tst_gen();

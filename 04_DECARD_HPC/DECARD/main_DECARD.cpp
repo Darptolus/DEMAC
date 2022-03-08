@@ -11,7 +11,7 @@ class cd_01 : public Codelet
   // cd_01(ThreadedProcedure * myTP, codelet_status stat, uint32_t dep, uint32_t res):
   // Codelet(myTP, stat, dep, res){}
 
-  int run(){
+  void fire(){
     DECARD_INFOMSG(1, "%s: CD_01 ", decard_rt.hostname);
   };
 };
@@ -23,7 +23,7 @@ public:
   cd_02(ThreadedProcedure * myTP, uint32_t dep):
   Codelet(myTP, dep){}
 
-  int run(){
+  void fire(){
     DECARD_INFOMSG(1, "%s: CD_02 ", decard_rt.hostname);
   };
 };
@@ -34,7 +34,7 @@ public:
   cd_03(ThreadedProcedure * myTP, uint32_t dep):
   Codelet(myTP, dep){}
 
-  int run(){
+  void fire(){
     DECARD_INFOMSG(1, "%s: CD_03 ", decard_rt.hostname);
   };
 };
@@ -85,12 +85,18 @@ int main(int argc, char *argv[]){
       // Local TP only  
       if (i_rank == n_rank){
         // Add Codelets
-        for (i_cd = 0; i_cd < m_cd; ++i_cd){
-          newCD = new Codelet(newTP, 0);
-          newCD->set_id(i_cd + 1);
-          // Add codelet
+        // for (i_cd = 0; i_cd < m_cd; ++i_cd){
+          newCD = new cd_01(newTP, 0);
           newTP->add_cd(newCD);
-        }
+          newCD = new cd_02(newTP, 0);
+          newTP->add_cd(newCD);
+          newCD = new cd_03(newTP, 0);
+          newTP->add_cd(newCD);
+          // newCD = new Codelet(newTP, 0);
+          // newCD->set_id(i_cd + 1);
+          // Add codelet
+          // newTP->add_cd(newCD);
+        // }
       }
       DECARD_INFOMSG(1, "%s: Generating TP_%04d", decard_rt.hostname, oopr);
       decard_rt.add_TP(newTP);

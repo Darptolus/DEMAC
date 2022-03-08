@@ -90,13 +90,12 @@ int NMGR::run()
         } else if (!t_INTPQ->empty() || !t_INCLQ->empty()){
           // INTPQ > 0 -> Change to LOCAL
           this->mode_lcl();
+        } else if (this->get_mode() == M_IDLE){
+          // Stay in IDLE
+          usleep(1000000);
         } else{
           // INVALID
-          DECARD_INFOMSG(1, "%s: NMGR: Invalid State", n_int->node_name);
-          usleep(1000000);
-        }
-        if (this->get_mode() == M_IDLE){
-          // Stay in IDLE
+          DECARD_INFOMSG(1, "%s: NMGR: IDLE Invalid State", n_int->node_name);
           usleep(1000000);
         }
       break; // End Idle Mode

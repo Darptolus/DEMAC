@@ -58,6 +58,7 @@ namespace decard
     int orig_node_id;
     int dest_node_id;
     int opr_id;
+    int id_cd;
     int cdn_exec;
     unsigned int ref_;
   public:
@@ -73,6 +74,8 @@ namespace decard
     void add_cd(Codelet * a_CD){
       tp_cds.push_back(a_CD);
       cdn_exec += a_CD->get_nexec();
+      a_CD->set_id(id_cd);
+      ++id_cd;
     };
     void set_orig(Node * a_o_node){
       this->orig_node = a_o_node;

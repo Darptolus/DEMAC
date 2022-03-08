@@ -100,7 +100,8 @@ namespace decard
       return (t_CU->get_mode() == U_IDLE && 
               ISCLQ.empty() && OSCLQ.empty() &&
               OSTPQ.empty() && ISTPQ.empty()) 
-              ? 1 : 0;};
+              ? 1 : 0;
+    };
   };
 }
 

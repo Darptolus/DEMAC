@@ -8,7 +8,6 @@
  * Includes the definition of CU
  */
 
-
 #include "CU.hpp"
 #include "Node.hpp"
 

@@ -97,11 +97,11 @@ namespace decard
     SyncSlot * getSyncSlot();
     int get_id(){ return cd_id;};
     int get_nexec(){ return n_exec;};
-    // virtual void fire(void) = 0; // Codelet firing rule
     void exe(){
       this->dec_nexec();
-      this->c_status = C_ACTV;
-      };
+      this->stus_actv();
+      this->fire();
+    };
     // Set status DRMT
     void stus_drmt(){ this->c_status = C_DRMT;};
     // Set status ENBL
@@ -111,6 +111,7 @@ namespace decard
     // Set status ACTV
     void stus_actv(){ this->c_status = C_ACTV;};
     int dec_nexec();
+    virtual void fire(void) = 0; // Codelet firing rule
   };
   // Codelet Vector
   typedef std::vector<Codelet*> cd_v;

@@ -33,6 +33,7 @@ ThreadedProcedure::ThreadedProcedure(void):
 ref_(1)
 {
   cdn_exec = 0; 
+  id_cd = 0;
 }//,
 // parentTP_(myThread.tempParent){ } //*****COMMENTED*****//
 
