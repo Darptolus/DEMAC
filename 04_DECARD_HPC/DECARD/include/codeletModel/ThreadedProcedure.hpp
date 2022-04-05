@@ -58,8 +58,9 @@ namespace decard
     int orig_node_id;
     int dest_node_id;
     int opr_id;
+    int tp_id; // TP Identifier
     int id_cd;
-    int cdn_exec;
+    int cdn_exec; // Total no. of CDs to be executed
     unsigned int ref_;
   public:
     ThreadedProcedure * parentTP_;
@@ -86,6 +87,7 @@ namespace decard
       // this->dest_node_id = a_d_node->get_id();
     };
     void set_tptype(tp_type a_tptype){ this->tptype = a_tptype;};
+    void set_id(int a_id){ tp_id = a_id;};
     void set_orig_id(int a_o_node){ this->orig_node_id = a_o_node;};
     void set_dest_id(int a_d_node){ this->dest_node_id = a_d_node;};
     void set_opr(int a_opr){ this->opr_id = a_opr;};
@@ -100,6 +102,11 @@ namespace decard
     int get_ncd(){ return tp_cds.size();};
     int get_cdnexec(){ return cdn_exec;};; 
     int dec_cdnexec();
+    void clear_all(){
+      for (auto& element : tp_cds) {
+        delete element;
+      }
+    }
     /*
     * Method: addCodelet
     * Adds a codelet to the TP's list

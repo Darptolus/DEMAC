@@ -55,12 +55,12 @@ int SchedulingUnit::run(){
                 // Check Codelet state
                 if ((*cds_it)->get_status() == C_ACTV){
                   // Codelet Active
-                  DECARD_INFOMSG(1, "%s: SU: M_%04d CD_Active CD_%03d", n_int->node_name, *((*tps_it)->get_opr()), (*cds_it)->get_id());
+                  DECARD_INFOMSG(1, "%s: SU: TP_%04d CD_Active CD_%03d", n_int->node_name, *((*tps_it)->get_opr()), (*cds_it)->get_id());
                 }else if (!(*cds_it)->getDep() && (*cds_it)->get_nexec() && t_CU->is_avail()){
                   // Codelet Ready -> Switch to Push Codelet
                   (*cds_it)->stus_enbl();
                   this->mode_pcd();
-                  DECARD_INFOMSG(1, "%s: SU: M_%04d CD_Rdy CD_%03d", n_int->node_name, *((*tps_it)->get_opr()), (*cds_it)->get_id());break; // Exit inner loop
+                  DECARD_INFOMSG(1, "%s: SU: TP_%04d CD_Rdy CD_%03d", n_int->node_name, *((*tps_it)->get_opr()), (*cds_it)->get_id());break; // Exit inner loop
                   break; // Exit inner loop
                 }
               } // End Codelets for loop

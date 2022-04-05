@@ -41,10 +41,10 @@ int NCOM::run()
           // Set next state 
           if (*(n_ext->get_rflg())){
             if(!ErrCode){
-              DECARD_INFOMSG(1, "%s: NCOM: TEST RO_%03d M_%04d S_%d", 
+              DECARD_INFOMSG(1, "%s: NCOM: TEST RO_%03d TP_%04d S_%d", 
               n_int->node_name, n_ext->get_id(), *(n_ext->get_msgbox()), *(n_ext->get_rflg()));
             }else{
-              DECARD_INFOMSG(1, "%s: NCOM: TEST RO_%03d M_%04d S_%d E_%d", 
+              DECARD_INFOMSG(1, "%s: NCOM: TEST RO_%03d TP_%04d S_%d E_%d", 
               n_int->node_name, n_ext->get_id(), *(n_ext->get_msgbox()), *(n_ext->get_rflg()), ErrCode);
             }
             // Mssage recieved -> Set origin node -> Change to RECEIVE
@@ -73,7 +73,7 @@ int NCOM::run()
       // Check for incoming message
       if (n_int->get_nrcv()){
         // Message Recieved
-        DECARD_INFOMSG(1, "%s: NCOM: RECV RO_%03d M_%04d", n_int->node_name, n_ext->get_id(), *(n_ext->get_msgbox())); // *((n_int->get_nrcv())->get_msgbox())
+        DECARD_INFOMSG(1, "%s: NCOM: RECV RO_%03d TP_%04d", n_int->node_name, n_ext->get_id(), *(n_ext->get_msgbox())); // *((n_int->get_nrcv())->get_msgbox())
         // Check if Node Done
         if (*(n_ext->get_msgbox()) == 999){
           n_ext->mode_dne(); // Set External node status to Done
@@ -141,10 +141,10 @@ int NCOM::run()
         // ACK before sending to the same node twice?
         ErrCode = MPI_Send(newTP->get_opr(), 1, MPI_INT, newTP->get_dest_id(), 1, MPI_COMM_WORLD);
         if(!ErrCode){
-          DECARD_INFOMSG(1, "%s: NCOM: SEND RD_%03d M_%04d", 
+          DECARD_INFOMSG(1, "%s: NCOM: SEND RD_%03d TP_%04d", 
           n_int->node_name, newTP->get_dest_id(), *(newTP->get_opr()));
         }else{
-          DECARD_INFOMSG(1, "%s: NCOM: SEND RD_%03d M_%04d E_%d", 
+          DECARD_INFOMSG(1, "%s: NCOM: SEND RD_%03d TP_%04d E_%d", 
           n_int->node_name, newTP->get_dest_id(), *(newTP->get_opr()), ErrCode);
         }
       }else if(!t_ONCLQ->empty()){
@@ -170,10 +170,10 @@ int NCOM::run()
                 int oopr = 999;
                 ErrCode = MPI_Send(&oopr, 1, MPI_INT, (*n_it)->get_id(), 1, MPI_COMM_WORLD);
                 if(!ErrCode){
-                  DECARD_INFOMSG(1, "%s: NCOM: SEND RD_%03d M_%04d", 
+                  DECARD_INFOMSG(1, "%s: NCOM: SEND RD_%03d TP_%04d", 
                   n_int->node_name, (*n_it)->get_id(), oopr);
                 }else{
-                  DECARD_INFOMSG(1, "%s: NCOM: SEND RD_%03d M_%04d E_%d", 
+                  DECARD_INFOMSG(1, "%s: NCOM: SEND RD_%03d TP_%04d E_%d", 
                   n_int->node_name, (*n_it)->get_id(), oopr, ErrCode);
                 }
               }
@@ -229,10 +229,10 @@ int NCOM::run()
       //   // ACK before sending to the same node twice?
       //   ErrCode = MPI_Send(newTP->get_opr(), 1, MPI_INT, newTP->get_dest_id(), 1, MPI_COMM_WORLD);
       //   if(!ErrCode){
-      //     DECARD_INFOMSG(1, "%s: NCOM: SEND RD_%03d M_%04d", 
+      //     DECARD_INFOMSG(1, "%s: NCOM: SEND RD_%03d TP_%04d", 
       //     n_int->node_name, newTP->get_dest_id(), *(newTP->get_opr()));
       //   }else{
-      //     DECARD_INFOMSG(1, "%s: NCOM: SEND RD_%03d M_%04d E_%d", 
+      //     DECARD_INFOMSG(1, "%s: NCOM: SEND RD_%03d TP_%04d E_%d", 
       //     n_int->node_name, newTP->get_dest_id(), *(newTP->get_opr()), ErrCode);
       //   }
       // }   
@@ -315,10 +315,10 @@ int NCOM::run()
 //           ErrCode = MPI_Test(n_ext->get_rreq(), n_ext->get_rflg(), n_ext->get_rsts());
 
 //           if(!ErrCode){
-//             DECARD_INFOMSG(1, "%s: NCOM: TEST RO_%03d M_%04d S_%d", 
+//             DECARD_INFOMSG(1, "%s: NCOM: TEST RO_%03d TP_%04d S_%d", 
 //             n_int->node_name, n_ext->get_id(), *(n_ext->get_msgbox()), *(n_ext->get_rflg()));
 //           }else{
-//             DECARD_INFOMSG(1, "%s: NCOM: TEST RO_%03d M_%04d S_%d E_%d", 
+//             DECARD_INFOMSG(1, "%s: NCOM: TEST RO_%03d TP_%04d S_%d E_%d", 
 //             n_int->node_name, n_ext->get_id(), *(n_ext->get_msgbox()), *(n_ext->get_rflg()), ErrCode);
 //           }
 
@@ -349,7 +349,7 @@ int NCOM::run()
 //       // Check for incoming message
 //       if (n_int->get_nrcv()){
 //         // Message Recieved
-//         DECARD_INFOMSG(1, "%s: NCOM: RECV RO_%03d M_%04d", n_int->node_name, n_ext->get_id(), *(n_ext->get_msgbox())); // *((n_int->get_nrcv())->get_msgbox())
+//         DECARD_INFOMSG(1, "%s: NCOM: RECV RO_%03d TP_%04d", n_int->node_name, n_ext->get_id(), *(n_ext->get_msgbox())); // *((n_int->get_nrcv())->get_msgbox())
 //         // Push to queue
 //         newTP = new ThreadedProcedure();
 //         // Simulated info from origin
@@ -405,10 +405,10 @@ int NCOM::run()
 //         // ACK before sending to the same node twice?
 //         ErrCode = MPI_Send(newTP->get_opr(), 1, MPI_INT, newTP->get_dest_id(), 1, MPI_COMM_WORLD);
 //         if(!ErrCode){
-//           DECARD_INFOMSG(1, "%s: NCOM: SEND RD_%03d M_%04d", 
+//           DECARD_INFOMSG(1, "%s: NCOM: SEND RD_%03d TP_%04d", 
 //           n_int->node_name, newTP->get_dest_id(), *(newTP->get_opr()));
 //         }else{
-//           DECARD_INFOMSG(1, "%s: NCOM: SEND RD_%03d M_%04d E_%d", 
+//           DECARD_INFOMSG(1, "%s: NCOM: SEND RD_%03d TP_%04d E_%d", 
 //           n_int->node_name, newTP->get_dest_id(), *(newTP->get_opr()), ErrCode);
 //         }
 //       }   

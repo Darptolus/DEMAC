@@ -28,7 +28,7 @@ int ComputationalUnit::run()
       DECARD_INFOMSG(1, "%s: CU: IDLE", n_int->node_name);
       if(!CDQ.empty()){  // Codelet Ready
         // Switch to Execute
-        DECARD_INFOMSG(1, "%s: CU: IDLE NOT EMPTY", n_int->node_name);
+        // DECARD_INFOMSG(1, "%s: CU: IDLE NOT EMPTY", n_int->node_name);
         this->mode_exe();
       }
       if (this->get_mode() == U_IDLE){

@@ -29,6 +29,7 @@ namespace decard
     int num_cd; // Number of Codelets
     tp_v all_tps; // Contains all TPS
     tp_v::iterator tps_it;
+    int tp_id; // TP Identifier
   public:
     CodeletGraph(){
       num_tp = 0;
@@ -38,7 +39,11 @@ namespace decard
         delete element;
       }
     };
-    void add_tp(ThreadedProcedure * a_TP){ all_tps.push_back(a_TP);};
+    void add_tp(ThreadedProcedure * a_TP){
+      all_tps.push_back(a_TP);
+      a_TP->set_id(tp_id);
+      ++tp_id;
+    };
     tp_v * get_atps() {return &all_tps;};
     int get_tps_size() {return all_tps.size();};
   }; 

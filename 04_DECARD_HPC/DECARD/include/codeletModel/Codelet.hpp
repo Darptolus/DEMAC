@@ -98,9 +98,9 @@ namespace decard
     int get_id(){ return cd_id;};
     int get_nexec(){ return n_exec;};
     void exe(){
-      this->dec_nexec();
       this->stus_actv();
       this->fire();
+      this->dec_nexec();
     };
     // Set status DRMT
     void stus_drmt(){ this->c_status = C_DRMT;};

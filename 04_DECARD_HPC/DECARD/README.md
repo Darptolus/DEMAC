@@ -21,6 +21,9 @@ cmake ../DECARD
 cmake --build .
 ./decard_main.out
 ```
+```
+ssh caviness -t 'cd ~/DEMAC/04_DECARD_HPC/build; bash -l'
+```
 
 Debug mode
 ```

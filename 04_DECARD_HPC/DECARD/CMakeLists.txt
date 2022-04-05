@@ -33,8 +33,11 @@ if (DEBUG)
   set(CMAKE_BUILD_TYPE Debug)
   enable_testing()
   add_subdirectory (tests) 
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O0")
+  ## Add Clang stuff here
 else ()
   message_bgreen("RELEASE MODE COMPILATION")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2")  
   set(CMAKE_BUILD_TYPE Release)
 endif (DEBUG)
 

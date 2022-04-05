@@ -58,7 +58,7 @@ int NMGR::run()
   tp_type tptype;
   Message * newMsg;
   ops_type op_type;
-  int oopr;
+  int tp_id;
   int done;
 
   DECARD_INFOMSG(1, "%s: NMGR: INIT", n_int->node_name);
@@ -105,9 +105,9 @@ int NMGR::run()
       // Check queues
       if (!t_INTPQ->empty()){
         newTP = t_INTPQ->popFront();
-        oopr = *(newTP->get_opr());
+        tp_id = *(newTP->get_opr());
         tptype = newTP->get_tptype();
-        DECARD_INFOMSG(1, "%s: NMGR: LCAL RO_%03d M_%04d", n_int->node_name, newTP->get_orig_id(), oopr);
+        DECARD_INFOMSG(1, "%s: NMGR: LCAL RO_%03d TP_%04d", n_int->node_name, newTP->get_orig_id(), tp_id);
         if(tptype == END){
           // End TP -> Send Done Message to NCOM
           DECARD_INFOMSG(1, "%s: NMGR: LCAL END_TP", n_int->node_name);
@@ -129,7 +129,7 @@ int NMGR::run()
       }else if (!t_INCLQ->empty()){
         newMsg = t_INCLQ->popFront();
         op_type = newMsg->get_opr();
-        DECARD_INFOMSG(1, "%s: NMGR: LCAL RO_%03d M_%04d", n_int->node_name, newTP->get_orig_id(), oopr);
+        DECARD_INFOMSG(1, "%s: NMGR: LCAL RO_%03d TP_%04d", n_int->node_name, newTP->get_orig_id(), tp_id);
         if(op_type == N_D){ // Node Done
           this->mode_dne();
         }
@@ -194,7 +194,7 @@ int NMGR::run()
 //   Node_Intern * n_int = dynamic_cast <Node_Intern *> (t_node);
 //   Node_Extern * n_ext;
 //   ThreadedProcedure * newTP;
-//   int x, oopr;
+//   int x, tp_id;
 //   int done;
 //   // Producing
 //   DECARD_INFOMSG(1, "%s: NMGR: Test_Gen TPs", n_int->node_name);
@@ -250,11 +250,11 @@ int NMGR::run()
 //       // Simulate Consuming -> Assigning to SU
 //       if (!t_INTPQ->empty()){
 //         newTP = t_INTPQ->popFront();
-//         oopr = *(newTP->get_opr());
-//         DECARD_INFOMSG(1, "%s: NMGR: LCAL RO_%03d M_%04d", n_int->node_name, newTP->get_orig_id(), oopr);
+//         tp_id = *(newTP->get_opr());
+//         DECARD_INFOMSG(1, "%s: NMGR: LCAL RO_%03d TP_%04d", n_int->node_name, newTP->get_orig_id(), tp_id);
 //       }
 
-//       if(oopr == 999){
+//       if(tp_id == 999){
 //         // "DONE" Message
 //         // n_it = nodes_list->at(newTP->get_orig());
 //         for (n_it = nodes_list->begin(); n_it != nodes_list->end(); ++n_it){
@@ -280,16 +280,16 @@ int NMGR::run()
 //           if ((*n_it)->get_id() != n_int->node_id){
 //             n_ext = dynamic_cast <Node_Extern *> (*n_it);
 //             if (x==y){
-//               oopr = 999;
+//               tp_id = 999;
 //             }else{
-//               oopr = (n_ext->get_id() + 1) * 1000 + (n_int->node_id + 1) * 10 + x;
+//               tp_id = (n_ext->get_id() + 1) * 1000 + (n_int->node_id + 1) * 10 + x;
 //             }      
 //             // Generate TP
 //             newTP = new ThreadedProcedure();
 //             newTP->set_orig_id(n_int->node_id);
 //             newTP->set_dest_id(n_ext->get_id());
-//             newTP->set_opr(oopr);
-//             DECARD_INFOMSG(1, "%s: NMGR: REMT RD_%03d M_%04d", n_int->node_name, n_ext->get_id(), oopr);
+//             newTP->set_opr(tp_id);
+//             DECARD_INFOMSG(1, "%s: NMGR: REMT RD_%03d TP_%04d", n_int->node_name, n_ext->get_id(), tp_id);
 //             t_ONTPQ->push_back(newTP);
 //           }
 //         }
