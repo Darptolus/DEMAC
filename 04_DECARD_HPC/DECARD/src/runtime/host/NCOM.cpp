@@ -25,6 +25,7 @@ int NCOM::run()
   ops_type op_type;
   // NCOM initialize channels
   DECARD_INFOMSG(1, "%s: NCOM: INIT", n_int->node_name);
+  msg_size = 4;
   // DECARD_INFOMSG(1, "This is a test");
   do{
     switch(this->get_mode()) {
@@ -38,14 +39,14 @@ int NCOM::run()
           ErrCode = MPI_Test(n_ext->get_rreq(), n_ext->get_rflg(), n_ext->get_rsts());
           // Check if msg has been recieved - Blocking
           // ErrCode = MPI_Wait(n_ext->get_rreq(), n_ext->get_rsts());
-          // Set next state 
           if (*(n_ext->get_rflg())){
             if(!ErrCode){
-              DECARD_INFOMSG(1, "%s: NCOM: TEST RO_%03d TP_%04d S_%d", 
-              n_int->node_name, n_ext->get_id(), *(n_ext->get_msgbox()), *(n_ext->get_rflg()));
+              // ToDo: add MPI_Get_count to get message size
+              DECARD_INFOMSG(1, "%s: NCOM: IDLE NEW MSG RO_%03d TP_%04d S_%d", 
+              n_int->node_name, n_ext->get_id(), *(n_ext->get_msgtype()), *(n_ext->get_rflg()));
             }else{
-              DECARD_INFOMSG(1, "%s: NCOM: TEST RO_%03d TP_%04d S_%d E_%d", 
-              n_int->node_name, n_ext->get_id(), *(n_ext->get_msgbox()), *(n_ext->get_rflg()), ErrCode);
+              DECARD_INFOMSG(1, "%s: NCOM: IDLE NEW MSG RO_%03d TP_%04d S_%d E_%d MPI ERROR", 
+              n_int->node_name, n_ext->get_id(), *(n_ext->get_msgtype()), *(n_ext->get_rflg()), ErrCode);
             }
             // Mssage recieved -> Set origin node -> Change to RECEIVE
             n_int->set_nrcv(n_ext);
@@ -69,39 +70,45 @@ int NCOM::run()
     break; // End Idle Mode
 
     case C_RECV: // Recieve Mode
-      DECARD_INFOMSG(1, "%s: NCOM: RECV", n_int->node_name);
+      // DECARD_INFOMSG(1, "%s: NCOM: RECV", n_int->node_name);
       // Check for incoming message
       if (n_int->get_nrcv()){
         // Message Recieved
         DECARD_INFOMSG(1, "%s: NCOM: RECV RO_%03d TP_%04d", n_int->node_name, n_ext->get_id(), *(n_ext->get_msgbox())); // *((n_int->get_nrcv())->get_msgbox())
+        // Read Msg
+        pmsg_1 = n_ext->get_msgin();
         // Check if Node Done
-        if (*(n_ext->get_msgbox()) == 999){
+        // if (*(n_ext->get_msgbox()) == 999){
+        if (pmsg_1->m_opr == N_D){
           n_ext->mode_dne(); // Set External node status to Done
-          // Generate control Message 
-          op_type = N_D;
-          newMsg = new Message(op_type, n_ext);
-          t_INCLQ->push_back(newMsg);
+          DECARD_INFOMSG(1, "%s: NCOM: RECV RO_%03d DONE", n_int->node_name, n_ext->get_id()); // *((n_int->get_nrcv())->get_msgbox())
+          // Generate control Message
+          // op_type = N_D;
+          // newMsg = new Message(op_type, n_ext);
+          // t_INCLQ->push_back(newMsg);
         }else{
-          // Push to queue
-          newTP = new ThreadedProcedure();
+          // ToDo: Get TP from CDG
+          // newTP = t_CDG->clone(*(n_ext->get_msgbox()));
+
           // Simulated info from origin
+          newTP = new ThreadedProcedure();
           newTP->set_orig(n_ext);
           newTP->set_orig_id(n_ext->get_id());
           newTP->set_dest(n_int);
           newTP->set_dest_id(n_int->node_id);
-          newTP->set_opr(*(n_ext->get_msgbox()));
+          newTP->set_id(*(n_ext->get_msgdata()));
           // Push to INTPQ
           t_INTPQ->push_back(newTP);
         }
         // Clear Recieved
         n_int->set_nrcv(NULL);
         // Reenable Channel
-        ErrCode = MPI_Irecv(n_ext->get_msgbox(), 1, MPI_INT, n_ext->get_id(), 1, MPI_COMM_WORLD, n_ext->get_rreq()); 
+        ErrCode = MPI_Irecv(n_ext->get_msgbox(), msg_size, MPI_INT, n_ext->get_id(), 1, MPI_COMM_WORLD, n_ext->get_rreq()); 
         n_ext->set_renb();
         if(!ErrCode){
-          DECARD_INFOMSG(1, "%s: NCOM: OPEN RD_%03d", n_int->node_name, n_ext->get_id());
+          DECARD_INFOMSG(1, "%s: NCOM: OPEN CH_%03d", n_int->node_name, n_ext->get_id());
         }else{
-          DECARD_INFOMSG(1, "%s: NCOM: OPEN RD_%03d E_%d", n_int->node_name, n_ext->get_id(), ErrCode);
+          DECARD_INFOMSG(1, "%s: NCOM: OPEN CH_%03d E_%d", n_int->node_name, n_ext->get_id(), ErrCode);
         }
       } else {
         // Check all channels
@@ -111,12 +118,12 @@ int NCOM::run()
             n_ext = dynamic_cast <Node_Extern *> (*n_it);
             if (!(n_ext->get_renb())){
               // Open channel
-              ErrCode = MPI_Irecv(n_ext->get_msgbox(), 1, MPI_INT, n_ext->get_id(), 1, MPI_COMM_WORLD, n_ext->get_rreq()); 
+              ErrCode = MPI_Irecv(n_ext->get_msgbox(), msg_size, MPI_INT, n_ext->get_id(), 1, MPI_COMM_WORLD, n_ext->get_rreq()); 
               n_ext->set_renb();
               if(!ErrCode){
-                DECARD_INFOMSG(1, "%s: NCOM: OPEN RD_%03d", n_int->node_name, n_ext->get_id());
+                DECARD_INFOMSG(1, "%s: NCOM: OPEN CH_%03d", n_int->node_name, n_ext->get_id());
               }else{
-                DECARD_INFOMSG(1, "%s: NCOM: OPEN RD_%03d E_%d", n_int->node_name, n_ext->get_id(), ErrCode);
+                DECARD_INFOMSG(1, "%s: NCOM: OPEN CH_%03d E_%d", n_int->node_name, n_ext->get_id(), ErrCode);
               }
             }
           }
@@ -133,19 +140,23 @@ int NCOM::run()
     break; // End Receive Mode
 
     case C_SEND:
-    DECARD_INFOMSG(1, "%s: NCOM: SEND", n_int->node_name);
+    // DECARD_INFOMSG(1, "%s: NCOM: SEND", n_int->node_name);
       if(!t_ONTPQ->empty()){
-        // Select Receiving Node
-        // Send msg to node
         newTP = t_ONTPQ->popFront();
+        // Prepare Messsage
+        n_ext = dynamic_cast <Node_Extern *> (newTP->get_dest());
+        // msg_2 = {.m_id = n_ext->get_msgid(), .m_opr = TSE, .m_size = 0, .m_data = 0};
+        msg_1 = {n_ext->get_msgid(), TSE, 1, newTP->get_id()};
+        // Send msg to node
+        ErrCode = MPI_Send(&msg_1, msg_size, MPI_INT, newTP->get_dest_id(), 1, MPI_COMM_WORLD);
         // ACK before sending to the same node twice?
-        ErrCode = MPI_Send(newTP->get_opr(), 1, MPI_INT, newTP->get_dest_id(), 1, MPI_COMM_WORLD);
+        n_ext->inc_msgid();
         if(!ErrCode){
           DECARD_INFOMSG(1, "%s: NCOM: SEND RD_%03d TP_%04d", 
-          n_int->node_name, newTP->get_dest_id(), *(newTP->get_opr()));
+          n_int->node_name, newTP->get_dest_id(), newTP->get_id_full());
         }else{
           DECARD_INFOMSG(1, "%s: NCOM: SEND RD_%03d TP_%04d E_%d", 
-          n_int->node_name, newTP->get_dest_id(), *(newTP->get_opr()), ErrCode);
+          n_int->node_name, newTP->get_dest_id(), newTP->get_id_full(), ErrCode);
         }
       }else if(!t_ONCLQ->empty()){
         // Outgoing Control Message
@@ -162,19 +173,20 @@ int NCOM::run()
           break;
           case N_D: // Node Done
             DECARD_INFOMSG(1, "%s: NCOM: SEND N_D", n_int->node_name);
-            // Check all channels
+            // For all all channels
             for (n_it = nodes_list->begin(); n_it != nodes_list->end(); ++n_it){
-              // Check channel availability
+              // Except itself
               if ((*n_it)->get_id() != n_int->node_id){
-                // Send Done Message
-                int oopr = 999;
-                ErrCode = MPI_Send(&oopr, 1, MPI_INT, (*n_it)->get_id(), 1, MPI_COMM_WORLD);
+                // Prepare Messsage
+                msg_1 = {n_ext->get_msgid(), N_D, 0, 0};
+                // Send Message
+                ErrCode = MPI_Send(&msg_1, msg_size, MPI_INT, (*n_it)->get_id(), 1, MPI_COMM_WORLD);
                 if(!ErrCode){
-                  DECARD_INFOMSG(1, "%s: NCOM: SEND RD_%03d TP_%04d", 
-                  n_int->node_name, (*n_it)->get_id(), oopr);
+                  DECARD_INFOMSG(1, "%s: NCOM: SEND RD_%03d -> END TP", 
+                  n_int->node_name, (*n_it)->get_id());
                 }else{
-                  DECARD_INFOMSG(1, "%s: NCOM: SEND RD_%03d TP_%04d E_%d", 
-                  n_int->node_name, (*n_it)->get_id(), oopr, ErrCode);
+                  DECARD_INFOMSG(1, "%s: NCOM: SEND RD_%03d -> END TP E_%d", 
+                  n_int->node_name, (*n_it)->get_id(), ErrCode);
                 }
               }
             }    

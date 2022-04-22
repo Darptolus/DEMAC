@@ -4,6 +4,7 @@ add_subdirectory( runtime )
 
 set( decard_src
      runtime/Runtime.cpp
+     runtime/Messages.cpp
      )
 
 set( decard_inc

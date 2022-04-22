@@ -35,11 +35,19 @@ namespace decard
     // Node * n_recv;
     AllNodes * nodes_list;
     AllNodes::iterator n_it;
+    CodeletGraph * t_CDG; // Codelet Graph 
+    ThreadedProcedure * newTP;
     cl_q * t_INCLQ; // Input Node Control Queue
     cl_q * t_ONCLQ; // Output Node Control Queue
     tp_q * t_INTPQ; // Input Node Control Queue
     tp_q * t_ONTPQ; // Output Node Control Queue
     int ErrCode;
+    // int msg_id;
+    int msg_size;
+    int * p_msg;
+    Msg1 msg_1;
+    Msg1 * pmsg_1;
+    // Msg2 msg_2;
   public:
     NCOM( 
       AllNodes * a_nodes, Node * a_node, 

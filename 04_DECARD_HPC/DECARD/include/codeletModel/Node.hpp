@@ -32,25 +32,22 @@ namespace decard
   private:
     MPI_Request rcv_req;
     MPI_Status rcv_sts;
-    // int ncom_done;
     int rcv_enb;
     int snd_flg;
-    // int test_flagS;
     int rcv_flg;
-    int msg_box;
-    int msg_out;
+    int msg_id;
+    int * msg_box;
+    Msg1 msg_in;
+    // Msg1 msg_out;
   public:
     Node_Extern(int w_rank, int w_size):Node(w_rank, w_size){
       rcv_enb = 0;
-    };
+      msg_id = 0;
+      msg_in ={0, N_Z, 0, 0}; // ToDo: Replace last zero for NULL ptr
+      msg_box = (int *) &msg_in;
+    }
     ~Node_Extern(){}
     int run();
-    // void set_ncom_done(){
-    //   this->ncom_done = 1;
-    // }
-    // void clr_ncom_done(){
-    //   this->ncom_done = 0;
-    // }
     void set_renb(){
       this->rcv_enb = 1;
     }
@@ -63,17 +60,21 @@ namespace decard
     void clr_sflg(){
       this->snd_flg = 0;
     }
-    void set_msgbox(int a_msg){
+    void set_msgbox(int * a_msg){
       this->msg_box = a_msg;
     }
     MPI_Request * get_rreq(){return &rcv_req;}
     MPI_Status * get_rsts(){return &rcv_sts;}
-    // int get_ncom_done(){return snd_ncom_done;}
+    int get_msgid(){return msg_id;}
     int * get_rflg(){return &rcv_flg;}
-    int * get_msgbox(){return &msg_box;}
-    int get_msgout(){return msg_out;}
+    Msg1 * get_msgin(){return &msg_in;}
+    int * get_msgbox(){return msg_box;}
+    int * get_msgtype(){return &msg_box[1];}
+    int * get_msgdata(){return &msg_box[3];}
+    // int get_msgout(){return msg_out;}
     int get_renb(){return rcv_enb;}
     int get_sflg(){return snd_flg;}
+    void inc_msgid(){++msg_id;}
   };
 
   class Node_Intern: public Node
@@ -112,7 +113,7 @@ namespace decard
         this->exec = 1;
         node_rcv = NULL;
         ncom_idle = 0;
-      };
+      }
 
     // Node_Intern(
     //   int w_rank, int w_size, AllNodes * a_nodes, CodeletGraph * a_CDG):
@@ -131,25 +132,25 @@ namespace decard
       // for (auto& element : nodes) {
       //   delete element;
       // }
-    };
+    }
     void set_exec(){
       this->exec = 1;
-    };
+    }
     void set_cidle(){
       this->ncom_idle = 1;
-    };
+    }
     void clr_exec(){
       this->exec = 0;
-    };
+    }
     void clr_cidle(){
       this->ncom_idle = 0;
-    };
+    }
     void set_nrcv(Node_Extern * a_nrcv){
       this->node_rcv = a_nrcv;
-    };
-    int get_exec(){return exec;};
-    int get_cidle(){return ncom_idle;};
-    Node_Extern * get_nrcv(){return node_rcv;};
+    }
+    int get_exec(){return exec;}
+    int get_cidle(){return ncom_idle;}
+    Node_Extern * get_nrcv(){return node_rcv;}
     int run();
   };
 

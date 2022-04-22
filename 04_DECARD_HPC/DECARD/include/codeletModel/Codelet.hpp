@@ -96,6 +96,8 @@ namespace decard
     uint32_t getDep(){ return s_slot.getCounter();};
     SyncSlot * getSyncSlot();
     int get_id(){ return cd_id;};
+    int get_tpid();
+    int get_tpid_full();
     int get_nexec(){ return n_exec;};
     void exe(){
       this->stus_actv();

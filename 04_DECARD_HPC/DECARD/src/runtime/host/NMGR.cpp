@@ -20,10 +20,12 @@ int NMGR::get_tps()
 
   for (tps_it = all_tps->begin(); tps_it != all_tps->end(); ++tps_it){
     if((*tps_it)->get_dest_id() == n_int->get_id()){
-      DECARD_INFOMSG(1, "%s: TP_%04d assigned to INTPQ", n_int->node_name, (*tps_it)->get_id());
+      DECARD_INFOMSG(1, "%s: TP_%05d assigned to INTPQ", n_int->node_name, (*tps_it)->get_id_full());
+      (*tps_it)->set_dest(t_node);
       t_INTPQ->push_back(*tps_it);
     }else if((*tps_it)->get_dest_id() != n_int->get_id()){
-      DECARD_INFOMSG(1, "%s: TP_%04d assigned to ONTPQ", n_int->node_name, (*tps_it)->get_id());
+      DECARD_INFOMSG(1, "%s: TP_%05d assigned to ONTPQ", n_int->node_name, (*tps_it)->get_id_full());
+      (*tps_it)->set_dest(nodes_list->at((*tps_it)->get_dest_id()));
       t_ONTPQ->push_back(*tps_it);
     }else{
       DECARD_INFOMSG(1, "%s: TP not assigned", n_int->node_name);
@@ -58,7 +60,6 @@ int NMGR::run()
   tp_type tptype;
   Message * newMsg;
   ops_type op_type;
-  int tp_id;
   int done;
 
   DECARD_INFOMSG(1, "%s: NMGR: INIT", n_int->node_name);
@@ -77,37 +78,41 @@ int NMGR::run()
         DECARD_INFOMSG(1, "%s: NMGR: IDLE INC=%03d ONC=%03d INT=%03d ONT=%03d", n_int->node_name, 
         t_INCLQ->size(), t_ONCLQ->size(), t_INTPQ->size(), t_ONTPQ->size());
         // Check if all Queues are empty
-        if (this->all_empty()){
+        if (!t_INTPQ->empty() || !t_INCLQ->empty()){
+          // TODO: Check all SU
+          if (t_SU->is_full()){
+            // OSTPQ > Max Local TP -> Change to REMOTE
+            this->mode_rmt();
+          }else{
+            // INTPQ > 0 & SU available -> Change to LOCAL
+            this->mode_lcl();
+          }
+        }else if (this->all_empty()){
           // Queues Empty
           DECARD_INFOMSG(1, "%s: NMGR: IDLE EMPTY", n_int->node_name);
           if (n_int->get_mode() == N_DONE && this->all_done() && n_int->get_cidle()){
             // Node Done, All Nodes are DONE, NCOM Idle
             this->mode_dne();
+          }else{
+          // } else if (this->get_mode() == M_IDLE){
+            // Stay in IDLE
+            usleep(1000000);
           }
-        } else if (t_SU->is_full()){
-          // OSTPQ > Min Local TP -> Change to REMOTE
-          this->mode_rmt();
-        } else if (!t_INTPQ->empty() || !t_INCLQ->empty()){
-          // INTPQ > 0 -> Change to LOCAL
-          this->mode_lcl();
-        } else if (this->get_mode() == M_IDLE){
-          // Stay in IDLE
-          usleep(1000000);
-        } else{
+        }
+        if (this->get_mode() == M_IDLE){
           // INVALID
-          DECARD_INFOMSG(1, "%s: NMGR: IDLE Invalid State", n_int->node_name);
+          DECARD_INFOMSG(1, "%s: NMGR: IDLE", n_int->node_name);
           usleep(1000000);
         }
       break; // End Idle Mode
 
       case M_LOCL: // Local Mode
-      DECARD_INFOMSG(1, "%s: NMGR: LCAL", n_int->node_name);
+      // DECARD_INFOMSG(1, "%s: NMGR: LCAL", n_int->node_name);
       // Check queues
       if (!t_INTPQ->empty()){
         newTP = t_INTPQ->popFront();
-        tp_id = *(newTP->get_opr());
         tptype = newTP->get_tptype();
-        DECARD_INFOMSG(1, "%s: NMGR: LCAL RO_%03d TP_%04d", n_int->node_name, newTP->get_orig_id(), tp_id);
+        DECARD_INFOMSG(1, "%s: NMGR: LCAL NO_%03d TP_%04d", n_int->node_name, newTP->get_orig_id(), newTP->get_id_full());
         if(tptype == END){
           // End TP -> Send Done Message to NCOM
           DECARD_INFOMSG(1, "%s: NMGR: LCAL END_TP", n_int->node_name);
@@ -129,10 +134,10 @@ int NMGR::run()
       }else if (!t_INCLQ->empty()){
         newMsg = t_INCLQ->popFront();
         op_type = newMsg->get_opr();
-        DECARD_INFOMSG(1, "%s: NMGR: LCAL RO_%03d TP_%04d", n_int->node_name, newTP->get_orig_id(), tp_id);
-        if(op_type == N_D){ // Node Done
-          this->mode_dne();
-        }
+        DECARD_INFOMSG(1, "%s: NMGR: LCAL RO_%03d TP_%04d", n_int->node_name, newMsg->get_orig_id(), newMsg->get_opr());
+        // if(op_type == N_D){ // Node Done
+        //   this->mode_dne();
+        // }
       }
       // Check conditions for next state
       if (t_INTPQ->empty() && t_INCLQ->empty()){

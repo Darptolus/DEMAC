@@ -57,7 +57,7 @@ namespace decard
     Node * dest_node;
     int orig_node_id;
     int dest_node_id;
-    int opr_id;
+    // int opr_id;
     int tp_id; // TP Identifier
     int id_cd;
     int cdn_exec; // Total no. of CDs to be executed
@@ -90,15 +90,16 @@ namespace decard
     void set_id(int a_id){ tp_id = a_id;};
     void set_orig_id(int a_o_node){ this->orig_node_id = a_o_node;};
     void set_dest_id(int a_d_node){ this->dest_node_id = a_d_node;};
-    void set_opr(int a_opr){ this->opr_id = a_opr;};
+    // void set_opr(int a_opr){ this->opr_id = a_opr;};
     Node * get_orig(){return orig_node;};
     Node * get_dest(){ return dest_node;};
     tp_type get_tptype(){ return tptype;};
     cd_v * get_cdv(){ return &tp_cds;};
     int get_orig_id(){ return orig_node_id;};
     int get_dest_id(){ return dest_node_id;};
-    int get_id(){ return opr_id;};
-    int * get_opr(){ return &opr_id;};
+    int get_id(){ return tp_id;};
+    int get_id_full(){ return (orig_node_id + 1) * 10000 + (dest_node_id + 1) * 100 + tp_id;};
+    // int * get_opr(){ return &opr_id;};
     int get_ncd(){ return tp_cds.size();};
     int get_cdnexec(){ return cdn_exec;};; 
     int dec_cdnexec();
@@ -107,6 +108,7 @@ namespace decard
         delete element;
       }
     }
+    virtual ThreadedProcedure * clone(){ return new ThreadedProcedure();};
     /*
     * Method: addCodelet
     * Adds a codelet to the TP's list

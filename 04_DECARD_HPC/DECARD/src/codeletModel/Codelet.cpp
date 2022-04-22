@@ -28,4 +28,16 @@ int Codelet::dec_nexec()
   return (Atomics::fetchSub(n_exec, 1));
 }
 
+int Codelet::get_tpid()
+{
+  // Get TP ID
+  return (t_TP->get_id());
+}
+
+int Codelet::get_tpid_full()
+{
+  // Get TP full ID
+  return (t_TP->get_id_full());
+}
+
 // void Codelet::resetCodelet()

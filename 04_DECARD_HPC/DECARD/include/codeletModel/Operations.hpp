@@ -15,6 +15,9 @@ namespace decard
 {
   enum ops_type // Operation Type
   {
+    N_Z, // Zero
+    N_A, // Node ACK
+    N_N, // Node Not-ACK
     // Node status
     N_S, // Node Sending
     N_R, // Node Receiving
@@ -31,7 +34,6 @@ namespace decard
     DRR, // Data Receive Request
     DSE, // Data Send 
     DRE, // Data Receive 
-    
   };
 }
 #endif /* OPERATIONS_HPP */

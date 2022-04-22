@@ -55,17 +55,19 @@ public:
 class HelloWorld : public ThreadedProcedure
 {
 public:
+  HelloWorld(){};
   HelloWorld(int n_nodes):
   ThreadedProcedure()
   {
     add_cd(new cd_01(this, 0));
-    // add_cd(&cd_02_a);
-    // add_cd(&cd_03_a);
+    add_cd(new cd_02(this, 0));
+    add_cd(new cd_03(this, 0));
   };
   virtual ~HelloWorld() {
     // DECARD_INFOMSG(1, "%s: TP Destructor ", decard_rt.hostname);
     // this->clear_all();
   };
+  virtual HelloWorld * clone(){ return new HelloWorld();};
 };
 
 class SayHello : public ThreadedProcedure
@@ -77,8 +79,10 @@ public:
   ThreadedProcedure(),
   cd_04_a(this, 1) // TP, dependencies
   {  
+    // Add Codelets
     add_cd(&cd_04_a);
   }
+  virtual SayHello * clone(){ return new SayHello();};
 };
 
 int main(int argc, char *argv[]){
@@ -97,36 +101,22 @@ int main(int argc, char *argv[]){
     // For each node
     for (i_rank = 0; i_rank < w_size; ++i_rank){
       tptype = PRT;
-      tp_id = (i_rank + 1) * 1000 + (n_rank + 1) * 10 + i_tp;
-      // Create TP
-      
-      // Local TP only  
+      // tp_id = (i_rank + 1) * 1000 + (n_rank + 1) * 10 + i_tp;
+      // Create TPs
       if (i_rank == n_rank){
-        // Add Codelets
-        // for (i_cd = 0; i_cd < m_cd; ++i_cd){
-          // newCD->set_id(i_cd + 1);
-          // Add codelet
-          // newTP->add_cd(newCD);
-        // }
-        // newCD = new cd_01(newTP, 0);
-        // newTP->add_cd(newCD);
-        // newCD = new cd_02(newTP, 0);
-        // newTP->add_cd(newCD);
-        // newCD = new cd_03(newTP, 0);
-        // newTP->add_cd(newCD);
-        // newCD = new Codelet(newTP, 0);
+        // Local TPs
         newTP = new HelloWorld(w_size);
+        // newTP = new ThreadedProcedure();
       }else{
+        // Remote TPs
         newTP = new ThreadedProcedure();
       }
-      newTP->set_opr(tp_id);
+      // newTP->set_id(tp_id);
       newTP->set_tptype(tptype);
       newTP->set_orig_id(n_rank);
       newTP->set_dest_id(i_rank);
-      DECARD_INFOMSG(1, "%s: Generating TP_%04d", decard_rt.hostname, tp_id);
       decard_rt.add_TP(newTP);
-         
-        
+      DECARD_INFOMSG(1, "%s: Generating TP_%05d", decard_rt.hostname, newTP->get_id_full());  
       }
     }
 
@@ -134,12 +124,12 @@ int main(int argc, char *argv[]){
   tp_id = 999;
   // Create TP
   newTP = new ThreadedProcedure();
-  newTP->set_opr(tp_id);
+  // newTP->set_id(tp_id);
   newTP->set_tptype(tptype);
   newTP->set_orig_id(n_rank);
   newTP->set_dest_id(n_rank);
-  DECARD_INFOMSG(1, "%s: Generating TP_%04d", decard_rt.hostname, tp_id);
   decard_rt.add_TP(newTP);
+  DECARD_INFOMSG(1, "%s: Generating TP_%05d -> END TP", decard_rt.hostname, newTP->get_id_full());
 
   // Start Runtime
   decard_rt.run();

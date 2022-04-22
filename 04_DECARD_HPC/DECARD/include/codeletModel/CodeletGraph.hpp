@@ -25,27 +25,27 @@ namespace decard
   class CodeletGraph
   {
   private:
-    int num_tp; // Number of TPs
     int num_cd; // Number of Codelets
     tp_v all_tps; // Contains all TPS
     tp_v::iterator tps_it;
     int tp_id; // TP Identifier
   public:
-    CodeletGraph(){
-      num_tp = 0;
-    };
+    CodeletGraph(){}
     ~CodeletGraph() {
       for (auto& element : all_tps) {
         delete element;
       }
-    };
+    }
     void add_tp(ThreadedProcedure * a_TP){
       all_tps.push_back(a_TP);
       a_TP->set_id(tp_id);
       ++tp_id;
-    };
+    }
     tp_v * get_atps() {return &all_tps;};
     int get_tps_size() {return all_tps.size();};
+    ThreadedProcedure * clone(int pos){
+      return (all_tps.at(pos))->clone();
+    }
   }; 
 }
 #endif /* CODELETGRAPH_H */

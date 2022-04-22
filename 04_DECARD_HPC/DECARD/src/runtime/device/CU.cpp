@@ -41,7 +41,7 @@ int ComputationalUnit::run()
       DECARD_INFOMSG(1, "%s: CU: EXEC", n_int->node_name);
       if(!CDQ.empty()){
         newCD = CDQ.popFront();
-        DECARD_INFOMSG(1, "%s: CU: EXEC CD_%03d", n_int->node_name, newCD->get_id());
+        DECARD_INFOMSG(1, "%s: CU: EXEC CD_%03d TP_%04d", n_int->node_name, newCD->get_id(), newCD->get_tpid_full());
         if(this->get_invTP()){  // Invoke TP
           // Switch to Invoke TP
           this->mode_ivt();
@@ -50,7 +50,7 @@ int ComputationalUnit::run()
         newCD->exe();
         if (!newCD->get_nexec()){
           // Execution Complete -> Codelet Dormant
-          DECARD_INFOMSG(1, "%s: CU: EXEC CD_%03d Over", n_int->node_name, newCD->get_id());
+          DECARD_INFOMSG(1, "%s: CU: EXEC CD_%03d TP_%04d Over", n_int->node_name, newCD->get_id(), newCD->get_tpid_full());
           newCD->stus_drmt();
         }
       }
