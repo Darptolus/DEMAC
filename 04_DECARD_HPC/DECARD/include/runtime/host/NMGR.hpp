@@ -58,29 +58,12 @@ namespace decard
       tp_q * a_INTPQ, tp_q * a_ONTPQ):
       nodes_list(a_nodes), t_node(a_node), t_dDARTS(a_dDARTS), t_CDG(a_CDG),
       t_INCLQ(a_INCLQ), t_ONCLQ(a_ONCLQ),
-      t_INTPQ(a_INTPQ), t_ONTPQ(a_ONTPQ)
+      t_INTPQ(a_INTPQ), t_ONTPQ(a_ONTPQ), 
+      m_mode(M_IDLE), all_tps(t_CDG->get_atps()), t_SU(t_dDARTS->get_SU())
       {
-        m_mode = M_IDLE;
-        all_tps = t_CDG->get_atps();
         // ToDo: Change for multiple SU
-        t_SU = t_dDARTS->get_SU();
-        // max_ostpq = 0; // Max number of TPS in OSTPQ
-        // max_istpq = 10; // Max number of TPs in ISTPQ
       };
 
-    // NMGR(
-    //   AllNodes * a_nodes, Node * a_node, dDARTS * a_dDARTS, CodeletGraph * a_CDG,
-    //   cl_q * a_INCLQ, cl_q * a_ONCLQ, cl_q * a_ISCLQ, cl_q * a_OSCLQ,
-    //   tp_q * a_INTPQ, tp_q * a_ONTPQ, tp_q * a_ISTPQ, tp_q * a_OSTPQ):
-    //   nodes_list(a_nodes), t_node(a_node), t_dDARTS(a_dDARTS), t_CDG(a_CDG),
-    //   t_INCLQ(a_INCLQ), t_ONCLQ(a_ONCLQ), t_ISCLQ(a_ISCLQ), t_OSCLQ(a_OSCLQ),
-    //   t_INTPQ(a_INTPQ), t_ONTPQ(a_ONTPQ), t_ISTPQ(a_ISTPQ), t_OSTPQ(a_OSTPQ)
-    //   {
-    //     m_mode = M_IDLE;
-    //     all_tps = t_CDG->get_atps();
-    //     max_ostpq = 0; // Max number of TPS in OSTPQ
-    //     max_istpq = 10; // Max number of TPs in ISTPQ
-    //   };
     ~NMGR(){};
     int get_tps();
     int run();
@@ -111,3 +94,23 @@ namespace decard
 }
 
 #endif /* NMGR_H */
+
+    // NMGR(
+    //   AllNodes * a_nodes, Node * a_node, dDARTS * a_dDARTS, CodeletGraph * a_CDG,
+    //   cl_q * a_INCLQ, cl_q * a_ONCLQ, cl_q * a_ISCLQ, cl_q * a_OSCLQ,
+    //   tp_q * a_INTPQ, tp_q * a_ONTPQ, tp_q * a_ISTPQ, tp_q * a_OSTPQ):
+    //   nodes_list(a_nodes), t_node(a_node), t_dDARTS(a_dDARTS), t_CDG(a_CDG),
+    //   t_INCLQ(a_INCLQ), t_ONCLQ(a_ONCLQ), t_ISCLQ(a_ISCLQ), t_OSCLQ(a_OSCLQ),
+    //   t_INTPQ(a_INTPQ), t_ONTPQ(a_ONTPQ), t_ISTPQ(a_ISTPQ), t_OSTPQ(a_OSTPQ)
+    //   {
+    //     m_mode = M_IDLE;
+    //     all_tps = t_CDG->get_atps();
+    //     max_ostpq = 0; // Max number of TPS in OSTPQ
+    //     max_istpq = 10; // Max number of TPs in ISTPQ
+    //   };
+
+    // t_SU = t_dDARTS->get_SU();
+    // max_ostpq = 0; // Max number of TPS in OSTPQ
+    // max_istpq = 10; // Max number of TPs in ISTPQ
+    // m_mode = M_IDLE;
+    // all_tps = t_CDG->get_atps();

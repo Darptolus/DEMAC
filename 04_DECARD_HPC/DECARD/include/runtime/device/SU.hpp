@@ -40,10 +40,6 @@ namespace decard
     cl_q OSCLQ; // Output Scheduler Control Queue
     tp_q ISTPQ; // Input Scheduler Threaded Procedure Queue
     tp_q OSTPQ; // Output Scheduler Threaded Procedure Queue
-    // cl_q * t_ISCLQ; // Input Scheduler Control Queue
-    // cl_q * t_OSCLQ; // Output Scheduler Control Queue
-    // tp_q * t_ISTPQ; // Input Scheduler Threaded Procedure Queue
-    // tp_q * t_OSTPQ; // Output Scheduler Threaded Procedure Queue
     // Scheduler
     cd_v * t_cds; // TP's Codelets
     cd_q * t_CDQ; // Codelet Queue

@@ -19,16 +19,18 @@ int NMGR::get_tps()
   Node_Intern * n_int = dynamic_cast <Node_Intern *> (t_node);
 
   for (tps_it = all_tps->begin(); tps_it != all_tps->end(); ++tps_it){
-    if((*tps_it)->get_dest_id() == n_int->get_id()){
-      DECARD_INFOMSG(1, "%s: TP_%05d assigned to INTPQ", n_int->node_name, (*tps_it)->get_id_full());
+    if((*tps_it)->get_dest_id() == -1){
+      DECARD_INFOMSG(1, "%s: TP_%05d not Assigned", n_int->node_name, (*tps_it)->get_id_full());  
+    }else if((*tps_it)->get_dest_id() == n_int->get_id()){
+      DECARD_INFOMSG(1, "%s: TP_%05d Assigned to INTPQ", n_int->node_name, (*tps_it)->get_id_full());
       (*tps_it)->set_dest(t_node);
       t_INTPQ->push_back(*tps_it);
     }else if((*tps_it)->get_dest_id() != n_int->get_id()){
-      DECARD_INFOMSG(1, "%s: TP_%05d assigned to ONTPQ", n_int->node_name, (*tps_it)->get_id_full());
+      DECARD_INFOMSG(1, "%s: TP_%05d Assigned to ONTPQ", n_int->node_name, (*tps_it)->get_id_full());
       (*tps_it)->set_dest(nodes_list->at((*tps_it)->get_dest_id()));
       t_ONTPQ->push_back(*tps_it);
     }else{
-      DECARD_INFOMSG(1, "%s: TP not assigned", n_int->node_name);
+      DECARD_INFOMSG(1, "%s: TP not Assigned", n_int->node_name);
     }
   }
   return 0;

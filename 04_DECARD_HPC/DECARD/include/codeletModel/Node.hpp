@@ -114,20 +114,6 @@ namespace decard
         node_rcv = NULL;
         ncom_idle = 0;
       }
-
-    // Node_Intern(
-    //   int w_rank, int w_size, AllNodes * a_nodes, CodeletGraph * a_CDG):
-    //   Node(w_rank, w_size), t_CDG(a_CDG),
-    //   t_NCOM(a_nodes, this, &INCLQ, &ONCLQ, &INTPQ, &ONTPQ),
-    //   t_NMGR(a_nodes, this, &t_dDARTS, a_CDG, &INCLQ, &ONCLQ, &ISCLQ, &OSCLQ, &INTPQ, &ONTPQ, &ISTPQ, &OSTPQ),
-    //   t_dDARTS(this, &ISCLQ, &OSCLQ, &ISTPQ, &OSTPQ)
-    //   {
-    //     gethostname(node_name, HOST_NAME_MAX+1);
-    //     // printf("NODENAME: %s \n", node_name);
-    //     this->exec = 1;
-    //     node_rcv = NULL;
-    //     ncom_idle = 0;
-    //   };
     ~Node_Intern(){
       // for (auto& element : nodes) {
       //   delete element;
@@ -156,3 +142,18 @@ namespace decard
 
 } // namespace decard
 #endif /* NODE_H */
+
+
+    // Node_Intern(
+    //   int w_rank, int w_size, AllNodes * a_nodes, CodeletGraph * a_CDG):
+    //   Node(w_rank, w_size), t_CDG(a_CDG),
+    //   t_NCOM(a_nodes, this, &INCLQ, &ONCLQ, &INTPQ, &ONTPQ),
+    //   t_NMGR(a_nodes, this, &t_dDARTS, a_CDG, &INCLQ, &ONCLQ, &ISCLQ, &OSCLQ, &INTPQ, &ONTPQ, &ISTPQ, &OSTPQ),
+    //   t_dDARTS(this, &ISCLQ, &OSCLQ, &ISTPQ, &OSTPQ)
+    //   {
+    //     gethostname(node_name, HOST_NAME_MAX+1);
+    //     // printf("NODENAME: %s \n", node_name);
+    //     this->exec = 1;
+    //     node_rcv = NULL;
+    //     ncom_idle = 0;
+    //   };

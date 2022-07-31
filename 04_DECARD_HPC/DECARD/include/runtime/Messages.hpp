@@ -32,14 +32,18 @@ namespace decard
     Node * node_orig;
     Node * node_dest;
     ThreadedProcedure * TP;
+    int data;
     int arg_size;
   public:
+    Message(
+      ops_type a_optype, int a_data):
+      op_type(a_optype), data(a_data){}
     Message(
       ops_type a_optype, Node * a_node_orig):
       op_type(a_optype), node_orig(a_node_orig){}
     Message(
       ops_type a_optype, Node * a_node_orig, Node * a_node_dest):
-      op_type(a_optype), node_orig(a_node_orig), node_dest(a_node_dest){};
+      op_type(a_optype), node_orig(a_node_orig), node_dest(a_node_dest){}
     ~Message(){}
     ops_type get_opr(){return op_type;}
     int get_orig_id();

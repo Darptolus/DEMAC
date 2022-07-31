@@ -30,7 +30,7 @@ namespace decard
     tp_v::iterator tps_it;
     int tp_id; // TP Identifier
   public:
-    CodeletGraph(){}
+    CodeletGraph():tp_id(1){}
     ~CodeletGraph() {
       for (auto& element : all_tps) {
         delete element;
@@ -44,6 +44,7 @@ namespace decard
     tp_v * get_atps() {return &all_tps;};
     int get_tps_size() {return all_tps.size();};
     ThreadedProcedure * clone(int pos){
+      // DECARD_INFOMSG(1, "Clonning...");
       return (all_tps.at(pos))->clone();
     }
   }; 

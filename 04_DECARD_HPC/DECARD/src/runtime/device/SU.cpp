@@ -56,7 +56,7 @@ int SchedulingUnit::run(){
                 if ((*cds_it)->get_status() == C_ACTV){
                   // Codelet Active
                   DECARD_INFOMSG(1, "%s: SU: TP_%04d CD_Active CD_%03d", n_int->node_name, (*tps_it)->get_id_full(), (*cds_it)->get_id());
-                }else if (!(*cds_it)->getDep() && (*cds_it)->get_nexec() && t_CU->is_avail()){
+                }else if (!(*cds_it)->get_Dep() && (*cds_it)->get_nexec() && t_CU->is_avail()){
                   // Codelet Ready -> Switch to Push Codelet
                   (*cds_it)->stus_enbl();
                   this->mode_pcd();
@@ -96,26 +96,15 @@ int SchedulingUnit::run(){
         }
       break; // End Idle Scheduler
 
-    // case S_INTP: // Init TP Mode
-    //   DECARD_INFOMSG(1, "%s: SU: INTP", n_int->node_name);
-      // if(!ISTPQ.empty()){
-      //   if (newTP->get_ncd() && sch.cd_rdy()){
-      //       newCD = sch.get_rdy();
-      //       // sch.get_rdy();
-      //       t_CU->add_cd(newCD);
-      //     }
-      //   }
-      // Allocate Memory
-      // Check Codelets
-      // s_mode = S_IDLE;
-      // break;
-
     case S_PSCD: // Push Codelet to CDQ
       DECARD_INFOMSG(1, "%s: SU: PSCD", n_int->node_name);
       // Check for available CU
+      // ToDo: Add multiple CU's 
       if (t_CU->is_avail()){
         // Assign Codelets to CU
         DECARD_INFOMSG(1, "%s: SU: Assign to CU CD_%03d", n_int->node_name, (*cds_it)->get_id());
+        // ToDo: Automate CU assignment on codelet generation
+        (*cds_it)->set_CU(t_CU);
         t_CU->add_cd(*cds_it);
       }
       s_mode = S_IDLE;
@@ -134,3 +123,19 @@ int SchedulingUnit::run(){
 
   return 0;
 }
+
+
+
+    // case S_INTP: // Init TP Mode
+    //   DECARD_INFOMSG(1, "%s: SU: INTP", n_int->node_name);
+      // if(!ISTPQ.empty()){
+      //   if (newTP->get_ncd() && sch.cd_rdy()){
+      //       newCD = sch.get_rdy();
+      //       // sch.get_rdy();
+      //       t_CU->add_cd(newCD);
+      //     }
+      //   }
+      // Allocate Memory
+      // Check Codelets
+      // s_mode = S_IDLE;
+      // break;

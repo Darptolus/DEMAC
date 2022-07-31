@@ -10,12 +10,13 @@
 
 #include "Codelet.hpp"
 #include "ThreadedProcedure.hpp"
+// #include "CU.hpp"
 
 using namespace decard;
 
-void Codelet::decDep()
+void Codelet::dec_Dep()
 {
-  if(!s_slot.decCount()){
+  if(!s_slot.dec_Count()){
     // Dependencies count reach zero
     this->stus_enbl(); // Set status ENBL
   }
@@ -38,6 +39,11 @@ int Codelet::get_tpid_full()
 {
   // Get TP full ID
   return (t_TP->get_id_full());
+}
+
+void * Codelet::invoke(int TP_id)
+{
+  // t_CU->invoke(TP_id);
 }
 
 // void Codelet::resetCodelet()

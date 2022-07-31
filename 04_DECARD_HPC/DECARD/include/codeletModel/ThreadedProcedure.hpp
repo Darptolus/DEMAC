@@ -59,8 +59,8 @@ namespace decard
     int dest_node_id;
     // int opr_id;
     int tp_id; // TP Identifier
-    int id_cd;
-    int cdn_exec; // Total no. of CDs to be executed
+    int cd_id;
+    int cdn_exec; // Total No. of CDs to be executed
     unsigned int ref_;
   public:
     ThreadedProcedure * parentTP_;
@@ -75,8 +75,8 @@ namespace decard
     void add_cd(Codelet * a_CD){
       tp_cds.push_back(a_CD);
       cdn_exec += a_CD->get_nexec();
-      a_CD->set_id(id_cd);
-      ++id_cd;
+      a_CD->set_id(cd_id);
+      ++cd_id;
     };
     void set_orig(Node * a_o_node){
       this->orig_node = a_o_node;

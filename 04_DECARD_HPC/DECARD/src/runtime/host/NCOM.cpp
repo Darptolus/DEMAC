@@ -30,6 +30,7 @@ int NCOM::run()
   do{
     switch(this->get_mode()) {
     case C_IDLE: // Idle Mode
+      // DECARD_INFOMSG(n_int->get_cidle(), "%s: NCOM: IDLE", n_int->node_name);
       DECARD_INFOMSG(1, "%s: NCOM: IDLE", n_int->node_name);
       // Check Inbox for each Node
       for (n_it = nodes_list->begin(); n_it != nodes_list->end(); ++n_it){
@@ -74,7 +75,7 @@ int NCOM::run()
       // Check for incoming message
       if (n_int->get_nrcv()){
         // Message Recieved
-        DECARD_INFOMSG(1, "%s: NCOM: RECV RO_%03d TP_%04d", n_int->node_name, n_ext->get_id(), *(n_ext->get_msgbox())); // *((n_int->get_nrcv())->get_msgbox())
+        DECARD_INFOMSG(1, "%s: NCOM: RECV RO_%03d MTP_%04d", n_int->node_name, n_ext->get_id(), *(n_ext->get_msgdata())); // *((n_int->get_nrcv())->get_msgbox())
         // Read Msg
         pmsg_1 = n_ext->get_msgin();
         // Check if Node Done
@@ -88,10 +89,12 @@ int NCOM::run()
           // t_INCLQ->push_back(newMsg);
         }else{
           // ToDo: Get TP from CDG
-          // newTP = t_CDG->clone(*(n_ext->get_msgbox()));
+          // newTP = t_CDG->clone(*(n_ext->get_msgdata())-1);
+          // newTP = t_CDG->clone(1);
+          // DECARD_INFOMSG(1, "%s: NCOM: RECV RO_%03d new TP", n_int->node_name, *(n_ext->get_msgdata())); // *((n_int->get_nrcv())->get_msgbox())
 
           // Simulated info from origin
-          newTP = new ThreadedProcedure();
+          // newTP = new ThreadedProcedure();
           newTP->set_orig(n_ext);
           newTP->set_orig_id(n_ext->get_id());
           newTP->set_dest(n_int);
@@ -111,11 +114,11 @@ int NCOM::run()
           DECARD_INFOMSG(1, "%s: NCOM: OPEN CH_%03d E_%d", n_int->node_name, n_ext->get_id(), ErrCode);
         }
       } else {
-        // Check all channels
+        // Check all channels - Initialization
         for (n_it = nodes_list->begin(); n_it != nodes_list->end(); ++n_it){
-          // Check channel availability
           if ((*n_it)->get_id() != n_int->node_id){
             n_ext = dynamic_cast <Node_Extern *> (*n_it);
+            // Check channel availability
             if (!(n_ext->get_renb())){
               // Open channel
               ErrCode = MPI_Irecv(n_ext->get_msgbox(), msg_size, MPI_INT, n_ext->get_id(), 1, MPI_COMM_WORLD, n_ext->get_rreq()); 

@@ -30,11 +30,8 @@
 using namespace decard;
 
 ThreadedProcedure::ThreadedProcedure(void):
-ref_(1)
-{
-  cdn_exec = 0; 
-  id_cd = 0;
-}//,
+ref_(1), cdn_exec(0), cd_id(1)
+{}//,
 // parentTP_(myThread.tempParent){ } //*****COMMENTED*****//
 
 //This is for paraFor loop

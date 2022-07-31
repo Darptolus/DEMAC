@@ -15,25 +15,26 @@ namespace decard
 {
   enum ops_type // Operation Type
   {
-    N_Z, // Zero
-    N_A, // Node ACK
-    N_N, // Node Not-ACK
+    N_Z, // Zero0
+    N_A, // (X) Node ACK
+    N_N, // (X) Node Not-ACK
     // Node status
     N_S, // Node Sending
     N_R, // Node Receiving
     N_D, // Node Done
     N_E, // Node Error
     // Workload Management
-    TSR, // TP Send Request
-    TRR, // TP Receive Request
+    TIV, // TP Invoke
+    TSR, // (X) TP Send Request
+    TRR, // (X) TP Receive Request
     TSE, // TP Send
     TRE, // TP Receive
-    TDN, // TP Done
+    TDN, // TP Done (Continuation Codelet?)
     // Data Management
-    DSR, // Data Send Request
-    DRR, // Data Receive Request
+    DSR, // (X) Data Send Request
+    DRR, // (X) Data Receive Request
     DSE, // Data Send 
-    DRE, // Data Receive 
+    DRE, // (X) Data Receive 
   };
 }
 #endif /* OPERATIONS_HPP */

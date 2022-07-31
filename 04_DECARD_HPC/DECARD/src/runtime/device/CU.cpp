@@ -59,6 +59,8 @@ int ComputationalUnit::run()
 
     case U_IVTP:
       DECARD_INFOMSG(1, "%s: CU: IVTP", n_int->node_name);
+      
+      // t_ONCLQ->push_back(newMsg);
       this->mode_idl();
       break;
 

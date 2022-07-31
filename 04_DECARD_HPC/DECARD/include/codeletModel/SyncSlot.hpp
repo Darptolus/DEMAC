@@ -31,18 +31,18 @@ namespace decard
       {};
     SyncSlot(){};
     ~SyncSlot(){};
-    void initSS(uint32_t a_dep, uint32_t a_res){
+    void init_SS(uint32_t a_dep, uint32_t a_res){
       SS_count = a_dep;
       SS_reset = a_res;
     };
-    bool decCount(){
+    bool dec_Count(){
       // Returns true when dependencies reach 0
       return (0==Atomics::fetchSub(SS_count, 1U));
     };
-    void resetCounter(){
+    void reset_Counter(){
       SS_count = SS_reset;
     };
-    uint32_t getCounter() const{
+    uint32_t get_Counter() const{
         return SS_count;
     };
     //returns the if the counter has reached zero
